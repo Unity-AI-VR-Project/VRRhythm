@@ -1,106 +1,103 @@
 using UnityEngine;
 using System.Collections;
 
+// 노트 생성과 이동을 제어하는 클래스
 public class NoteMover : MonoBehaviour
 {
-    public Transform pointA; // SetPoint (30, 0, 0)
-    public Transform pointB; // Target (0, 0, 0)
-    public Transform spawnPoint; // Start (30, -5, 0)
+    public Transform spawnPoint;      // 노트가 생성되는 시작 위치 (지점 C)
+    public Transform setPoint;        // 노트가 경유하는 중간 위치 (지점 A)
+    public Transform targetPoint;     // 노트가 도착하는 최종 위치 (지점 B)
+    public AudioSource audio;         // 음악 재생을 위한 오디오 소스
 
-    public float bpm = 130f; // 음악 BPM
-    public AudioSource audioSource;
-    public float moveToA_Duration = 0.3f; // C → A까지 소요 시간
+    [Header("Tempo Settings")]
+    public float bpm = 120f;                 // 곡의 BPM (분당 박자 수)
+    public float beatsPerNote = 2f;          // 노트가 생성 후 몇 박자 뒤에 도착해야 하는지
 
-    public int maxNoteCount = 500;
+    [Range(0f, 1f)]
+    public float moveToA_Ratio = 0.4f;       // 전체 이동 시간 중 C → A에 사용되는 비율
 
-    private float beatTime;             // 1박자 시간 (초)
-    private float moveToB_Duration;     // A → B 이동 시간 (계산됨)
-    private int noteIndex = 0;
-    private bool readyToGenerate = false;
+    [Header("Spawn Settings")]
+    public int maxNoteCount = 100;           // 생성할 최대 노트 수
+    public float spawnIntervalInBeats = 1.0f; // 노트 생성 간격 (단위: 박자)
 
+    // 내부 변수들
+    private float beatTime;         // 한 박자에 걸리는 시간 (초)
+    private float spawnInterval;    // 노트 생성 간격을 초로 환산한 값
+    private int noteIndex = 0;      // 현재 생성한 노트 수
+    private float timer = 0f;       // 시간 누적용 타이머
+
+    // 초기화 시 호출
     void Start()
     {
-        beatTime = 60f / bpm;
-
-        // A→B로 갈 시간이 0이 되면 오류 발생 → 방어 로직
-        if (moveToA_Duration >= beatTime)
-        {
-            Debug.LogError("C→A 시간이 beatTime보다 크거나 같으면 안 됩니다.");
-            return;
-        }
-
-        moveToB_Duration = beatTime - moveToA_Duration;
-
-        // 첫 노트는 C → A 이동 후 음악 시작
-        SpawnFirstNote();
+        beatTime = 60f / bpm;                           // BPM을 초 단위로 환산
+        spawnInterval = beatTime * spawnIntervalInBeats; // 노트 생성 주기 설정
     }
 
+    // 매 프레임마다 실행
     void Update()
     {
-        if (!readyToGenerate || !audioSource.isPlaying) return;
+        if (noteIndex >= maxNoteCount) return;  // 최대 개수 도달 시 종료
 
-        float totalTravelTime = beatTime; // 전체 이동 시간 = C→A + A→B
-
-        // 현재 오디오 재생 시간에 따라 노트 미리 생성
-        while (noteIndex < maxNoteCount &&
-               audioSource.time >= beatTime * noteIndex - totalTravelTime)
+        timer += Time.deltaTime;
+        if (timer >= spawnInterval)
         {
-            SpawnNoteWithTiming();
-            noteIndex++;
+            timer -= spawnInterval;
+            SpawnNote();   // 노트 생성
+            noteIndex++;   // 생성 수 증가
         }
     }
 
-    // 최초 노트: C → A → B 로 이동하며, A 도착 후 음악 재생
-    void SpawnFirstNote()
+    // 노트 생성 시 호출
+    void SpawnNote()
     {
+        // 첫 노트 생성 시 음악 재생
+        if (noteIndex == 0 && audio != null && !audio.isPlaying)
+        {
+            audio.Play();
+        }
+
+        // 노트 풀에서 가져와 시작 위치에 배치
         GameObject note = NotePoolManager.Instance.SpawnNote(spawnPoint.position);
-        StartCoroutine(FirstNoteRoutine(note));
+
+        // 노트 이동 코루틴 실행 (C → A → B)
+        StartCoroutine(MoveNote_CAB(note));
     }
 
-    IEnumerator FirstNoteRoutine(GameObject note)
+    // 노트를 C → A → B로 이동시키는 코루틴
+    IEnumerator MoveNote_CAB(GameObject note)
     {
-        // 1단계: C → A 이동
-        yield return StartCoroutine(Move(note, spawnPoint.position, pointA.position, moveToA_Duration));
+        float totalTravelTime = beatTime * beatsPerNote; // 전체 이동 시간
 
-        // 음악 시작
-        audioSource.Play();
-        readyToGenerate = true;
+        float moveToA_Duration = totalTravelTime * moveToA_Ratio;         // C → A 시간
+        float moveToB_Duration = totalTravelTime * (1f - moveToA_Ratio);  // A → B 시간
 
-        // 2단계: A → B 이동
-        yield return StartCoroutine(Move(note, pointA.position, pointB.position, moveToB_Duration));
-
-        NotePoolManager.Instance.ReturnNote(note);
+        yield return StartCoroutine(MoveSegment(note, spawnPoint.position, setPoint.position, moveToA_Duration));
+        yield return StartCoroutine(MoveSegment(note, setPoint.position, targetPoint.position, moveToB_Duration, true));
     }
 
-    // 일반 노트: C → A → B 이동 (총 duration은 beatTime으로 정확히 맞춤)
-    void SpawnNoteWithTiming()
-    {
-        GameObject note = NotePoolManager.Instance.SpawnNote(spawnPoint.position);
-        StartCoroutine(FullMoveRoutine(note));
-    }
-
-    IEnumerator FullMoveRoutine(GameObject note)
-    {
-        // 1단계: C → A 이동
-        yield return StartCoroutine(Move(note, spawnPoint.position, pointA.position, moveToA_Duration));
-
-        // 2단계: A → B 이동
-        yield return StartCoroutine(Move(note, pointA.position, pointB.position, moveToB_Duration));
-
-        NotePoolManager.Instance.ReturnNote(note);
-    }
-
-    // 이동 코루틴 (보간 이동)
-    IEnumerator Move(GameObject obj, Vector3 from, Vector3 to, float duration)
+    // 한 구간(from → to)을 일정 시간 동안 이동시키는 함수
+    IEnumerator MoveSegment(GameObject obj, Vector3 from, Vector3 to, float duration, bool keepGoingAfter = false)
     {
         float time = 0f;
         while (time < duration)
         {
             time += Time.deltaTime;
             float t = time / duration;
-            obj.transform.position = Vector3.Lerp(from, to, t);
+            obj.transform.position = Vector3.Lerp(from, to, t);  // 선형 보간
             yield return null;
         }
-        obj.transform.position = to;
+
+        // B에 도달한 이후에도 같은 방향으로 계속 이동 (연출용)
+        if (keepGoingAfter)
+        {
+            Vector3 dir = (to - from).normalized;
+            float speed = Vector3.Distance(from, to) / duration;
+
+            while (true)
+            {
+                obj.transform.position += dir * speed * Time.deltaTime;
+                yield return null;
+            }
+        }
     }
 }

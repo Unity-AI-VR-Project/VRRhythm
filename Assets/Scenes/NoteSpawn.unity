@@ -251,7 +251,7 @@ MonoBehaviour:
   targetPoint: {fileID: 372667890}
   audio: {fileID: 340268931}
   bpm: 120
-  beatsPerNote: 2
+  beatsPerNote: 10
   moveToA_Ratio: 0.4
   maxNoteCount: 500
   spawnIntervalInBeats: 1

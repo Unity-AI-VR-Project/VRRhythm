@@ -2,31 +2,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+// UI를 관리하는 클래스
+public class UiManager : MonoBehaviour
 {
-    // 점수 텍스트 UI
+    // 점수, 콤보, 타이머 텍스트, HP 바 등 UI 요소들
     public TextMeshProUGUI scoreText;
-    // 콤보 텍스트 UI
     public TextMeshProUGUI comboText;
-    // 타이머 UI 이미지 (프로그래스 바 형태)
     public Image timerImage;
-    // 남은 시간 텍스트 UI
     public TextMeshProUGUI timeText;
-    // 음악 재생용 오디오 소스
     public AudioSource audioSource;
+    public Image hpBar;
 
-    // 전체 노래 길이
+    // HP 정보
+    float startHP;
+    float currentHP;
+
+    // 음악 재생 시간 정보
     private float totalSongTime;
-    // 현재 남은 시간
     private float currentTime;
 
-    // 현재 점수와 콤보 수
+    // 점수 및 콤보
     private int score = 0;
     private int combo = 0;
 
+    // 초기화
     void Start()
     {
-        // 오디오 소스와 클립이 존재하면 총 시간 초기화
+        // HP 초기값 설정
+        startHP = 100;
+        currentHP = 100;
+
+        // 오디오 클립이 제대로 설정되었는지 확인하고 총 길이 측정
         if (audioSource != null && audioSource.clip != null)
         {
             totalSongTime = audioSource.clip.length;
@@ -37,81 +43,98 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning("오디오 소스나 클립이 할당되지 않았습니다.");
         }
 
-        // 시작 시 콤보 텍스트는 숨김
+        // 콤보 텍스트는 기본적으로 비활성화
         comboText.gameObject.SetActive(false);
 
+        // 초기 점수 및 콤보 텍스트 표시
         UpdateScoreText();
         UpdateComboText();
     }
 
+    // 매 프레임마다 호출됨
     void Update()
     {
-        HandleInput(); // 키 입력 처리
-        UpdateTimer(); // 타이머 업데이트
+        HandleInput();   // 입력 처리
+        UpdateTimer();   // 타이머 업데이트
     }
 
+    // 키보드 입력 처리
     void HandleInput()
     {
-        // O 키를 누르면 점수 100 추가
         if (Input.GetKeyDown(KeyCode.O))
         {
+            // 점수 100점 추가
             score += 100;
             UpdateScoreText();
         }
 
-        // P 키를 누르면 콤보 증가
         if (Input.GetKeyDown(KeyCode.P))
         {
-            // 콤보가 0이면 콤보 UI 표시
+            // 콤보가 0이면 텍스트 다시 표시
             if (combo == 0)
             {
                 comboText.gameObject.SetActive(true);
             }
 
+            // 콤보 증가
             combo += 1;
             UpdateComboText();
         }
 
-        // D 키를 누르면 콤보 리셋 및 UI 숨김
         if (Input.GetKeyDown(KeyCode.D))
         {
+            // 콤보 초기화 및 UI 숨기기
             combo = 0;
             comboText.gameObject.SetActive(false);
         }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            // HP 10 감소 및 UI 업데이트
+            currentHP -= 10;
+            UpdateHP();
+        }
     }
 
+    // 타이머 및 진행률 바 업데이트
     void UpdateTimer()
     {
         if (currentTime > 0)
         {
-            // 남은 시간 감소
             currentTime -= Time.deltaTime;
 
-            // 프로그레스 바 채우기 비율 계산
             float fillAmount = Mathf.Clamp01(currentTime / totalSongTime);
             timerImage.fillAmount = fillAmount;
 
-            // 남은 시간 계산 및 표시
             int totalSeconds = Mathf.CeilToInt(currentTime);
             int minutes = totalSeconds / 60;
             int seconds = totalSeconds % 60;
+
+            // mm:ss 형식으로 텍스트 출력
             timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
         }
         else
         {
-            // 시간이 다 되었을 때 표시
+            // 시간이 다 되었을 경우
             timeText.text = "0:00";
             timerImage.fillAmount = 0f;
         }
     }
 
-    // 점수 텍스트 갱신
+    // HP 게이지 업데이트
+    void UpdateHP()
+    {
+        float fillAmount = Mathf.Clamp01(currentHP / startHP);
+        hpBar.fillAmount = fillAmount;
+    }
+
+    // 점수 텍스트 업데이트
     void UpdateScoreText()
     {
         scoreText.text = "Score: " + score;
     }
 
-    // 콤보 텍스트 갱신
+    // 콤보 텍스트 업데이트
     void UpdateComboText()
     {
         comboText.text = "X " + combo;

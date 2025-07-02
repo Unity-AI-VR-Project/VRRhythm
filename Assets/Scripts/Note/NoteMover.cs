@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 // 노트 생성과 이동을 제어하는 클래스
 public class NoteMover : MonoBehaviour
 {

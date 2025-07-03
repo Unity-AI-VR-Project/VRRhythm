@@ -325,8 +325,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 83850d7094266a54ca07af96e5788315, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 75bede4f344aa884aa60db74818c16b1, type: 3}
-  m_Resource: {fileID: 8300000, guid: 75bede4f344aa884aa60db74818c16b1, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
+  m_Resource: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -439,7 +439,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d115cafcfbb2b5746827ee09535c286a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bpm: 75
+  bpm: 102
+  delayBeat: 4
+  offset: 1
 --- !u!1 &1694594604
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +562,7 @@ GameObject:
   - component: {fileID: 1842416037}
   - component: {fileID: 1842416036}
   - component: {fileID: 1842416035}
+  - component: {fileID: 1842416038}
   m_Layer: 0
   m_Name: NoteCreate Audio Source
   m_TagString: Untagged
@@ -580,16 +583,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1842416036}
-  spectrumSize: 4096
-  fftWindow: 4
+  spectrumSize: 1024
+  fftWindow: 0
   lowBandEnergy: 0
   midBandEnergy: 0
   highBandEnergy: 0
-  lowFrequencyThresholdEnd: 250
-  midFrequencyThresholdStart: 500
+  lowFrequencyThresholdEnd: 120
+  midFrequencyThresholdStart: 300
   midFrequencyThresholdEnd: 2000
-  highFrequencyThresholdStart: 2000
+  highFrequencyThresholdStart: 6500
   highFrequencyThresholdEnd: 22050
+  lowPoint:
+    energyMin: 0
+    energyMax: 0
+  midPoint:
+    energyMin: 0
+    energyMax: 0
+  highPoint:
+    energyMin: 0
+    energyMax: 0
 --- !u!82 &1842416036
 AudioSource:
   m_ObjectHideFlags: 0
@@ -600,8 +612,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: e96fdd5a366b26e4caa54b6628a2cfbf, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 75bede4f344aa884aa60db74818c16b1, type: 3}
-  m_Resource: {fileID: 8300000, guid: 75bede4f344aa884aa60db74818c16b1, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
+  m_Resource: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -702,6 +714,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1842416038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1842416034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79958c1c1bc789549928347e44be27f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2090382988
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3230984672529116744, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3230984672529116744, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -833,22 +857,14 @@ PrefabInstance:
       propertyPath: detector
       value: 
       objectReference: {fileID: 1842416035}
-    - target: {fileID: 7377035568831347065, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
-      propertyPath: musicOffset
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7377035568831347065, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
-      propertyPath: beatsPerNote
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7377035568831347065, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
-      propertyPath: energyThreshold
-      value: 0.45
-      objectReference: {fileID: 0}
     - target: {fileID: 7541423304679518883, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
       propertyPath: m_Name
       value: LowSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 8600394302699171891, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
+      propertyPath: timeChacker
+      value: 
+      objectReference: {fileID: 1842416038}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -862,6 +878,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1148363514267546922, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
+      propertyPath: timeChacker
+      value: 
+      objectReference: {fileID: 1842416038}
     - target: {fileID: 2218835857159258189, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
       propertyPath: m_Name
       value: MiddleSpawner
@@ -876,7 +896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4168788514687457774, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4168788514687457774, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
       propertyPath: m_LocalRotation.w
@@ -910,18 +930,6 @@ PrefabInstance:
       propertyPath: detector
       value: 
       objectReference: {fileID: 1842416035}
-    - target: {fileID: 5086108957573699501, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
-      propertyPath: musicOffset
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5086108957573699501, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
-      propertyPath: beatsPerNote
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5086108957573699501, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
-      propertyPath: energyThreshold
-      value: 0.7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -939,6 +947,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: HighSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 3342972261113534295, guid: a5fe801c8f233764ab93f3056792420b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4056116826847548800, guid: a5fe801c8f233764ab93f3056792420b, type: 3}
+      propertyPath: bpm
+      value: 102
+      objectReference: {fileID: 0}
     - target: {fileID: 4056116826847548800, guid: a5fe801c8f233764ab93f3056792420b, type: 3}
       propertyPath: detector
       value: 
@@ -953,7 +969,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4056116826847548800, guid: a5fe801c8f233764ab93f3056792420b, type: 3}
       propertyPath: energyThreshold
-      value: 0.6
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6036705033950330167, guid: a5fe801c8f233764ab93f3056792420b, type: 3}
       propertyPath: m_LocalPosition.x

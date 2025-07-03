@@ -16,7 +16,7 @@ public class NoteMover : MonoBehaviour
 
 
     [Header("Tempo Settings")]
-    public static float bpm = 140f;              // 비트당 분당 박자 수 (1분에 몇 박자)
+    public static float bpm = 102f;              // 비트당 분당 박자 수 (1분에 몇 박자)
     public float beatsPerNote = 2f;       // 노트가 생성되고 도달하기까지 걸리는 비트 수
 
     [Range(0f, 1f)]
@@ -73,8 +73,10 @@ public class NoteMover : MonoBehaviour
         while (time < duration)
         {
             time += Time.deltaTime;
-            float t = time / duration;
-            obj.transform.position = Vector3.Lerp(from, to, t);  // 선형 보간을 통한 위치 이동
+            float t = Mathf.Clamp01(time / duration);
+            //Debug.Log(t-1);
+            float easedT = Mathf.Pow(t, 0.80f);
+            obj.transform.position = Vector3.Lerp(from, to, easedT);  // 선형 보간을 통한 위치 이동
             yield return null;
         }
 

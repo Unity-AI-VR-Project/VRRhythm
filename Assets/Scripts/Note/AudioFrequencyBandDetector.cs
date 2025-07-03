@@ -1,5 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
+
+[Serializable]
+public struct EnergyPoint
+{
+    public float energyMin;
+    public float energyMax;
+}
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioFrequencyBandDetector : MonoBehaviour
@@ -8,6 +16,7 @@ public class AudioFrequencyBandDetector : MonoBehaviour
 
     public int spectrumSize = 1024; // 스펙트럼 데이터 배열 크기 (2의 거듭제곱)
     public FFTWindow fftWindow = FFTWindow.Blackman;
+    
 
     // 감지된 주파수 대역 에너지 (0.0 ~ 1.0 사이 값)
     [Range(0f, 1f)]
@@ -24,6 +33,13 @@ public class AudioFrequencyBandDetector : MonoBehaviour
     [Range(0f, 22050f)] public float highFrequencyThresholdStart = 2000f; // 고음은 2000Hz ~ Nyquist (~22050Hz)
     [Range(0f, 22050f)] public float highFrequencyThresholdEnd = 22050f;     // 고음은 2000Hz ~ Nyquist (~22050Hz)
 
+    [Header("BeatPer High/Low")] 
+    public EnergyPoint lowPoint;
+    public EnergyPoint midPoint;
+    public EnergyPoint highPoint;
+    public static float bpm = 102f;
+    public static float beatPer = 1;
+
     private float[] spectrumData;
     private float binBandwidth; // 각 스펙트럼 bin이 담당하는 주파수 폭
 
@@ -38,6 +54,13 @@ public class AudioFrequencyBandDetector : MonoBehaviour
 
         // 각 bin의 주파수 폭 = (샘플레이트 / 2) / bin 개수
         binBandwidth = (AudioSettings.outputSampleRate / 2f) / spectrumSize;
+        
+        lowPoint.energyMin = 1f;
+        lowPoint.energyMax = 0f;
+        midPoint.energyMin = 1f;
+        midPoint.energyMax = 0f;
+        highPoint.energyMin = 1f;
+        highPoint.energyMax = 0f;
 
         Debug.Log($"Bin Bandwidth: {binBandwidth:F2} Hz per bin");
         Debug.Log($"Nyquist Frequency (Max Analyzed Freq): {AudioSettings.outputSampleRate / 2f} Hz");
@@ -48,9 +71,32 @@ public class AudioFrequencyBandDetector : MonoBehaviour
     {
         // 실시간 스펙트럼 데이터 가져오기
         audioSource.GetSpectrumData(spectrumData, 0, fftWindow);
+        
+        
 
         // 주파수 대역별 에너지 계산
         CalculateFrequencyBandEnergy();
+        
+        // energy Max, Min 갱신
+        lowPoint = CheckBandEnergy(lowPoint, lowBandEnergy);
+        midPoint = CheckBandEnergy(midPoint, midBandEnergy);
+        highPoint = CheckBandEnergy(highPoint, highBandEnergy);
+        
+    }
+    
+
+    private EnergyPoint CheckBandEnergy(EnergyPoint energyPoint, float bandEnergy)
+    {
+        if (energyPoint.energyMin >= bandEnergy)
+        {
+            energyPoint.energyMin = bandEnergy;
+        }
+
+        if (energyPoint.energyMax <= bandEnergy)
+        {
+            energyPoint.energyMax = bandEnergy;
+        }
+        return energyPoint;
     }
 
     void CalculateFrequencyBandEnergy()
@@ -106,5 +152,7 @@ public class AudioFrequencyBandDetector : MonoBehaviour
         // value는 0 ~ 매우 작은 값 (예: 0.00001)
         float db = Mathf.Log10(value + 1e-6f); // -6 ~ 0 범위
         return Mathf.Clamp01((db + 6f) / 6f);  // 0 ~ 1로 정규화
+        
+        
     }
 }

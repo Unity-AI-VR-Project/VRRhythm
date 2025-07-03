@@ -1,116 +1,90 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
-
-// ³ëÆ® »ı¼º°ú ÀÌµ¿À» Á¦¾îÇÏ´Â Å¬·¡½º
+/// <summary>
+/// ë…¸íŠ¸ ì˜¤ë¸Œì íŠ¸ë¥¼ ì´ë™ì‹œí‚¤ëŠ” í´ë˜ìŠ¤
+/// </summary>
 public class NoteMover : MonoBehaviour
 {
-    // === À§Ä¡ ¼³Á¤ ===
-    public Transform spawnPoint;   // ³ëÆ®°¡ »ı¼ºµÇ´Â ½ÃÀÛ À§Ä¡ (ÁöÁ¡ C)
-    public Transform setPoint;     // ³ëÆ®°¡ Àá½Ã °æÀ¯ÇÏ´Â ÁöÁ¡ (ÁöÁ¡ A)
-    public Transform targetPoint;  // ³ëÆ®°¡ ÃÖÁ¾ÀûÀ¸·Î µµ´ŞÇØ¾ß ÇÏ´Â À§Ä¡ (ÁöÁ¡ B)
+    public Transform spawner;
+    
+    // === ìœ„ì¹˜ ì„¤ì • ===
+    private Transform spawnPoint;   // ë…¸íŠ¸ê°€ ìƒì„±ë˜ëŠ” ì‹œì‘ ìœ„ì¹˜ (ì§€ì  C)
+    private Transform setPoint;     // ë…¸íŠ¸ê°€ ì²˜ìŒ ë©ˆì¶”ëŠ” ì§€ì  (ì§€ì  A)
+    private Transform targetPoint;  // ë…¸íŠ¸ê°€ ì—°ì£¼ íƒ€ì´ë°ì— ë„ë‹¬í•´ì•¼ í•˜ëŠ” ìœ„ì¹˜ (ì§€ì  B)
 
-    public AudioSource audio;      // À½¾Ç Àç»ıÀ» À§ÇÑ ¿Àµğ¿À ¼Ò½º
 
     [Header("Tempo Settings")]
-    public float bpm = 120f;              // À½¾ÇÀÇ BPM (1ºĞ¿¡ ¸î ¹ÚÀÚ)
-    public float beatsPerNote = 2f;       // ³ëÆ®°¡ »ı¼ºµÈ µÚ ¸î ¹ÚÀÚ ÈÄ¿¡ µµÂøÇÒÁö ¼³Á¤
+    public static float bpm = 102f;              // ë¹„íŠ¸ë‹¹ ë¶„ë‹¹ ë°•ì ìˆ˜ (1ë¶„ì— ëª‡ ë°•ì)
+    public float beatsPerNote = 2f;       // ë…¸íŠ¸ê°€ ìƒì„±ë˜ê³  ë„ë‹¬í•˜ê¸°ê¹Œì§€ ê±¸ë¦¬ëŠ” ë¹„íŠ¸ ìˆ˜
 
     [Range(0f, 1f)]
-    public float moveToA_Ratio = 0.4f;    // ÀüÃ¼ ÀÌµ¿ Áß C¡æA ±¸°£ÀÌ Â÷ÁöÇÏ´Â ºñÀ²
-
-    [Header("Spawn Settings")]
-    public int maxNoteCount = 100;              // ÃÖ´ë »ı¼ºÇÒ ³ëÆ® °³¼ö
-    public float spawnIntervalInBeats = 1.0f;   // ³ëÆ® »ı¼º °£°İ (´ÜÀ§: ¹ÚÀÚ)
+    public float moveToA_Ratio = 0.4f;    // ì˜¤ë¸Œì íŠ¸ ì´ë™ ì‹œ Câ†’A êµ¬ê°„ì´ ì „ì²´ì—ì„œ ì°¨ì§€í•˜ëŠ” ë¹„ìœ¨
 
     [Header("Stop Settings")]
-    [Range(0f, 30f)]
-    public float stopSpawnBeforeEnd = 5f; // À½¾ÇÀÌ ³¡³ª±â XÃÊ ÀüºÎÅÍ´Â ³ëÆ® »ı¼º Áß´Ü
 
-    // ³»ºÎ º¯¼öµé
-    private float beatTime;        // ÇÑ ¹ÚÀÚÀÇ Áö¼Ó ½Ã°£ (ÃÊ)
-    private float spawnInterval;   // ¹ÚÀÚ ±â¹İ °£°İÀ» ÃÊ ´ÜÀ§·Î È¯»êÇÑ °ª
-    private int noteIndex = 0;     // »ı¼ºÇÑ ³ëÆ® °³¼ö
-    private float timer = 0f;      // »ı¼º Å¸ÀÌ¸Ó ´©Àû°ª
+    // ë‚´ë¶€ ë³€ìˆ˜ë“¤
+    private float beatTime = 60f / bpm;        // 1ë¹„íŠ¸ë‹¹ ì‹œê°„ (ì´ˆ)
+    private int noteIndex = 0;     // í˜„ì¬ê¹Œì§€ ìƒì„±ëœ ë…¸íŠ¸ ìˆ˜
+    private float timer = 0f;      // ì‹œê°„ ëˆ„ì ìš© íƒ€ì´ë¨¸
 
-    // ½ÃÀÛ ½Ã È£Ãâ
-    void Start()
+    private void OnEnable()
     {
-        beatTime = 60f / bpm;  // BPM ¡æ ÃÊ ´ÜÀ§ È¯»ê
-        spawnInterval = beatTime * spawnIntervalInBeats;  // »ı¼º ÁÖ±â °è»ê
+        // ìœ„ì¹˜ í¬ì¸íŠ¸ ìë™ ì„¤ì •
+        if (spawner != null)
+        {
+            AssignPointsFromParent(spawner);
+        }
+        else
+        {
+            Debug.LogWarning("movementPointsParentê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+        }
+        
+        StartCoroutine(MoveNote_CAB(gameObject));
+        Invoke("DestroyObject", 4f);
     }
 
-    // ¸Å ÇÁ·¹ÀÓ¸¶´Ù ½ÇÇà
-    void Update()
+    void DestroyObject()
     {
-        if (noteIndex >= maxNoteCount) return; // ÃÖ´ë °³¼ö µµ´Ş ½Ã Á¾·á
-
-        // Ã¹ ³ëÆ®´Â À½¾Ç ¾øÀÌµµ »ı¼ºÇØ¾ß ÇÏ¹Ç·Î ¿¹¿Ü Ã³¸®
-        if (noteIndex > 0)
-        {
-            // À½¾ÇÀÌ ¸ØÃè°Å³ª, À½¾ÇÀÌ °ğ ³¡³¯ °æ¿ì »ı¼º Áß´Ü
-            if (!audio.isPlaying || (audio.clip != null && audio.clip.length - audio.time <= stopSpawnBeforeEnd))
-                return;
-        }
-
-        // ½Ã°£ ´©ÀûÇÏ¿© spawnInterval¸¶´Ù ³ëÆ® »ı¼º
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
-        {
-            timer -= spawnInterval;
-            SpawnNote();  // ³ëÆ® »ı¼º
-            noteIndex++;  // »ı¼ºÇÑ ³ëÆ® ¼ö Áõ°¡
-        }
+        Destroy(gameObject);
     }
 
-    // ³ëÆ®¸¦ »ı¼ºÇÏ°í À½¾Ç Àç»ıÀ» ½ÃÀÛ
-    void SpawnNote()
-    {
-        // Ã¹ ³ëÆ® »ı¼º ½Ã À½¾Ç Àç»ı
-        if (noteIndex == 0 && audio != null && !audio.isPlaying)
-        {
-            audio.Play();
-        }
 
-        // Ç®¿¡¼­ ³ëÆ®¸¦ °¡Á®¿Í ½ÃÀÛ À§Ä¡¿¡ ¹èÄ¡
-        GameObject note = NotePoolManager.Instance.SpawnNote(spawnPoint.position);
-
-        // ³ëÆ® ÀÌµ¿ ½ÃÀÛ (C ¡æ A ¡æ B)
-        StartCoroutine(MoveNote_CAB(note));
-    }
-
-    // ³ëÆ®¸¦ C¡æA¡æB·Î ÀÏÁ¤ ½Ã°£¿¡ ¸ÂÃç ÀÌµ¿
+    // ë…¸íŠ¸ê°€ C â†’ A â†’ Bë¡œ ì •í•´ì§„ ì‹œê°„ ë™ì•ˆ ì´ë™
     IEnumerator MoveNote_CAB(GameObject note)
     {
-        float totalTravelTime = beatTime * beatsPerNote;  // ÀüÃ¼ ÀÌµ¿ ½Ã°£
+        float totalTravelTime = beatTime * beatsPerNote;  // ì „ì²´ ì´ë™ ì‹œê°„
 
-        float moveToA_Duration = totalTravelTime * moveToA_Ratio;         // C ¡æ A ÀÌµ¿ ½Ã°£
-        float moveToB_Duration = totalTravelTime * (1f - moveToA_Ratio);  // A ¡æ B ÀÌµ¿ ½Ã°£
+        float moveToA_Duration = totalTravelTime * moveToA_Ratio;         // C â†’ A ì´ë™ ì‹œê°„
+        float moveToB_Duration = totalTravelTime * (1f - moveToA_Ratio);  // A â†’ B ì´ë™ ì‹œê°„
 
-        // C ¡æ A ÀÌµ¿
+        // C â†’ A ì´ë™
         yield return StartCoroutine(MoveSegment(note, spawnPoint.position, setPoint.position, moveToA_Duration));
 
-        // A ¡æ B ÀÌµ¿ (µµÂø ÈÄ¿¡´Â °è¼Ó ¾ÕÀ¸·Î Á÷Áø)
+        // A â†’ B ì´ë™ (ì—°ì£¼ ì‹œì  ë„ë‹¬ ì´í›„ì—ëŠ” ê³„ì† ì „ì§„)
         yield return StartCoroutine(MoveSegment(note, setPoint.position, targetPoint.position, moveToB_Duration, true));
     }
 
-    // ÇÑ ±¸°£À» duration ½Ã°£ µ¿¾È ÀÌµ¿
+    // ì˜¤ë¸Œì íŠ¸ë¥¼ from â†’ toê¹Œì§€ duration ì‹œê°„ ë™ì•ˆ ì´ë™
     IEnumerator MoveSegment(GameObject obj, Vector3 from, Vector3 to, float duration, bool keepGoingAfter = false)
     {
         float time = 0f;
         while (time < duration)
         {
             time += Time.deltaTime;
-            float t = time / duration;
-            obj.transform.position = Vector3.Lerp(from, to, t);  // ¼±Çü º¸°£À¸·Î ºÎµå·´°Ô ÀÌµ¿
+            float t = Mathf.Clamp01(time / duration);
+            //Debug.Log(t-1);
+            float easedT = Mathf.Pow(t, 0.80f);
+            obj.transform.position = Vector3.Lerp(from, to, easedT);  // ì„ í˜• ë³´ê°„ì„ í†µí•œ ìœ„ì¹˜ ì´ë™
             yield return null;
         }
 
-        // B µµÂø ÀÌÈÄ¿¡µµ °°Àº ¹æÇâÀ¸·Î °è¼Ó ÀÌµ¿
+        // B ì§€ì  ë„ë‹¬ ì´í›„ ê³„ì† ì „ì§„í•˜ë„ë¡ ì„¤ì •ëœ ê²½ìš°
         if (keepGoingAfter)
         {
-            Vector3 dir = (to - from).normalized;  // ÀÌµ¿ ¹æÇâ ´ÜÀ§ º¤ÅÍ
-            float speed = Vector3.Distance(from, to) / duration; // µ¿ÀÏÇÑ ¼Óµµ À¯Áö
+            Vector3 dir = (to - from).normalized;  // ì´ë™ ë°©í–¥ ë²¡í„°
+            float speed = Vector3.Distance(from, to) / duration; // ì´ë™ ì†ë„ ê³„ì‚°
 
             while (true)
             {
@@ -118,5 +92,28 @@ public class NoteMover : MonoBehaviour
                 yield return null;
             }
         }
+    }
+    void AssignPointsFromParent(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            switch (child.name)
+            {
+                case "SpawnPos":
+                    spawnPoint = child;
+                    break;
+                case "SetPos":
+                    setPoint = child;
+                    break;
+                case "TargetPos":
+                    targetPoint = child;
+                    break;
+            }
+        }
+
+        // í• ë‹¹ë˜ì§€ ì•Šì€ ê²½ìš° ê²½ê³ 
+        if (!spawnPoint) Debug.LogWarning("SpawnPos ìì‹ Transformì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
+        if (!setPoint) Debug.LogWarning("SetPos ìì‹ Transformì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
+        if (!targetPoint) Debug.LogWarning("TargetPos ìì‹ Transformì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.");
     }
 }

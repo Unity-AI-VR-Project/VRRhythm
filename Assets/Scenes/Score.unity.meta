@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/Scenes/Score.unity.meta
 guid: 591df58a34ea0af44958cd60103b1f74
+========
+guid: 4630a9758e726334580712b258adc556
+>>>>>>>> Stashed changes:Assets/Mesh-Cutting/Assets/Scenes/Sample.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

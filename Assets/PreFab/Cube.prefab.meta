@@ -1,6 +1,12 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/PreFab/Cube.prefab.meta
 guid: 50c4ed5652386d04289ca3f34c711a44
 PrefabImporter:
+=======
+guid: 2ae2997598382b8499689298a0c92380
+folderAsset: yes
+DefaultImporter:
+>>>>>>> Stashed changes:Assets/Mesh-Cutting/Assets.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

@@ -14,7 +14,7 @@ public class A : MonoBehaviour
     public Image hpBar;                  // 체력바 이미지
 
     // 체력 관련 변수
-    float startHP;                       // 시작 체력 (GameManager에서 가져옴)
+    float startHP;                       // 시작 체력 (InGameManager에서 가져옴)
   
 
     // 음악 타이머 관련 변수
@@ -24,7 +24,7 @@ public class A : MonoBehaviour
     void Start()
     {
         // 시작 시 체력 초기화
-        startHP = GameManager.instance.playerHealth;
+        startHP = InGameManager.instance.playerHealth;
       
 
         // 음악 길이 설정
@@ -42,12 +42,12 @@ public class A : MonoBehaviour
         comboText.gameObject.SetActive(false);
 
         // 점수 및 콤보 변경 시 UI 갱신 이벤트 등록
-        GameManager.instance.OnScoreChanged += UpdateScoreText;
-        GameManager.instance.OnComboChanged += UpdateComboText;
+        InGameManager.instance.OnScoreChanged += UpdateScoreText;
+        InGameManager.instance.OnComboChanged += UpdateComboText;
 
         // UI 텍스트 초기화
-        UpdateScoreText(GameManager.instance.Score);
-        UpdateComboText(GameManager.instance.Combo);
+        UpdateScoreText(InGameManager.instance.Score);
+        UpdateComboText(InGameManager.instance.Combo);
     }
 
     void Update()
@@ -85,7 +85,7 @@ public class A : MonoBehaviour
     // 체력바 UI 갱신 함수
     void UpdateHP()
     {
-        float fillAmount = Mathf.Clamp01(GameManager.instance.playerHealth / startHP);
+        float fillAmount = Mathf.Clamp01(InGameManager.instance.playerHealth / startHP);
         hpBar.fillAmount = fillAmount;
     }
 
@@ -113,10 +113,10 @@ public class A : MonoBehaviour
     // 오브젝트가 파괴될 때 이벤트 해제 (메모리 누수 방지)
     private void OnDestroy()
     {
-        if (GameManager.instance != null)
+        if (InGameManager.instance != null)
         {
-            GameManager.instance.OnScoreChanged -= UpdateScoreText;
-            GameManager.instance.OnComboChanged -= UpdateComboText;
+            InGameManager.instance.OnScoreChanged -= UpdateScoreText;
+            InGameManager.instance.OnComboChanged -= UpdateComboText;
         }
     }
 }

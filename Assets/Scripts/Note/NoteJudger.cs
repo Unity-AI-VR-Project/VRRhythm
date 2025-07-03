@@ -14,7 +14,7 @@ public class NoteJudger : MonoBehaviour
     private Vector3 spawnPosition;
     private bool isActive = false;
 
-    [Header("ÆÇÁ¤ °Å¸® ±âÁØ (´ÜÀ§: Unity Units)")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½: Unity Units)")]
     public float perfectRange;
     public float excellentRange;
     public float goodRange;
@@ -43,25 +43,25 @@ public class NoteJudger : MonoBehaviour
         if (!isActive) return;
     if (!other.CompareTag("Saber")) return;
 
-    // 1. Ãæµ¹ ¹æÇâ °è»ê
+    // 1. ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     Vector3 hitDir = (transform.position - other.transform.position).normalized;
 
-    // 2. ³ëÆ®ÀÇ ·ÎÄÃ ±âÁØÀ¸·Î º¯È¯
+    // 2. ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     Vector3 localHitDir = transform.InverseTransformDirection(hitDir);
 
-    // 3. ¿Þ¡æ¿À Á¶°Ç Ã¼Å© (x > 0.7)
+    // 3. ï¿½Þ¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å© (x > 0.7)
     if (localHitDir.x > 0.7f)
     {
-        // ÆÇÁ¤
+        // ï¿½ï¿½ï¿½ï¿½
         DoJudgement();
 
-        // Àý´Ü¿ë Å¬·Ð »ý¼º
+        // ï¿½ï¿½ï¿½Ü¿ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         GameObject clone = Instantiate(gameObject, transform.position, transform.rotation);
         Destroy(clone.GetComponent<Collider>());
-        Destroy(clone.GetComponent<NoteJudger>()); // Áßº¹ ¹æÁö
+        Destroy(clone.GetComponent<NoteJudger>()); // ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        // Àý´Ü Ã³¸®
-        Cutter.Cut(clone, transform.position, transform.up);
+        // ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
+        //Cutter.Cut(clone, transform.position, transform.up);
         Destroy(clone, 2f);
     }
     }
@@ -75,7 +75,7 @@ public class NoteJudger : MonoBehaviour
         ParticlePoolManager.instance.SpawnParticle(judgement.ToString(), transform.position);
 
         isActive = false;
-        gameObject.SetActive(false); // ¼öµ¿ ºñÈ°¼ºÈ­
+        gameObject.SetActive(false); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
     }
 
     JudgementType GetJudgement(float distance)
@@ -110,7 +110,7 @@ public class NoteJudger : MonoBehaviour
                 break;
         }
 
-        Debug.Log($"[{gameObject.name}] ÆÇÁ¤ °á°ú: {result}");
+        Debug.Log($"[{gameObject.name}] ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½: {result}");
     }
 
     int GetScore(JudgementType result)

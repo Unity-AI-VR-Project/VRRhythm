@@ -2,37 +2,32 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// UI를 관리하는 클래스
+// 게임의 점수, 콤보, 타이머, 체력 등의 UI를 관리하는 클래스
 public class UiManager : MonoBehaviour
 {
-    // 점수, 콤보, 타이머 텍스트, HP 바 등 UI 요소들
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI comboText;
-    public Image timerImage;
-    public TextMeshProUGUI timeText;
-    public AudioSource audioSource;
-    public Image hpBar;
+    // UI 요소들 (인스펙터에서 할당)
+    public TextMeshProUGUI scoreText;    // 점수 텍스트
+    public TextMeshProUGUI comboText;    // 콤보 텍스트
+    public Image timerImage;             // 타이머 이미지 (프로그래스 바 형태)
+    public TextMeshProUGUI timeText;     // 남은 시간 텍스트
+    public AudioSource audioSource;      // 음악 재생용 AudioSource
+    public Image hpBar;                  // 체력바 이미지
 
-    // HP 정보
-    float startHP;
-    float currentHP;
+    // 체력 관련 변수
+    float startHP;                       // 시작 체력 (InGameManager에서 가져옴)
 
-    // 음악 재생 시간 정보
-    private float totalSongTime;
-    private float currentTime;
 
-    // 점수 및 콤보
-    private int score = 0;
-    private int combo = 0;
+    // 음악 타이머 관련 변수
+    private float totalSongTime;         // 음악 전체 재생 시간
+    private float currentTime;           // 현재 남은 시간
 
-    // 초기화
     void Start()
     {
-        // HP 초기값 설정
-        startHP = 100;
-        currentHP = 100;
+        // 시작 시 체력 초기화
+        startHP = InGameManager.instance.playerHealth;
 
-        // 오디오 클립이 제대로 설정되었는지 확인하고 총 길이 측정
+
+        // 음악 길이 설정
         if (audioSource != null && audioSource.clip != null)
         {
             totalSongTime = audioSource.clip.length;
@@ -40,103 +35,88 @@ public class UiManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("오디오 소스나 클립이 할당되지 않았습니다.");
+            Debug.LogWarning("오디오 클립이 없음.");
         }
 
-        // 콤보 텍스트는 기본적으로 비활성화
+        // 시작 시 콤보 텍스트는 숨김
         comboText.gameObject.SetActive(false);
 
-        // 초기 점수 및 콤보 텍스트 표시
-        UpdateScoreText();
-        UpdateComboText();
+        // 점수 및 콤보 변경 시 UI 갱신 이벤트 등록
+        InGameManager.instance.OnScoreChanged += UpdateScoreText;
+        InGameManager.instance.OnComboChanged += UpdateComboText;
+
+        // UI 텍스트 초기화
+        UpdateScoreText(InGameManager.instance.Score);
+        UpdateComboText(InGameManager.instance.Combo);
     }
 
-    // 매 프레임마다 호출됨
     void Update()
     {
-        HandleInput();   // 입력 처리
-        UpdateTimer();   // 타이머 업데이트
+        // 매 프레임 타이머 및 체력바 갱신
+        UpdateTimer();
+        UpdateHP();
     }
 
-    // 키보드 입력 처리
-    void HandleInput()
-    {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            // 점수 100점 추가
-            score += 100;
-            UpdateScoreText();
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            // 콤보가 0이면 텍스트 다시 표시
-            if (combo == 0)
-            {
-                comboText.gameObject.SetActive(true);
-            }
-
-            // 콤보 증가
-            combo += 1;
-            UpdateComboText();
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            // 콤보 초기화 및 UI 숨기기
-            combo = 0;
-            comboText.gameObject.SetActive(false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            // HP 10 감소 및 UI 업데이트
-            currentHP -= 10;
-            UpdateHP();
-        }
-    }
-
-    // 타이머 및 진행률 바 업데이트
+    // 타이머 UI 갱신 함수
     void UpdateTimer()
     {
         if (currentTime > 0)
         {
             currentTime -= Time.deltaTime;
 
+            // 타이머 바 채우기 비율 조정
             float fillAmount = Mathf.Clamp01(currentTime / totalSongTime);
             timerImage.fillAmount = fillAmount;
 
+            // 텍스트로 시간 표시 (분:초)
             int totalSeconds = Mathf.CeilToInt(currentTime);
             int minutes = totalSeconds / 60;
             int seconds = totalSeconds % 60;
-
-            // mm:ss 형식으로 텍스트 출력
             timeText.text = string.Format("{0}:{1:00}", minutes, seconds);
         }
         else
         {
-            // 시간이 다 되었을 경우
+            // 시간이 다 되면 0으로 고정
             timeText.text = "0:00";
             timerImage.fillAmount = 0f;
         }
     }
 
-    // HP 게이지 업데이트
+    // 체력바 UI 갱신 함수
     void UpdateHP()
     {
-        float fillAmount = Mathf.Clamp01(currentHP / startHP);
+        float fillAmount = Mathf.Clamp01(InGameManager.instance.playerHealth / startHP);
         hpBar.fillAmount = fillAmount;
     }
 
-    // 점수 텍스트 업데이트
-    void UpdateScoreText()
+
+    // 점수 변경 시 텍스트 갱신 (이벤트 핸들러)
+    void UpdateScoreText(int score)
     {
         scoreText.text = "Score: " + score;
     }
 
-    // 콤보 텍스트 업데이트
-    void UpdateComboText()
+    // 콤보 변경 시 텍스트 갱신 및 토글 (이벤트 핸들러)
+    void UpdateComboText(int combo)
     {
-        comboText.text = "X " + combo;
+        if (combo > 0)
+        {
+            comboText.gameObject.SetActive(true);
+            comboText.text = "X " + combo;
+        }
+        else
+        {
+            comboText.gameObject.SetActive(false);
+        }
+    }
+
+    // 오브젝트가 파괴될 때 이벤트 해제 (메모리 누수 방지)
+    private void OnDestroy()
+    {
+        if (InGameManager.instance != null)
+        {
+            InGameManager.instance.OnScoreChanged -= UpdateScoreText;
+            InGameManager.instance.OnComboChanged -= UpdateComboText;
+        }
     }
 }

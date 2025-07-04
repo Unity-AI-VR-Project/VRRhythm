@@ -1,6 +1,16 @@
 using System.Collections;
 using System.IO;
+using NUnit.Framework;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
+
+[Serializable]
+public class NoteTimer
+{
+    [SerializeField]
+    public List<List<float>> times;
+}
 
 public class NoteSpawnerTime : MonoBehaviour
 {
@@ -12,11 +22,14 @@ public class NoteSpawnerTime : MonoBehaviour
     public string fileName;
     
     private int counter;
-    
+
+    public NoteTimer timer;
 
     void Start()
     {
         TextAsset data = Resources.Load<TextAsset>(fileName);
+        timer = JsonUtility.FromJson<NoteTimer>(data.text);
+        
 
         if (data == null)
         {
@@ -24,7 +37,9 @@ public class NoteSpawnerTime : MonoBehaviour
             return;
         }
 
-        string[] timeStrings = data.text.Split(new char[] { '\n'}, System.StringSplitOptions.RemoveEmptyEntries);
+        // string[] timeStrings = data.text.Split(new char[] {'\n'}, StringSplitOptions.RemoveEmptyEntries);
+        Debug.LogError(data.text);
+        string[] timeStrings = data.text.Split('\n');
         spawnIndex = new double[timeStrings.Length];
         
         
@@ -47,7 +62,7 @@ public class NoteSpawnerTime : MonoBehaviour
     {
         if (counter < spawnIndex.Length)
         {
-            if (timeChacker.elapsedTime >= spawnIndex[counter])
+            if (timeChacker.elapsedTime > spawnIndex[counter])
             {
                 Debug.Log("노트 생성" + spawnIndex[counter]);
                 SpawnNote();

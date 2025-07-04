@@ -74,8 +74,7 @@ public class NoteMover : MonoBehaviour
         {
             time += Time.deltaTime;
             float t = Mathf.Clamp01(time / duration);
-            //Debug.Log(t-1);
-            float easedT = Mathf.Pow(t, 0.80f);
+            float easedT = Mathf.Pow(t, 0.60f);
             obj.transform.position = Vector3.Lerp(from, to, easedT);  // 선형 보간을 통한 위치 이동
             yield return null;
         }

@@ -345,9 +345,9 @@ AudioSource:
   m_GameObject: {fileID: 1072502018}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: 83850d7094266a54ca07af96e5788315, type: 2}
-  m_audioClip: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
-  m_Resource: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 2aec550ed07c54549b2a47eb4ea93fd7, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 50a8fafcb54864a449d37a127890007f, type: 3}
+  m_Resource: {fileID: 8300000, guid: 50a8fafcb54864a449d37a127890007f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -632,9 +632,9 @@ AudioSource:
   m_GameObject: {fileID: 1842416034}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: e96fdd5a366b26e4caa54b6628a2cfbf, type: 2}
-  m_audioClip: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
-  m_Resource: {fileID: 8300000, guid: d06c0d1037eef314eb0c93c71e3e26c4, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 3f32861443d46884187b35658b75fd9b, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 50a8fafcb54864a449d37a127890007f, type: 3}
+  m_Resource: {fileID: 8300000, guid: 50a8fafcb54864a449d37a127890007f, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -882,6 +882,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LowSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 7541423304679518883, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8600394302699171891, guid: e1b3ef9ec54b04045b02896c1019770e, type: 3}
       propertyPath: fileName
       value: low_band_peaks
@@ -905,7 +909,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1148363514267546922, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
       propertyPath: fileName
-      value: 
+      value: mid_band_peaks
       objectReference: {fileID: 0}
     - target: {fileID: 1148363514267546922, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
       propertyPath: timeChacker

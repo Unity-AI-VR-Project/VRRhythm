@@ -1,91 +1,91 @@
 using System;
 using UnityEngine;
 
-// °ÔÀÓ Àü¹İÀÇ Á¡¼ö, ÄŞº¸, Ã¼·Â µîÀ» °ü¸®ÇÏ´Â ¸Å´ÏÀú Å¬·¡½º
+// ê²Œì„ ì ìˆ˜, ì½¤ë³´, ì²´ë ¥ ë“±ì˜ ì •ë³´ë¥¼ ê´€ë¦¬í•˜ëŠ” ë§¤ë‹ˆì € í´ë˜ìŠ¤
 public class InGameManager : MonoBehaviour
 {
-    // ½Ì±ÛÅÏ ÀÎ½ºÅÏ½º Á¢±Ù ÇÁ·ÎÆÛÆ¼
+    // ì¸ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ ì ‘ê·¼ í”„ë¡œí¼í‹°
     public static InGameManager instance
     {
         get
         {
             if (m_instance == null)
             {
-                // ¾À¿¡ Á¸ÀçÇÏ´Â InGameManager¸¦ Ã£¾Æ ÇÒ´ç
+                // í˜„ì¬ ì¡´ì¬í•˜ëŠ” InGameManagerë¥¼ ì°¾ì•„ í• ë‹¹
                 m_instance = FindAnyObjectByType<InGameManager>();
             }
             return m_instance;
         }
     }
 
-    // ½ÇÁ¦ ½Ì±ÛÅÏ ÀÎ½ºÅÏ½º¸¦ ÀúÀåÇÏ´Â Á¤Àû ÇÊµå
+    // ë‹¨ì¼ ì¸ê²Œì„ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì €ì¥í•˜ëŠ” ì •ì  í•„ë“œ
     private static InGameManager m_instance;
 
-    // °ÔÀÓ Á¡¼ö
+    // í˜„ì¬ ì ìˆ˜
     public int Score { get; private set; }
 
-    // ÇöÀç ÄŞº¸ ¼öÄ¡
+    // í˜„ì¬ ì½¤ë³´ ìˆ˜ì¹˜
     public int Combo { get; private set; }
 
-    // ÃÖ°í ÄŞº¸ ±â·Ï
+    // ìµœê³  ì½¤ë³´ ê¸°ë¡
     public int MaxCombo { get; private set; }
 
-    // ÇÃ·¹ÀÌ¾î Ã¼·Â
+    // í”Œë ˆì´ì–´ ì²´ë ¥
     public float playerHealth { get; private set; }
 
-    // Á¡¼ö°¡ º¯°æµÇ¾úÀ» ¶§ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    // ì ìˆ˜ê°€ ë³€ê²½ë˜ì—ˆì„ ë•Œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     public event Action<int> OnScoreChanged;
 
-    // ÄŞº¸ ¼öÄ¡°¡ º¯°æµÇ¾úÀ» ¶§ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
+    // ì½¤ë³´ ìˆ˜ì¹˜ê°€ ë³€ê²½ë˜ì—ˆì„ ë•Œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
     public event Action<int> OnComboChanged;
 
-    // ¿ÀºêÁ§Æ®°¡ È°¼ºÈ­µÉ ¶§ ½ÇÇàµÊ
+    // ì˜¤ë¸Œì íŠ¸ê°€ í™œì„±í™”ë  ë•Œ í˜¸ì¶œ
     private void Awake()
     {
-        // ½Ì±ÛÅÏÀÌ Áßº¹µÇÁö ¾Êµµ·Ï Ã³¸®
+        // ì¸ê²Œì„ ë§¤ë‹ˆì € ì¤‘ë³µ ìƒì„± ë§‰ëŠ” ì²˜ë¦¬
         if (instance != this)
         {
             Destroy(gameObject);
         }
 
-        // ÃÊ±â Ã¼·Â ¼³Á¤
+        // ì´ˆê¸° ì²´ë ¥ ì„¤ì •
         playerHealth = 100;
     }
 
-    // Á¡¼ö¸¦ Ãß°¡ÇÏ´Â ¸Ş¼­µå
+    // ì ìˆ˜ë¥¼ ì¶”ê°€í•˜ëŠ” ë©”ì„œë“œ
     public void AddScore(int value)
     {
         Score += value;
-        OnScoreChanged?.Invoke(Score); // ¸®½º³Ê¿¡°Ô Á¡¼ö º¯°æ ¾Ë¸²
+        OnScoreChanged?.Invoke(Score); // êµ¬ë…ìë“¤ì—ê²Œ ì ìˆ˜ ë³€ê²½ ì•Œë¦¼
     }
 
-    // ÄŞº¸¸¦ 1 Áõ°¡½ÃÅ°´Â ¸Ş¼­µå
+    // ì½¤ë³´ë¥¼ 1 ì¦ê°€ì‹œí‚¤ëŠ” ë©”ì„œë“œ
     public void AddCombo()
     {
         Combo++;
         if (Combo > MaxCombo)
             MaxCombo = Combo;
 
-        OnComboChanged?.Invoke(Combo); // ¸®½º³Ê¿¡°Ô ÄŞº¸ º¯°æ ¾Ë¸²
+        OnComboChanged?.Invoke(Combo); // êµ¬ë…ìë“¤ì—ê²Œ ì½¤ë³´ ë³€ê²½ ì•Œë¦¼
     }
 
-    // ÄŞº¸¸¦ ÃÊ±âÈ­ÇÏ´Â ¸Ş¼­µå
+    // ì½¤ë³´ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” ë©”ì„œë“œ
     public void ResetCombo()
     {
         Combo = 0;
         OnComboChanged?.Invoke(Combo);
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ µ¥¹ÌÁö¸¦ ÀÔÀ» ¶§ È£Ãâ
+    // í”Œë ˆì´ì–´ê°€ í”¼í•´ë¥¼ ì…ì—ˆì„ ë•Œ í˜¸ì¶œ
     public void TakeDamage(int damage)
     {
         playerHealth -= damage;
     }
 
-    // ÇöÀç ÃÖ´ë ÄŞº¸¸¦ ±â¹İÀ¸·Î º¸³Ê½º Á¡¼ö¸¦ ºÎ¿©
+    // ê²Œì„ ì¢…ë£Œ ì‹œ ìµœëŒ€ ì½¤ë³´ì— ë”°ë¥¸ ë³´ë„ˆìŠ¤ ì ìˆ˜ ì ìš©
     public void ApplyComboBonus()
     {
-        // ¿¹: ÃÖ´ë ÄŞº¸ ¼ö x 10 ¸¸Å­ º¸³Ê½º Á¡¼ö Ãß°¡
+        // ì˜ˆ: ìµœëŒ€ ì½¤ë³´ ìˆ˜ x 10 ë§Œí¼ ë³´ë„ˆìŠ¤ ì ìˆ˜ ì¶”ê°€
         int bonus = MaxCombo * 10;
         AddScore(bonus);
         Debug.Log($"Max Combo Bonus Applied: {bonus}");

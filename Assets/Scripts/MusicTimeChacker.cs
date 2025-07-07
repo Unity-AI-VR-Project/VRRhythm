@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class MusicTimeChacker : MonoBehaviour
 {
-    private AudioSource audioSource;
+    public AudioSource audioSource;
     private double startDspTime;
     private float musicLength;
 

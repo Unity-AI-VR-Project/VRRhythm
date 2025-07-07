@@ -14,7 +14,7 @@ public class NoteJudger : MonoBehaviour
     private Vector3 spawnPosition;
     private bool isActive = false;
 
-    [Header("���� �Ÿ� ���� (����: Unity Units)")]
+    [Header("노트 거리 설정 (단위: Unity Units)")] // 수정됨:  Ÿ 
     public float perfectRange;
     public float excellentRange;
     public float goodRange;
@@ -32,38 +32,40 @@ public class NoteJudger : MonoBehaviour
         if (!isActive) return;
 
         float distance = Vector3.Distance(transform.position, spawnPosition);
-        if (distance > autoMissRange)
+        /*if (distance > autoMissRange)
         {
             DoJudgement();
-        }
+        }*/
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (!isActive) return;
-    if (!other.CompareTag("Saber")) return;
+        if (!other.CompareTag("Saber")) return;
+        
 
-    // 1. �浹 ���� ���
-    Vector3 hitDir = (transform.position - other.transform.position).normalized;
+        // 1. 충돌 방향 계산 // 수정됨: 浹  
+        Vector3 hitDir = (transform.position - other.transform.position).normalized;
 
-    // 2. ��Ʈ�� ���� �������� ��ȯ
-    Vector3 localHitDir = transform.InverseTransformDirection(hitDir);
+        // 2. 노트를 자신 로컬 좌표계로 변환 // 수정됨: Ʈ   ȯ
+        Vector3 localHitDir = transform.InverseTransformDirection(hitDir);
+        Debug.Log(localHitDir);
 
-    // 3. �ޡ�� ���� üũ (x > 0.7)
-    if (localHitDir.x > 0.7f)
-    {
-        // ����
-        DoJudgement();
+        // 3. 베기 방향 체크 (x > 0.7) // 수정됨: ޡ  üũ
+        if (localHitDir.x > 0.25f)
+        {
+            // 판정 // 수정됨: 
+            DoJudgement();
+            // 잔상으로 클론 생성 // 수정됨: ܿ Ŭ 
+            GameObject clone = Instantiate(gameObject, transform.position, transform.rotation);
+            Destroy(clone.GetComponent<Collider>());
+            Destroy(clone.GetComponent<NoteJudger>()); // 중복 제거 // 수정됨: ߺ 
 
-        // ���ܿ� Ŭ�� ����
-        GameObject clone = Instantiate(gameObject, transform.position, transform.rotation);
-        Destroy(clone.GetComponent<Collider>());
-        Destroy(clone.GetComponent<NoteJudger>()); // �ߺ� ����
-
-        // ���� ó��
-        //Cutter.Cut(clone, transform.position, transform.up);
-        Destroy(clone, 2f);
-    }
+            // 절단 처리 // 수정됨:  ó
+            Cutter.Cut(clone, transform.position, transform.up);
+            gameObject.GetComponent<Collider>().enabled = false;
+            Destroy(clone, 2f);
+        }
     }
 
     void DoJudgement()
@@ -75,7 +77,7 @@ public class NoteJudger : MonoBehaviour
         ParticlePoolManager.instance.SpawnParticle(judgement.ToString(), transform.position);
 
         isActive = false;
-        gameObject.SetActive(false); // ���� ��Ȱ��ȭ
+        gameObject.SetActive(false); // 노트 비활성화 // 수정됨:  Ȱȭ
     }
 
     JudgementType GetJudgement(float distance)
@@ -110,7 +112,7 @@ public class NoteJudger : MonoBehaviour
                 break;
         }
 
-        Debug.Log($"[{gameObject.name}] ���� ���: {result}");
+        Debug.Log($"[{gameObject.name}] 판정 결과: {result}"); // 수정됨:  
     }
 
     int GetScore(JudgementType result)

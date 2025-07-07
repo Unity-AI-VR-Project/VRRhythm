@@ -1,17 +1,17 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.Pool;
 using System.Collections;
 using System.Collections.Generic;
 
-// ÆÄÆ¼Å¬ ¿ÀºêÁ§Æ® Ç®À» °ü¸®ÇÏ´Â Å¬·¡½º
+// íŒŒí‹°í´ ì˜¤ë¸Œì íŠ¸ í’€ì„ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤
 public class ParticlePoolManager : MonoBehaviour
 {
-    // ¿ÜºÎ¿¡¼­ Á¢±Ù °¡´ÉÇÑ ½Ì±ÛÅÏ ÀÎ½ºÅÏ½º
+    // ì™¸ë¶€ì—ì„œ ì ‘ê·¼ ê°€ëŠ¥í•œ ë‹¨ì¼ ì¸ìŠ¤í„´ìŠ¤
     public static ParticlePoolManager instance
     {
         get
         {
-            // ÀÎ½ºÅÏ½º°¡ ¾øÀ¸¸é ¾À¿¡¼­ °Ë»öÇÏ¿© ÇÒ´ç
+            // ì¸ìŠ¤í„´ìŠ¤ê°€ ì—†ìœ¼ë©´ ì°¾ì•„ì„œ í• ë‹¹
             if (m_instance == null)
             {
                 m_instance = FindAnyObjectByType<ParticlePoolManager>();
@@ -20,82 +20,82 @@ public class ParticlePoolManager : MonoBehaviour
         }
     }
 
-    // ½ÇÁ¦ ÀÎ½ºÅÏ½º¸¦ ÀúÀåÇÏ´Â Á¤Àû ÇÊµå
+    // ë‹¨ì¼ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì €ì¥í•˜ëŠ” ì •ì  í•„ë“œ
     private static ParticlePoolManager m_instance;
 
-    // Å°¿¡ µû¶ó ´Ù¾çÇÑ ÆÄÆ¼Å¬ ÇÁ¸®ÆÕÀ» ÀúÀåÇÒ ¼ö ÀÖ´Â ±¸Á¶Ã¼
+    // í‚¤ì— ë”°ë¼ ë§¤í•‘ë  íŒŒí‹°í´ í”„ë¦¬íŒ¹ ì •ë³´ë¥¼ ì €ì¥í•  ìˆ˜ ìˆëŠ” í´ë˜ìŠ¤
     [System.Serializable]
     public class ParticleEntry
     {
-        public string key;              // ÆÄÆ¼Å¬ ½Äº° Å°
-        public ParticleSystem prefab;  // ÇØ´ç Å°¿¡ ´ëÀÀÇÏ´Â ÆÄÆ¼Å¬ ÇÁ¸®ÆÕ
+        public string key;              // íŒŒí‹°í´ ì‹ë³„ í‚¤
+        public ParticleSystem prefab;  // í•´ë‹¹ í‚¤ì— ì—°ê²°ëœ íŒŒí‹°í´ í”„ë¦¬íŒ¹
     }
 
-    [Header("µî·ÏµÈ ÆÄÆ¼Å¬ ÇÁ¸®ÆÕµé")]
-    public ParticleEntry[] particlePrefabs; // ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ °¡´ÉÇÑ ÇÁ¸®ÆÕ ¹è¿­
+    [Header("ë“±ë¡ëœ íŒŒí‹°í´ í”„ë¦¬íŒ¹ ëª©ë¡")]
+    public ParticleEntry[] particlePrefabs; // ì¸ìŠ¤í™í„°ì—ì„œ ì„¤ì • ê°€ëŠ¥í•œ íŒŒí‹°í´ ë°°ì—´
 
-    // Å°º°·Î ¿ÀºêÁ§Æ® Ç®À» °ü¸®ÇÏ´Â µñ¼Å³Ê¸®
+    // í‚¤ë³„ ì˜¤ë¸Œì íŠ¸ í’€ì„ ì €ì¥í•˜ëŠ” ë”•ì…”ë„ˆë¦¬
     private Dictionary<string, ObjectPool<ParticleSystem>> particlePools;
 
     private void Awake()
     {
-        // Áßº¹ ½Ì±ÛÅÏ ¹æÁö: ¸¸¾à ´Ù¸¥ ÀÎ½ºÅÏ½º¶ó¸é Á¦°Å
+        // ì¤‘ë³µ ì¸ìŠ¤í„´ìŠ¤ ë°©ì§€: ì´ë¯¸ ë‹¤ë¥¸ ì¸ìŠ¤í„´ìŠ¤ê°€ ì¡´ì¬í•˜ë©´
         if (instance != this)
         {
             Destroy(gameObject);
         }
 
-        // µñ¼Å³Ê¸® ÃÊ±âÈ­
+        // ë”•ì…”ë„ˆë¦¬ ì´ˆê¸°í™”
         particlePools = new Dictionary<string, ObjectPool<ParticleSystem>>();
 
-        // °¢ ÇÁ¸®ÆÕ¸¶´Ù ¿ÀºêÁ§Æ® Ç® »ı¼º
+        // ê° í”„ë¦¬íŒ¹ì— ëŒ€í•œ ì˜¤ë¸Œì íŠ¸ í’€ ìƒì„±
         foreach (var entry in particlePrefabs)
         {
             string key = entry.key;
             ParticleSystem prefab = entry.prefab;
 
-            // ¿ÀºêÁ§Æ® Ç® »ı¼º ¹× µñ¼Å³Ê¸®¿¡ µî·Ï
+            // ì˜¤ë¸Œì íŠ¸ í’€ ìƒì„± ë° ë”•ì…”ë„ˆë¦¬ì— ì¶”ê°€
             particlePools[key] = new ObjectPool<ParticleSystem>(
                 createFunc: () =>
                 {
-                    ParticleSystem ps = Instantiate(prefab);     // »õ ÆÄÆ¼Å¬ ÀÎ½ºÅÏ½º »ı¼º
-                    ps.gameObject.SetActive(false);              // ±âº»ÀûÀ¸·Î ºñÈ°¼ºÈ­
+                    ParticleSystem ps = Instantiate(prefab);     // ìƒˆ íŒŒí‹°í´ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+                    ps.gameObject.SetActive(false);              // ê¸°ë³¸ì ìœ¼ë¡œ ë¹„í™œì„±í™”
                     return ps;
                 },
-                actionOnGet: (ps) => ps.gameObject.SetActive(true),    // Ç®¿¡¼­ ²¨³¾ ¶§ È°¼ºÈ­
-                actionOnRelease: (ps) => ps.gameObject.SetActive(false), // ¹İÈ¯ ½Ã ºñÈ°¼ºÈ­
-                actionOnDestroy: (ps) => Destroy(ps.gameObject),        // Ç® ÀÚÃ¼ »èÁ¦ ½Ã °´Ã¼ Á¦°Å
+                actionOnGet: (ps) => ps.gameObject.SetActive(true),    // í’€ì—ì„œ ê°€ì ¸ì˜¬ ë•Œ í™œì„±í™”
+                actionOnRelease: (ps) => ps.gameObject.SetActive(false), // ë°˜í™˜ ì‹œ ë¹„í™œì„±í™”
+                actionOnDestroy: (ps) => Destroy(ps.gameObject),        // í’€ ê°ì²´ íŒŒê´´ ì‹œ ê²Œì„ ì˜¤ë¸Œì íŠ¸ íŒŒê´´
                 collectionCheck: false,
-                defaultCapacity: 10 // ÃÊ±â Ç® Å©±â ¼³Á¤
+                defaultCapacity: 10 // ì´ˆê¸° í’€ í¬ê¸° ì„¤ì •
             );
            
         }
     }
 
     /// <summary>
-    /// ÇØ´ç Å°ÀÇ ÆÄÆ¼Å¬À» ÁöÁ¤µÈ À§Ä¡¿¡ Àç»ı
+    /// í•´ë‹¹ í‚¤ì˜ íŒŒí‹°í´ì„ ì§€ì •ëœ ìœ„ì¹˜ì— ìƒì„±
     /// </summary>
     public void SpawnParticle(string key, Vector3 position)
     {
-        // Å°°¡ µî·ÏµÇÁö ¾Ê¾ÒÀ¸¸é °æ°í ·Î±× Ãâ·Â ÈÄ Á¾·á
+        // í‚¤ê°€ ë“±ë¡ë˜ì–´ ìˆì§€ ì•Šìœ¼ë©´ ê²½ê³  ë¡œê·¸ í‘œì‹œ í›„ ì¢…ë£Œ
         if (!particlePools.ContainsKey(key))
         {
-            Debug.LogWarning($"[ParticlePoolManager] µî·ÏµÇÁö ¾ÊÀº ÆÄÆ¼Å¬ Å°: {key}");
+            Debug.LogWarning($"[ParticlePoolManager] ë“±ë¡ë˜ì§€ ì•Šì€ íŒŒí‹°í´ í‚¤: {key}");
             return;
         }
 
-        // Ç®¿¡¼­ ÆÄÆ¼Å¬ ÀÎ½ºÅÏ½º¸¦ ²¨³» À§Ä¡ ÁöÁ¤ ÈÄ Àç»ı
+        // í’€ì—ì„œ íŒŒí‹°í´ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ê°€ì ¸ì™€ ìœ„ì¹˜ ì„¤ì • í›„ ì¬ìƒ
         var pool = particlePools[key];
         ParticleSystem ps = pool.Get();
         ps.transform.position = position;
 
         ps.Play();
 
-        // ÆÄÆ¼Å¬ Àç»ıÀÌ ³¡³­ ÈÄ ÀÚµ¿À¸·Î ¹İÈ¯ÇÏ´Â ÄÚ·çÆ¾ ½ÃÀÛ
+        // íŒŒí‹°í´ ì¬ìƒì´ ëë‚˜ë©´ ìë™ìœ¼ë¡œ ë°˜í™˜í•˜ëŠ” ì½”ë£¨í‹´ ì‹œì‘
         StartCoroutine(ReturnAfterDelay(ps, pool, ps.main.duration));
     }
 
-    // ÀÏÁ¤ ½Ã°£ ÈÄ ÆÄÆ¼Å¬À» Ç®¿¡ ¹İÈ¯ÇÏ´Â ÄÚ·çÆ¾
+    // ì§€ì • ì‹œê°„ í›„ íŒŒí‹°í´ì„ í’€ë¡œ ë°˜í™˜í•˜ëŠ” ì½”ë£¨í‹´
     private IEnumerator ReturnAfterDelay(ParticleSystem ps, ObjectPool<ParticleSystem> pool, float delay)
     {
         yield return new WaitForSeconds(delay);

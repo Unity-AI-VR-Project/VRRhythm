@@ -64,10 +64,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4503b686678094da28968badcfe5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeChacker: {fileID: 0}
+  musicJsonFile: {fileID: 4900000, guid: 0fc4a5d53890b3e42b90e7200550add2, type: 3}
   notePrefab: {fileID: 3476338928611796843, guid: a5577ac8a93d6fe4fa704dbdbf0610a4, type: 3}
-  spawnIndex: []
-  fileName: grouped_output_high
+  spawnerTransform: {fileID: 6036705033950330167}
+  timeChacker: {fileID: 0}
 --- !u!1 &3200142174863595210
 GameObject:
   m_ObjectHideFlags: 0

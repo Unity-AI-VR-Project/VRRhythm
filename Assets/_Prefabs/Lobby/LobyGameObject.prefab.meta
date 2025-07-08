@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Lobby/LobyGameObject.prefab.meta
+guid: 13a40506db60afa4db1e5de7769c9b53
+========
+guid: 2d54d0bf84987de4ab9e59043bcb13b3
+>>>>>>>> develop:Assets/Prefabs/InGame/InGameManager.prefab.meta
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

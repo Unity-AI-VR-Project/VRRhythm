@@ -123,4 +123,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawner: {fileID: 4168788514687457774, guid: aff5555af7d45244ea9ef08a0c646130, type: 3}
   beatsPerNote: 4
-  moveToA_Ratio: 0.4
+  moveToA_Ratio: 0.3

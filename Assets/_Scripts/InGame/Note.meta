@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Lobby.meta
+guid: e442061535059fd478c81a784d2007ec
+========
+guid: 1b1d1261c3e9a5444b7dd1fa617a4ca7
+>>>>>>>> develop:Assets/Scripts/InGame/Note.meta
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

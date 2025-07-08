@@ -30,7 +30,7 @@ public class SceneLoaderOnSaberContact : MonoBehaviour
         _lastSceneLoadTime = Time.time; // 씬 로드 시도 시간 기록
 
         // Check 스크립트에서 현재 선택된 패널의 인덱스를 가져옵니다.
-        int selectedPanelIndex = Check.currentIndex;
+        int selectedPanelIndex = SongSelect.currentIndex;
 
         // 유효한 씬 인덱스인지 확인
         if (selectedPanelIndex >= 0 && selectedPanelIndex < sceneNames.Length)

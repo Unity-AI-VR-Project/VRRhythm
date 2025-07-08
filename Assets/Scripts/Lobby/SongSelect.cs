@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI; // CanvasGroup을 위해 추가
 
-public class Check : MonoBehaviour
+public class SongSelect : MonoBehaviour
 {
     // 버튼 타입을 정의: 왼쪽 또는 오른쪽
     public enum ButtonType { Left, Right }

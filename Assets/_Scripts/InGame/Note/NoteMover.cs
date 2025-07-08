@@ -65,7 +65,10 @@ public class NoteMover : MonoBehaviour
         MusicTimeChacker = musicTimeChacker;
     
         InitializePositions();
+        
+
         CalculateMovementParameters();
+        
         
         _noteActualStartTime = TargetMusicTime - _zTravelTime; // 노트의 실제 이동 시작 시간 계산
 
@@ -108,13 +111,13 @@ public class NoteMover : MonoBehaviour
         Transform tempTarget = SpawnerParent.Find("TargetPos");
 
         _spawnPosition = (tempSpawn != null) ? tempSpawn.position : Vector3.zero;
-        if (tempSpawn == null) Debug.LogError("NoteMover: 'SpawnPos' 자식 Transform을 찾지 못했습니다.", this); 
+        if (tempSpawn == null) Debug.LogError($"NoteMover: Spawner '{SpawnerParent.name}'에서 'SpawnPos' 자식 Transform을 찾지 못했습니다. 노트 스폰 위치가 0,0,0이 됩니다.", this); 
 
         _setPointPosition = (tempSet != null) ? tempSet.position : Vector3.zero;
-        if (tempSet == null) Debug.LogWarning("NoteMover: 'SetPos' 자식 Transform을 찾지 못했습니다. 중간 기믹이 작동하지 않을 수 있습니다.", this);
+        if (tempSet == null) Debug.LogWarning($"NoteMover: Spawner '{SpawnerParent.name}'에서 'SetPos' 자식 Transform을 찾지 못했습니다. 중간 기믹이 작동하지 않을 수 있습니다.", this);
 
         _targetPosition = (tempTarget != null) ? tempTarget.position : Vector3.zero;
-        if (tempTarget == null) Debug.LogError("NoteMover: 'TargetPos' 자식 Transform을 찾지 못했습니다. 노트 이동이 불가능합니다.", this);
+        if (tempTarget == null) Debug.LogError($"NoteMover: Spawner '{SpawnerParent.name}'에서 'TargetPos' 자식 Transform을 찾지 못했습니다. 노트 이동이 불가능하며 0,0,0으로 도착할 수 있습니다.", this);
     }
 
     /// <summary>
@@ -284,14 +287,14 @@ public class NoteMover : MonoBehaviour
     {
         const float destroyOffset = 5.0f; 
     
-        if (_totalZDistance > 0) 
+        if (_totalZDistance > 0) // 노트가 앞으로 이동하는 경우
         {
             if (currentTime - TargetMusicTime > 1.0f && transform.position.z > (_targetPosition.z + destroyOffset)) 
             {
                 Destroy(gameObject);
             }
         }
-        else 
+        else // 노트가 뒤로 이동하는 경우 (Z축 값이 감소)
         {
             if (currentTime - TargetMusicTime > 1.0f && transform.position.z < (_targetPosition.z - destroyOffset)) 
             {

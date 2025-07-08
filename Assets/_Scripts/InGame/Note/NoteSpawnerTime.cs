@@ -127,5 +127,14 @@ public class NoteSpawnerTime : MonoBehaviour
             Debug.LogWarning("생성된 노트 프리팹에 NoteMover 컴포넌트가 없습니다! 노트 이동이 불가능합니다.", spawnedNote);
             Destroy(spawnedNote); 
         }
+
+        // --- 추가된 부분: NoteJudger 초기화 ---
+        NoteJudger noteJudger = spawnedNote.GetComponent<NoteJudger>();
+        if (noteJudger != null)
+        {
+            // NoteMover 인스턴스를 NoteJudger에 전달합니다.
+            noteJudger.Initialize(noteMover); 
+        }
+        // ------------------------------------
     }
 }

@@ -2806,10 +2806,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2666150244164433482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf14522d53cc1594991c164e785780dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 41a2bd6c9bf15c84e88f42932722634d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayInteractor: {fileID: 0}
+  rayInteractor: {fileID: 3190348463259474274}
   blad: {fileID: 4991995547435381379}
 --- !u!1 &2744284293384639981
 GameObject:
@@ -6665,7 +6665,6 @@ GameObject:
   - component: {fileID: 8320233535656409145}
   - component: {fileID: 4034451175099640474}
   - component: {fileID: 3099993063886147693}
-  - component: {fileID: 4451625156993685542}
   m_Layer: 5
   m_Name: UserCanvas
   m_TagString: Untagged
@@ -6776,21 +6775,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
---- !u!114 &4451625156993685542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6293621912950982207}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 489bbcb368bd93945a3b471795ef2a22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetUI: {fileID: 5196770187749578798}
-  slideDuration: 1
-  startOffset: {x: 0, y: -200}
 --- !u!1 &6351214075649458369
 GameObject:
   m_ObjectHideFlags: 0
@@ -9016,10 +9000,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9207425065050566752}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56732e55067fcca47bdc6ad1f6601bcc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9471114d48daae14f9953f916210783a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UserCanvas: {fileID: 6293621912950982207}
+  UserCanvas: {fileID: 0}
 --- !u!1001 &1593148721584515422
 PrefabInstance:
   m_ObjectHideFlags: 0

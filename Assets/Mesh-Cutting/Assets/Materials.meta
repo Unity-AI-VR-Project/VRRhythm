@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Mesh-Cutting/Assets.meta
+guid: 0f66356042b3f02469088174561bff46
+========
 guid: 7bdebb60733504e46a8688cd1b7d8bc9
+>>>>>>>> develop:Assets/Mesh-Cutting/Assets/Materials.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

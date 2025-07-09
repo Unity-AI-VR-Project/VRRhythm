@@ -19,8 +19,8 @@ public class CanvasMover : MonoBehaviour
     public List<GameObject> scrollableObjects = new List<GameObject>(); // 스크롤시킬 오브젝트 리스트 (6개)
 
     [Header("스크롤 설정")]
-    [Tooltip("오브젝트 하나가 이동할 거리이자, 오브젝트들 간의 간격 (기본값: 10.4)")]
-    public float scrollDistance = 10.4f; // 각 오브젝트가 한 번에 이동할 거리 (캔버스 또는 패널 너비)
+    [Tooltip("오브젝트 하나가 이동할 거리이자, 오브젝트들 간의 간격 (기본값: 10)")]
+    public float scrollDistance = 10f; // 각 오브젝트가 한 번에 이동할 거리 (캔버스 또는 패널 너비)
 
     [Tooltip("스크롤 애니메이션이 진행될 시간")]
     public float slideDuration = 0.4f; // 스크롤 애니메이션 지속 시간
@@ -67,9 +67,9 @@ public class CanvasMover : MonoBehaviour
 
         numberOfObjects = scrollableObjects.Count;
 
-        if (numberOfObjects != 6)
+        if (numberOfObjects != 9)
         {
-            Debug.LogError($"[CanvasMover] 'Scrollable Objects' 리스트에 정확히 6개의 오브젝트를 할당해야 합니다! 현재 {numberOfObjects}개 할당됨.");
+            Debug.LogError($"[CanvasMover] 'Scrollable Objects' 리스트에 정확히 9개의 오브젝트를 할당해야 합니다! 현재 {numberOfObjects}개 할당됨.");
             enabled = false;
             return;
         }

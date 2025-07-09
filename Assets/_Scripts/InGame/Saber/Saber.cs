@@ -4,6 +4,12 @@ public class Saber : MonoBehaviour
 {
     private Vector3 _previousPosition; // 이전 프레임의 사벨 위치
     private Vector3 _currentVelocity;  // 현재 프레임의 사벨 속도 (방향과 속력)
+    
+    [Header("Saber Configuration")]
+    [Tooltip("이 세이버가 왼손 세이버인지 오른손 세이버인지 지정합니다.")]
+    // 이제 Enums.cs에 정의된 HandType을 사용합니다.
+    public HandType saberHandType; // 유니티 에디터에서 선택할 수 있는 퍼블릭 필드
+    
 
     [Header("Saber Settings")]
     [Tooltip("스윙 방향 계산을 위한 최소 이동 거리 (노이즈 필터링).")]
@@ -17,10 +23,6 @@ public class Saber : MonoBehaviour
 
     void Update()
     {
-        // FixedUpdate에서 물리적인 움직임을 처리하는 것이 더 정확하지만,
-        // 간단한 방향 계산을 위해 Update에서도 가능합니다.
-        // Rigidbody를 사용한다면 FixedUpdate에서 처리하는 것이 좋습니다.
-
         Vector3 currentPosition = transform.position;
         Vector3 deltaPosition = currentPosition - _previousPosition;
 

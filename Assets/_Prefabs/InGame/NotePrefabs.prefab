@@ -124,56 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2cb8f95a7df03f44b19bd2e682e3615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requiredDirection: 0
   PreSpawnBeats: 4
-  XCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  YCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  CurveMagnitude: 1
   MIN_SETPOINT_ANIM_TIME: 0.2
 --- !u!114 &3920318738030989921
 MonoBehaviour:
@@ -187,13 +139,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8989a75c2829fbc45828db8215ca185e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutSoundClip: {fileID: 8300000, guid: d127eaddfd54d004da672f20e9782bd6, type: 3}
+  cutSoundClip: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
   perfectTimingWindow: 0.05
   excellentTimingWindow: 0.1
   goodTimingWindow: 0.15
   normalTimingWindow: 0.2
   autoMissTimingWindow: 0.03
   requiredDirection: 0
+  requiredHandType: 0
 --- !u!82 &1592861608724733592
 AudioSource:
   m_ObjectHideFlags: 0
@@ -204,8 +157,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: ac39e2bd23f2ef3488935521a009b567, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 44db83989ef1fd44f9c8ee69b367d0c3, type: 3}
-  m_Resource: {fileID: 8300000, guid: 44db83989ef1fd44f9c8ee69b367d0c3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
+  m_Resource: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

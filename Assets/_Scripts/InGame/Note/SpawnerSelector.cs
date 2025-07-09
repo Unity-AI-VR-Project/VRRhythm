@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq; // OrderBy 사용을 위해 추가
+using System.Linq; 
 
 // NoteJudger.cs에 정의된 JudgementType.NoteDirection enum을 사용하기 위해 필요
 // 만약 NoteJudger가 다른 네임스페이스에 있다면 using NoteJudgerNamespace; 와 같이 추가해야 합니다.
+
+// HandType enum은 이제 Enums.cs에 정의되어 있으므로 여기서 제거합니다.
+// public enum HandType { ... } <-- 이 부분 삭제!
 
 [System.Serializable]
 public class RootData
@@ -37,6 +40,12 @@ public class NoteInfo
     public float strength;
     // 이 필드는 JSON에서 직접 파싱되지 않고, SpawnerSelector에서 할당됩니다.
     public NoteJudger.NoteDirection requiredDirection; 
+
+    // 새로 추가: 이 노트의 최종 목표 위치
+    public Vector3 calculatedTargetPos; 
+
+    // 새로 추가: 왼손/오른손 정보 - 이제 Enums.cs에 정의된 HandType 사용
+    public HandType handType; 
 }
 
 public struct SpawnInfoBundle
@@ -44,32 +53,42 @@ public struct SpawnInfoBundle
     public NoteInfo NoteData;
     public Transform SpawnerTransform;
     public float Tempo;
+    public Vector3 CalculatedTargetPos; // SpawnerSelector에서 계산된 TargetPos
 }
 
 public class SpawnerSelector : MonoBehaviour
 {
     [Header("JSON Data & Spawner Setup")]
-    [Tooltip("재생할 음악 정보가 담긴 JSON 파일 (TextAsset으로 드래그 앤 드롭).")]
     public TextAsset musicJsonFile; 
-    [Tooltip("SpawnPos, SetPos, TargetPos Transform을 자식으로 포함하는 부모 GameObject들. 각 스포너는 이 목록의 한 요소입니다.")]
     public List<Transform> spawners; 
 
-    [Tooltip("새로운 노트가 생성되기 전에 음악 박자로 얼마나 일찍 스폰되어야 하는지를 지정합니다. 이 값은 NoteMover에서 가져옵니다.")]
     [HideInInspector] public float NotePreSpawnBeats;
 
     private RootData _currentSongData; 
-    private List<NoteInfo> _allNotes; // 모든 노트를 시간 순서대로 저장
+    private List<NoteInfo> _allNotes; 
     private int _nextNoteIndex = 0; 
 
     private string _lastSpawnedNoteBand = null;
     private float _lastSpawnedNoteTime = -1.0f; 
     private int _lastUsedSpawnerIndex = -1; 
-    private NoteJudger.NoteDirection _lastAssignedDirection = NoteJudger.NoteDirection.Any; // 마지막으로 할당된 노트 방향
 
+    private Vector3 _lastCalculatedTargetPos = Vector3.zero;
+    private NoteJudger.NoteDirection _lastAssignedDirection = NoteJudger.NoteDirection.Up; 
+    // 새로 추가: 마지막으로 할당된 손 타입 - 이제 Enums.cs에 정의된 HandType 사용
+    private HandType _lastAssignedHandType = HandType.RightHand; // 초기값 설정
+
+    public float PLAYABLE_X_MIN = -1f;
+    public float PLAYABLE_X_MAX = 1f;
+    public float PLAYABLE_Y_MIN = 0.7f;
+    public float PLAYABLE_Y_MAX = 1.4f;
+
+    public float copyNoteDataSecOffset = 0.125f; 
+    public float moveAmount = 0.35f;
+    
+    // (이하 기존 코드 유지)
     void Awake()
     {
         LoadMusicData();
-        // 스포너 리스트가 비어있는지 확인
         if (spawners == null || spawners.Count == 0)
         {
             Debug.LogError("SpawnerSelector: spawners 리스트가 비어 있습니다. 스포너 Transform을 할당해주세요.", this);
@@ -100,19 +119,14 @@ public class SpawnerSelector : MonoBehaviour
             {
                 if (beat.notes != null)
                 {
-                    // 각 비트 내의 노트들을 _allNotes에 추가
                     foreach(var note in beat.notes)
                     {
                         _allNotes.Add(note);
                     }
                 }
             }
-            // 모든 노트를 절대 시간 기준으로 정렬
-            // JSON의 time 필드는 beat_time에 상대적인 시간일 수 있으므로, 정확한 절대 시간을 계산하여 정렬해야 합니다.
-            // 여기서는 간단히 note.time 필드를 기준으로 정렬합니다. (필요시 beat_time + note.time으로 절대 시간 계산 후 정렬)
             _allNotes.Sort((n1, n2) => n1.time.CompareTo(n2.time)); 
 
-            // 모든 노트에 requiredDirection 할당
             AssignDirectionsToNotes();
 
             Debug.Log($"SpawnerSelector: 음악 데이터 로드 성공: '{_currentSongData.metadata.band_group}' (BPM: {_currentSongData.metadata.tempo}) - 총 {_allNotes.Count}개 노트.", this);
@@ -132,45 +146,45 @@ public class SpawnerSelector : MonoBehaviour
             NoteJudger.NoteDirection.Right,
         };
 
+        HandType[] possibleHands = { // 새로 추가: 가능한 손 타입 - 이제 Enums.cs의 HandType 사용
+            HandType.LeftHand,
+            HandType.RightHand
+        };
+
         float lastNoteTime = -1.0f;
-        NoteJudger.NoteDirection currentAssignedDirection = NoteJudger.NoteDirection.Any;
 
         for (int i = 0; i < _allNotes.Count; i++)
         {
             NoteInfo note = _allNotes[i];
-            
-            // 2. SpawnInfoBundle값을 보낼때 이전 노트와 NoteData 차이가 짧거나 같으면 방향값을 똑같이 하고 바로 옆 spawners에 값을 보내기
-            // '0.2f'는 예시 값이며, 게임 플레이에 따라 조정 필요
-            bool isCloseToLastNote = (note.time - lastNoteTime < 0.2f && lastNoteTime != -1.0f); 
+
+            bool isCloseToLastNote = (note.time - lastNoteTime <= copyNoteDataSecOffset && lastNoteTime != -1.0f); 
 
             if (isCloseToLastNote)
             {
-                // 이전 노트와 매우 가깝다면 이전 노트와 같은 방향 할당
-                note.requiredDirection = currentAssignedDirection;
+                // 인접 노트의 경우, 이전 노트의 방향과 손 타입 모두 그대로 사용
+                note.requiredDirection = _lastAssignedDirection; 
+                note.handType = _lastAssignedHandType; // 손 타입도 복사
             }
             else
             {
-                // 가깝지 않다면 랜덤 방향 할당
-                int randomIndex = Random.Range(0, possibleDirections.Length);
-                note.requiredDirection = possibleDirections[randomIndex];
-            }
+                // 인접하지 않은 노트는 랜덤 방향과 랜덤 손 타입 할당
+                int randomDirectionIndex = Random.Range(0, possibleDirections.Length);
+                note.requiredDirection = possibleDirections[randomDirectionIndex];
 
-            // 할당된 방향을 업데이트하여 다음 노트에 사용
-            currentAssignedDirection = note.requiredDirection;
+                int randomHandIndex = Random.Range(0, possibleHands.Length); // 랜덤 손 타입 할당
+                note.handType = possibleHands[randomHandIndex];
+            }
+            
+            // _lastAssignedDirection과 _lastAssignedHandType 갱신 (다음 노트의 로직을 위해)
+            _lastAssignedDirection = note.requiredDirection;
+            _lastAssignedHandType = note.handType; // 손 타입도 갱신
             lastNoteTime = note.time;
 
-            _allNotes[i] = note; // 구조체이므로 변경사항을 다시 할당
+            _allNotes[i] = note;
         }
     }
 
 
-    /// <summary>
-    /// 현재 음악 시간과 노트 프리팹 정보를 기반으로 다음 스폰할 노트 정보와
-    /// 해당 노트를 스폰할 스포너의 Transform을 반환합니다.
-    /// 이 메서드 내부에서 preSpawnTime을 계산합니다.
-    /// </summary>
-    /// <param name="currentTime">현재 음악 진행 시간 (초).</param>
-    /// <returns>스폰할 노트 정보와 스포너 Transform이 담긴 SpawnInfoBundle? (null 허용).</returns>
     public SpawnInfoBundle? GetNoteAndSpawnerForCurrentTime(float currentTime)
     {
         if (_allNotes == null || _currentSongData == null || _currentSongData.metadata == null || _nextNoteIndex >= _allNotes.Count)
@@ -188,17 +202,13 @@ public class SpawnerSelector : MonoBehaviour
         }
         float preSpawnTime = NotePreSpawnBeats * (60f / tempo); 
 
-        // JSON의 note.time은 beat_time에 상대적인 시간일 수 있으므로,
-        // 정확한 절대 시간을 계산해야 합니다.
-        // 이 부분은 JSON 데이터의 'time' 필드가 절대 시간인지, 상대 시간인지에 따라 달라집니다.
-        // 현재 JSON은 'time'이 절대 시간처럼 보이지만, 'beat_time'도 있으므로 확인 필요.
-        // 여기서는 'time'을 노트의 절대 시간으로 가정하고 진행합니다.
         float noteAbsoluteTime = nextNote.time; 
 
         if (currentTime >= noteAbsoluteTime - preSpawnTime)
         {
-            // FindAppropriateSpawner에 현재 노트의 방향 정보를 전달하여 스포너 선택에 활용할 수 있습니다.
-            // 현재 FindAppropriateSpawner는 band와 시간 차이만 고려하므로, 필요시 확장하세요.
+            nextNote.calculatedTargetPos = CalculateTargetPosition(nextNote);
+            _allNotes[_nextNoteIndex] = nextNote; 
+
             Transform selectedSpawner = FindAppropriateSpawner(nextNote); 
 
             if (selectedSpawner == null) 
@@ -208,19 +218,89 @@ public class SpawnerSelector : MonoBehaviour
 
             SpawnInfoBundle bundle = new SpawnInfoBundle
             {
-                NoteData = nextNote, // requiredDirection이 이미 할당된 NoteData
+                NoteData = nextNote,
                 SpawnerTransform = selectedSpawner,
-                Tempo = tempo
+                Tempo = tempo,
+                CalculatedTargetPos = nextNote.calculatedTargetPos
             };
 
             _nextNoteIndex++; 
             _lastSpawnedNoteBand = nextNote.band;
-            _lastSpawnedNoteTime = nextNote.time; // 마지막으로 스폰된 노트의 절대 시간
+            _lastSpawnedNoteTime = nextNote.time;
+            _lastCalculatedTargetPos = nextNote.calculatedTargetPos;
 
             return bundle;
         }
 
         return null; 
+    }
+
+    private Vector3 CalculateTargetPosition(NoteInfo currentNote)
+    {
+        Vector3 defaultTargetPos = new Vector3(
+            Random.Range(PLAYABLE_X_MIN + 0.1f, PLAYABLE_X_MAX - 0.1f), 
+            Random.Range(PLAYABLE_Y_MIN + 0.1f, PLAYABLE_Y_MAX - 0.1f), 
+            5.0f 
+        );
+
+        if (_lastSpawnedNoteTime != -1.0f && (currentNote.time - _lastSpawnedNoteTime <= copyNoteDataSecOffset))
+        {
+            if (currentNote.requiredDirection == NoteJudger.NoteDirection.Any)
+            {
+                Debug.LogWarning("CalculateTargetPosition: 현재 노트의 requiredDirection이 Any입니다. 인접 로직 대신 랜덤 TargetPos를 사용합니다.");
+                return defaultTargetPos;
+            }
+
+            Vector3 basePos = _lastCalculatedTargetPos; 
+            float moveAmount = this.moveAmount; // 멤버 변수 moveAmount 사용
+            Vector3 finalCalculatedPos = basePos; 
+
+            switch (currentNote.requiredDirection)
+            {
+                case NoteJudger.NoteDirection.Up:
+                    float intendedY_Up = basePos.y + moveAmount;
+                    if (intendedY_Up > PLAYABLE_Y_MAX) {
+                        finalCalculatedPos.y = basePos.y - moveAmount;
+                    } else {
+                        finalCalculatedPos.y = intendedY_Up;
+                    }
+                    break;
+                case NoteJudger.NoteDirection.Down:
+                    float intendedY_Down = basePos.y - moveAmount;
+                    if (intendedY_Down < PLAYABLE_Y_MIN) {
+                        finalCalculatedPos.y = basePos.y + moveAmount;
+                    } else {
+                        finalCalculatedPos.y = intendedY_Down;
+                    }
+                    break;
+                case NoteJudger.NoteDirection.Left:
+                    float intendedX_Left = basePos.x - moveAmount;
+                    if (intendedX_Left < PLAYABLE_X_MIN) {
+                        finalCalculatedPos.x = basePos.x + moveAmount;
+                    } else {
+                        finalCalculatedPos.x = intendedX_Left;
+                    }
+                    break;
+                case NoteJudger.NoteDirection.Right:
+                    float intendedX_Right = basePos.x + moveAmount;
+                    if (intendedX_Right > PLAYABLE_X_MAX) {
+                        finalCalculatedPos.x = basePos.x - moveAmount;
+                    } else {
+                        finalCalculatedPos.x = intendedX_Right;
+                    }
+                    break;
+            }
+            
+            finalCalculatedPos.x = Mathf.Clamp(finalCalculatedPos.x, PLAYABLE_X_MIN, PLAYABLE_X_MAX);
+            finalCalculatedPos.y = Mathf.Clamp(finalCalculatedPos.y, PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
+            finalCalculatedPos.z = 3.0f; 
+
+            //Debug.Log($"인접 노트 타겟 포지션 계산: 이전 노트 시간: {_lastSpawnedNoteTime}, 현재 노트 시간: {currentNote.time}, 요청 방향: {currentNote.requiredDirection}, 최종 타겟: {finalCalculatedPos}, 손 타입: {currentNote.handType}");
+            return finalCalculatedPos;
+        }
+
+        //Debug.Log($"랜덤 타겟 포지션 계산: 최종 타겟: {defaultTargetPos}, 노트 타격방향: {currentNote.requiredDirection}, 손 타입: {currentNote.handType}");
+        return defaultTargetPos; 
     }
 
     private Transform FindAppropriateSpawner(NoteInfo currentNote)
@@ -234,35 +314,21 @@ public class SpawnerSelector : MonoBehaviour
         int numSpawners = spawners.Count;
         int startIndex = (_lastUsedSpawnerIndex + 1) % numSpawners; 
 
-        // 첫 노트 처리
-        if (_lastUsedSpawnerIndex == -1) // _lastSpawnedNoteTime == -1.0f는 AssignDirectionsToNotes에서 처리
+        if (_lastUsedSpawnerIndex == -1) 
         {
             _lastUsedSpawnerIndex = startIndex; 
             return spawners[startIndex];
         }
 
-        // 2. 노트와 NoteData 차이가 짧거나 같으면 바로 옆 spawners에 값을 보내기
-        // SpawnerSelector의 AssignDirectionsToNotes에서 이미 방향을 결정했으므로,
-        // 여기서는 스포너 선택 로직만 남습니다.
-        // '바로 옆' 스포너 선택 로직은 'band' 또는 'relative_pos_in_beat'와 같은
-        // 노트의 위치 관련 데이터와 스포너의 물리적 위치를 매핑해야 합니다.
-        // 현재는 단순히 다음 인덱스의 스포너를 선택하도록 유지합니다.
-        
-        // 이전에 스폰된 노트와 현재 노트의 시간 간격이 짧은 경우, 스포너를 특정 방식으로 선택할 수 있습니다.
-        // 예를 들어, 이전 스포너의 바로 옆 스포너를 우선적으로 선택하는 로직
-        // 이 로직은 스포너의 물리적 배치가 중요합니다. (예: 왼쪽 -> 중앙 -> 오른쪽)
-        bool isCloseToLastNote = (currentNote.time - _lastSpawnedNoteTime < 0.2f); // SpawnerSelector의 _lastSpawnedNoteTime 사용
+        bool isCloseToLastNoteTime = (currentNote.time - _lastSpawnedNoteTime <= 0.2f);
 
-        if (isCloseToLastNote)
+        if (isCloseToLastNoteTime)
         {
-            // 이전 스포너의 '바로 옆' 스포너를 찾습니다.
-            // 이 로직은 spawners 리스트의 순서가 물리적 위치와 일치한다고 가정합니다.
             int nextAdjacentSpawnerIndex = (_lastUsedSpawnerIndex + 1) % numSpawners;
             _lastUsedSpawnerIndex = nextAdjacentSpawnerIndex;
             return spawners[nextAdjacentSpawnerIndex];
         }
 
-        // 일반적인 스포너 선택 로직 (기존 코드와 유사)
         for (int i = 0; i < numSpawners; i++)
         {
             int potentialSpawnerIndex = (startIndex + i) % numSpawners;
@@ -273,8 +339,7 @@ public class SpawnerSelector : MonoBehaviour
             {
                 requiresDifferentSpawner = true;
             }
-            // `currentNote.time - _lastSpawnedNoteTime < 0.2f` 조건은 위에서 isCloseToLastNote로 처리
-
+            
             if (potentialSpawnerIndex == _lastUsedSpawnerIndex && requiresDifferentSpawner)
             {
                 continue; 
@@ -296,6 +361,6 @@ public class SpawnerSelector : MonoBehaviour
         {
             return _currentSongData.metadata.tempo;
         }
-        return 120f; // 기본값
+        return 120f;
     }
 }

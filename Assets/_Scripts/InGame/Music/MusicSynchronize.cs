@@ -8,9 +8,9 @@ public class MusicSynchronizer : MonoBehaviour
     [Tooltip("SpawnerSelector에서 로드된 음악의 BPM.")]
     public float bpm; 
 
-    public int delayBeat = 2;
+    public int delayBeat = 4;
     [Tooltip("음악 재생 시작 시점의 추가 오프셋 (초 단위).")]
-    public float offset = 0.3f;
+    public float offset = 1.16f;
     private AudioSource audioSource;
 
     [Header("참조")]

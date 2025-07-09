@@ -8,8 +8,9 @@ public class SceneLoaderOnSaberContact : MonoBehaviour
     public static event System.Action<string> OnSceneLoadRequested;
     // ======================================
 
-    [Tooltip("충돌 시 로드할 씬의 이름을 입력하세요.")]
-    public string sceneToLoad = "GameScene"; // 로드할 씬 이름
+    [Header("씬 로드 설정")]
+    [Tooltip("CanvasMover의 음악 클립 인덱스에 매칭되는 씬 이름들을 순서대로 할당하세요.")]
+    public string[] scenesToLoad; // 각 음악 인덱스에 매칭되는 씬 이름 배열
 
     [Header("충돌 감지 쿨다운")]
     [Tooltip("Saber와의 충돌 후 다음 충돌을 감지할 때까지의 시간 (초)")]
@@ -18,7 +19,26 @@ public class SceneLoaderOnSaberContact : MonoBehaviour
 
     void Start()
     {
-        Debug.Log($"[SceneLoaderOnSaberContact] 스크립트가 준비되었습니다. 'Saber'와 충돌 시 '{sceneToLoad}' 씬을 로드 요청합니다.");
+        // CanvasMover 인스턴스 참조를 가져옵니다.
+        // CanvasMover._instance가 private이기 때문에 직접 접근할 수 없습니다.
+        // public static getter를 CanvasMover에 추가하거나, FindFirstObjectByType 사용해야 합니다.
+        // 여기서는 FindFirstObjectByType 사용하는 것이 가장 간단합니다.
+        // (단, 씬에 CanvasMover 컴포넌트가 하나만 있거나, 오디오 재생을 담당하는 CanvasMover를 명확히 찾을 수 있어야 합니다.)
+        CanvasMover masterCanvasMover = FindFirstObjectByType<CanvasMover>();
+
+        if (masterCanvasMover != null)
+        {
+            if (masterCanvasMover.clips != null && scenesToLoad.Length != masterCanvasMover.clips.Length)
+            {
+                Debug.LogWarning($"[SceneLoaderOnSaberContact] 'Scenes To Load' 배열의 길이가 CanvasMover의 'Clips' 배열 길이 ({masterCanvasMover.clips.Length})와 다릅니다. 이는 예상치 못한 동작을 유발할 수 있습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("[SceneLoaderOnSaberContact] 씬에서 CanvasMover 인스턴스를 찾을 수 없습니다! 'Clips' 배열 길이 검사를 건너뜝니다.");
+        }
+
+        Debug.Log("[SceneLoaderOnSaberContact] 스크립트가 준비되었습니다. 'Saber'와 충돌 시 현재 선택된 곡에 해당하는 씬을 로드 요청합니다.");
     }
 
     /// <summary>
@@ -41,10 +61,23 @@ public class SceneLoaderOnSaberContact : MonoBehaviour
 
         _lastTriggerTime = Time.time; // 마지막 트리거 시간 업데이트
 
-        Debug.Log($"[SceneLoaderOnSaberContact] Saber와의 충돌 감지! '{sceneToLoad}' 씬 로드를 요청합니다.");
+        // CanvasMover에서 현재 선택된 곡의 인덱스를 가져옵니다.
+        // CanvasMover.currentSongIndex는 static이므로 직접 접근 가능합니다.
+        int currentSongIndex = CanvasMover.currentSongIndex;
 
-        // === 씬 로드 요청 이벤트를 외부에 알림 ===
-        OnSceneLoadRequested?.Invoke(sceneToLoad);
-        // ==========================================
+        // 해당 인덱스에 매칭되는 씬 이름을 찾습니다.
+        if (scenesToLoad != null && currentSongIndex >= 0 && currentSongIndex < scenesToLoad.Length)
+        {
+            string sceneNameToLoad = scenesToLoad[currentSongIndex];
+            Debug.Log($"[SceneLoaderOnSaberContact] Saber와의 충돌 감지! 현재 곡 인덱스 {currentSongIndex}에 해당하는 '{sceneNameToLoad}' 씬 로드를 요청합니다.");
+
+            // === 씬 로드 요청 이벤트를 외부에 알림 ===
+            OnSceneLoadRequested?.Invoke(sceneNameToLoad);
+            // ==========================================
+        }
+        else
+        {
+            Debug.LogWarning($"[SceneLoaderOnSaberContact] 유효하지 않은 곡 인덱스 ({currentSongIndex}) 이거나 'Scenes To Load' 배열이 할당되지 않았습니다. 씬 로드를 할 수 없습니다.");
+        }
     }
 }

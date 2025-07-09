@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Define;
 public class Saber : MonoBehaviour
 {
     private Vector3 _previousPosition; // 이전 프레임의 사벨 위치
@@ -7,8 +7,8 @@ public class Saber : MonoBehaviour
     
     [Header("Saber Configuration")]
     [Tooltip("이 세이버가 왼손 세이버인지 오른손 세이버인지 지정합니다.")]
-    // 이제 Enums.cs에 정의된 HandType을 사용합니다.
-    public HandType saberHandType; // 유니티 에디터에서 선택할 수 있는 퍼블릭 필드
+    // 이제 Enums.cs에 정의된 NoteType을 사용합니다.
+    public NoteType saberNoteType; // 유니티 에디터에서 선택할 수 있는 퍼블릭 필드
     
 
     [Header("Saber Settings")]

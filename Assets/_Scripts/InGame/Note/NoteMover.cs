@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Define;
 /// <summary>
 /// 노트 오브젝트의 이동 및 생명주기를 관리합니다.
 /// Z축은 BPM 기반의 고정 속도로 이동하며, X/Y축은 AnimationCurve를 따라 움직여 기믹을 구현합니다.
@@ -10,7 +10,7 @@ public class NoteMover : MonoBehaviour
     public Transform SpawnerParent { get; private set; } 
     public NoteJudger.NoteDirection requiredDirection;
     // 새로 추가: 이 노트에 필요한 손 타입
-    public HandType NoteHandType { get; private set; } // NoteJudger에서도 참조할 수 있도록 public 유지
+    public NoteType noteType { get; private set; } // NoteJudger에서도 참조할 수 있도록 public 유지
 
     // === 내부에서 사용할 위치 값 (InitializeNote에서 초기화) ===
     private Vector3 _spawnPosition;     
@@ -51,8 +51,8 @@ public class NoteMover : MonoBehaviour
     /// 이 메서드는 NoteSpawnerTime에서 노트를 스폰한 직후에 호출되어야 합니다.
     /// 노트 이동에 필요한 모든 초기 데이터를 설정하고 계산을 시작합니다.
     /// </summary>
-    // handType 파라미터 추가
-    public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, NoteInfo noteData, MusicTimeChacker musicTimeChacker, Vector3 targetPos, HandType handType)
+    // NoteType 파라미터 추가
+    public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, NoteInfo noteData, MusicTimeChacker musicTimeChacker, Vector3 targetPos, NoteType NoteType)
     {
         SpawnerParent = spawnerParent;
         Bpm = bpm;
@@ -61,7 +61,7 @@ public class NoteMover : MonoBehaviour
         MusicTimeChacker = musicTimeChacker;
         TargetPosition = targetPos; // 외부에서 받은 TargetPos 할당
         requiredDirection = NoteData.requiredDirection;
-        this.NoteHandType = handType; // 새로 추가: handType 할당
+        this.noteType = NoteType; // 새로 추가: NoteType 할당
     
         InitializePositions(); 
         CalculateMovementParameters(); 
@@ -73,7 +73,7 @@ public class NoteMover : MonoBehaviour
         transform.position = _spawnPosition; 
 
         _isInitialized = true; 
-        ApplySetPointGimmick(NoteData); // HandType 색상 변경 로직 포함
+        ApplySetPointGimmick(NoteData); // NoteType 색상 변경 로직 포함
     }
 
     /// <summary>
@@ -169,11 +169,6 @@ public class NoteMover : MonoBehaviour
     /// </summary>
     private bool IsValidSetup()
     {
-        if (MusicTimeChacker == null)
-        {
-            Debug.LogError("NoteMover: 'MusicTimeChacker'가 할당되지 않았습니다. 노트가 움직이지 않습니다.", this);
-            return false;
-        }
         if (_spawnPosition == Vector3.zero && TargetPosition == Vector3.zero) 
         {
              Debug.LogError("NoteMover: 스폰/타겟 위치가 올바르게 초기화되지 않았습니다. SpawnerParent 설정을 확인하거나, SpawnerSelector에서 TargetPos를 제대로 전달했는지 확인하세요.", this);
@@ -287,34 +282,16 @@ public class NoteMover : MonoBehaviour
         Renderer noteRenderer = GetComponent<Renderer>();
         if (noteRenderer != null)
         {
-            // 기존 밴드 기반 색상 변경 로직 (기본 색상)
-            switch (note.band)
+            switch (noteType) // 저장된 NoteNoteType 사용
             {
-                case "low":
-                    noteRenderer.material.color = Color.cyan;
-                    break;
-                case "mid":
-                    noteRenderer.material.color = Color.magenta;
-                    break;
-                case "high":
-                    noteRenderer.material.color = Color.yellow;
-                    break;
-                default:
-                    noteRenderer.material.color = Color.white;
-                    break;
-            }
-
-            // 새로 추가: HandType에 따른 색상 변경 (기존 색상을 덮어씀)
-            switch (NoteHandType) // 저장된 NoteHandType 사용
-            {
-                case HandType.LeftHand:
+                case NoteType.LeftHand:
                     noteRenderer.material.color = Color.red;
                     break;
-                case HandType.RightHand:
+                case NoteType.RightHand:
                     noteRenderer.material.color = Color.blue;
                     break;
-                case HandType.Any:
-                    // HandType이 Any인 경우, band 기반의 색상을 그대로 유지
+                case NoteType.Any:
+                    
                     break; 
             }
         }

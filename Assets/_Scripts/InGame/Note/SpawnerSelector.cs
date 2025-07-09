@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
+using Define;
 
 // NoteJudger.cs에 정의된 JudgementType.NoteDirection enum을 사용하기 위해 필요
 // 만약 NoteJudger가 다른 네임스페이스에 있다면 using NoteJudgerNamespace; 와 같이 추가해야 합니다.
 
-// HandType enum은 이제 Enums.cs에 정의되어 있으므로 여기서 제거합니다.
-// public enum HandType { ... } <-- 이 부분 삭제!
+// NoteType enum은 이제 Enums.cs에 정의되어 있으므로 여기서 제거합니다.
+// public enum NoteType { ... } <-- 이 부분 삭제!
 
 [System.Serializable]
 public class RootData
@@ -44,8 +45,8 @@ public class NoteInfo
     // 새로 추가: 이 노트의 최종 목표 위치
     public Vector3 calculatedTargetPos; 
 
-    // 새로 추가: 왼손/오른손 정보 - 이제 Enums.cs에 정의된 HandType 사용
-    public HandType handType; 
+    // 새로 추가: 왼손/오른손 정보 - 이제 Enums.cs에 정의된 NoteType 사용
+    public NoteType NoteType; 
 }
 
 public struct SpawnInfoBundle
@@ -74,8 +75,8 @@ public class SpawnerSelector : MonoBehaviour
 
     private Vector3 _lastCalculatedTargetPos = Vector3.zero;
     private NoteJudger.NoteDirection _lastAssignedDirection = NoteJudger.NoteDirection.Up; 
-    // 새로 추가: 마지막으로 할당된 손 타입 - 이제 Enums.cs에 정의된 HandType 사용
-    private HandType _lastAssignedHandType = HandType.RightHand; // 초기값 설정
+    // 새로 추가: 마지막으로 할당된 손 타입 - 이제 Enums.cs에 정의된 NoteType 사용
+    private NoteType _lastAssignedNoteType = NoteType.RightHand; // 초기값 설정
 
     public float PLAYABLE_X_MIN = -1f;
     public float PLAYABLE_X_MAX = 1f;
@@ -146,9 +147,9 @@ public class SpawnerSelector : MonoBehaviour
             NoteJudger.NoteDirection.Right,
         };
 
-        HandType[] possibleHands = { // 새로 추가: 가능한 손 타입 - 이제 Enums.cs의 HandType 사용
-            HandType.LeftHand,
-            HandType.RightHand
+        NoteType[] possibleHands = { // 새로 추가: 가능한 손 타입 - 이제 Enums.cs의 NoteType 사용
+            NoteType.LeftHand,
+            NoteType.RightHand
         };
 
         float lastNoteTime = -1.0f;
@@ -163,7 +164,7 @@ public class SpawnerSelector : MonoBehaviour
             {
                 // 인접 노트의 경우, 이전 노트의 방향과 손 타입 모두 그대로 사용
                 note.requiredDirection = _lastAssignedDirection; 
-                note.handType = _lastAssignedHandType; // 손 타입도 복사
+                note.NoteType = _lastAssignedNoteType; // 손 타입도 복사
             }
             else
             {
@@ -172,12 +173,12 @@ public class SpawnerSelector : MonoBehaviour
                 note.requiredDirection = possibleDirections[randomDirectionIndex];
 
                 int randomHandIndex = Random.Range(0, possibleHands.Length); // 랜덤 손 타입 할당
-                note.handType = possibleHands[randomHandIndex];
+                note.NoteType = possibleHands[randomHandIndex];
             }
             
-            // _lastAssignedDirection과 _lastAssignedHandType 갱신 (다음 노트의 로직을 위해)
+            // _lastAssignedDirection과 _lastAssignedNoteType 갱신 (다음 노트의 로직을 위해)
             _lastAssignedDirection = note.requiredDirection;
-            _lastAssignedHandType = note.handType; // 손 타입도 갱신
+            _lastAssignedNoteType = note.NoteType; // 손 타입도 갱신
             lastNoteTime = note.time;
 
             _allNotes[i] = note;
@@ -295,11 +296,11 @@ public class SpawnerSelector : MonoBehaviour
             finalCalculatedPos.y = Mathf.Clamp(finalCalculatedPos.y, PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
             finalCalculatedPos.z = 3.0f; 
 
-            //Debug.Log($"인접 노트 타겟 포지션 계산: 이전 노트 시간: {_lastSpawnedNoteTime}, 현재 노트 시간: {currentNote.time}, 요청 방향: {currentNote.requiredDirection}, 최종 타겟: {finalCalculatedPos}, 손 타입: {currentNote.handType}");
+            //Debug.Log($"인접 노트 타겟 포지션 계산: 이전 노트 시간: {_lastSpawnedNoteTime}, 현재 노트 시간: {currentNote.time}, 요청 방향: {currentNote.requiredDirection}, 최종 타겟: {finalCalculatedPos}, 손 타입: {currentNote.NoteType}");
             return finalCalculatedPos;
         }
 
-        //Debug.Log($"랜덤 타겟 포지션 계산: 최종 타겟: {defaultTargetPos}, 노트 타격방향: {currentNote.requiredDirection}, 손 타입: {currentNote.handType}");
+        //Debug.Log($"랜덤 타겟 포지션 계산: 최종 타겟: {defaultTargetPos}, 노트 타격방향: {currentNote.requiredDirection}, 손 타입: {currentNote.NoteType}");
         return defaultTargetPos; 
     }
 

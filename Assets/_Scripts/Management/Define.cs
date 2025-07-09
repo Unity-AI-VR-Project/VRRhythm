@@ -6,4 +6,10 @@ namespace Define
         Lobby,
         InGame
     }
+    public enum NoteType
+    {
+        LeftHand,
+        RightHand,
+        Any
+    }
 }

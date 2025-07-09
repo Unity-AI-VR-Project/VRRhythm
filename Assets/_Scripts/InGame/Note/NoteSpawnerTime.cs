@@ -129,7 +129,7 @@ public class NoteSpawnerTime : MonoBehaviour
                 noteInfo,               
                 timeChacker,
                 calculatedTargetPos,
-                noteInfo.handType 
+                noteInfo.NoteType 
             );
         }
         else
@@ -141,7 +141,7 @@ public class NoteSpawnerTime : MonoBehaviour
         NoteJudger noteJudger = spawnedNote.GetComponent<NoteJudger>();
         if (noteJudger != null)
         {
-            noteJudger.Initialize(noteMover, noteInfo.requiredDirection, noteInfo.handType); 
+            noteJudger.Initialize(noteMover, noteInfo.requiredDirection, noteInfo.NoteType); 
         }
     }
 }

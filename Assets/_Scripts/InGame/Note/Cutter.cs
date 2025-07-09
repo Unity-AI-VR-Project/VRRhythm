@@ -13,7 +13,30 @@ public class Cutter : MonoBehaviour
 
         isBusy = true;
         
-        Plane cutPlane = new Plane(originalGameObject.transform.InverseTransformDirection(-cutNormal), originalGameObject.transform.InverseTransformPoint(contactPoint));
+        // --- 변경 시작: 절단 평면의 법선 계산 로직 수정 ---
+        // cutNormal은 사벨의 월드 스윙 방향 (NoteJudger에서 saberSwingDirection으로 전달됨)
+        
+        // 노트를 자를 평면의 법선을 노트의 로컬 공간으로 변환하여 계산합니다.
+        // 이렇게 하면 노트가 회전되어 있어도 항상 노트의 기준에 맞춰 잘립니다.
+        Vector3 localSaberSwingDirection = originalGameObject.transform.InverseTransformDirection(cutNormal);
+        Vector3 planeNormal;
+
+        // 사벨의 로컬 스윙 방향(localSaberSwingDirection)과 노트의 로컬 Z축(Vector3.forward)의 외적을 사용합니다.
+        // 이 외적은 localSaberSwingDirection에 대해 수직이며, 동시에 노트의 앞/뒤 방향(Z축)에도 수직인 벡터를 생성합니다.
+        // 이는 사용자가 원하는 '스윙 평면'과 같은 방향의 절단면을 만들어줍니다.
+        planeNormal = Vector3.Cross(localSaberSwingDirection, Vector3.forward);
+
+        // 특수 케이스 처리: 사벨 스윙 방향이 노트의 로컬 Z축과 거의 평행할 때 (즉, 노트를 찌르거나 뽑는 움직임)
+        // 이 경우 외적 결과가 0에 가까워지므로, 기본적으로 노트의 로컬 '위쪽' 방향을 법선으로 사용하여 수평 절단을 강제합니다.
+        if (planeNormal.magnitude < 0.0001f) // 아주 작은 값으로 비교하여 부동 소수점 오차 처리
+        {
+            planeNormal = Vector3.up; // 노트의 로컬 위쪽 방향 (수평 절단을 위한 법선)
+        }
+
+        // 계산된 평면 법선과 충돌 지점을 사용하여 절단 평면을 생성합니다.
+        Plane cutPlane = new Plane(planeNormal, originalGameObject.transform.InverseTransformPoint(contactPoint));
+        // --- 변경 끝 ---
+
         originalMesh = originalGameObject.GetComponent<MeshFilter>().mesh;
 
         if (originalMesh == null)
@@ -42,11 +65,11 @@ public class Cutter : MonoBehaviour
         var collider = originalGameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = finishedLeftMesh;
         collider.convex = true;
-        collider.isTrigger = true;
+        collider.isTrigger = true; 
         
         Material[] mats = new Material[finishedLeftMesh.subMeshCount];
         for (int i = 0; i < finishedLeftMesh.subMeshCount; i++)
-		{
+       {
             mats[i] = originalGameObject.GetComponent<MeshRenderer>().material;
         }
         originalGameObject.GetComponent<MeshRenderer>().materials = mats;
@@ -59,7 +82,7 @@ public class Cutter : MonoBehaviour
         
         mats = new Material[finishedRightMesh.subMeshCount];
         for (int i = 0; i < finishedRightMesh.subMeshCount; i++)
-		{
+       {
             mats[i] = originalGameObject.GetComponent<MeshRenderer>().material;
         }
         right.GetComponent<MeshRenderer>().materials = mats;
@@ -70,14 +93,20 @@ public class Cutter : MonoBehaviour
         foreach (var col in cols)
         {
             col.convex = true;
-            col.isTrigger = true;
+            col.isTrigger = false; 
         }
         
         var rightRigidbody = right.AddComponent<Rigidbody>();
         rightRigidbody.AddRelativeForce(-cutPlane.normal * 250f);
+        rightRigidbody.useGravity = true; 
         
+        DestroyAfterDelay destroyScript = right.AddComponent<DestroyAfterDelay>();
+        destroyScript.delay = 1.0f; 
+
         isBusy = false;
+        
     }
+    
 
     /// <summary>
     /// Iterates over all the triangles of all the submeshes of the original mesh to separate the left
@@ -93,7 +122,6 @@ public class Cutter : MonoBehaviour
         {
             var subMeshIndices = originalMesh.GetTriangles(i);
 
-            //We are now going through the submesh indices as triangles to determine on what side of the mesh they are.
             for (int j = 0; j < subMeshIndices.Length; j+=3)
             {
                 var triangleIndexA = subMeshIndices[j];
@@ -102,20 +130,15 @@ public class Cutter : MonoBehaviour
 
                 MeshTriangle currentTriangle = GetTriangle(triangleIndexA,triangleIndexB,triangleIndexC,i);
 
-                //We are now using the plane.getside function to see on which side of the cut our trianle is situated 
-                //or if it might be cut through
                 bool triangleALeftSide = plane.GetSide(originalMesh.vertices[triangleIndexA]);
                 bool triangleBLeftSide = plane.GetSide(originalMesh.vertices[triangleIndexB]);
                 bool triangleCLeftSide = plane.GetSide(originalMesh.vertices[triangleIndexC]);
 
                 switch (triangleALeftSide)
                 {
-                    //All three vertices are on the left side of the plane, so they need to be added to the left
-                    //mesh
                     case true when triangleBLeftSide && triangleCLeftSide:
                         leftMesh.AddTriangle(currentTriangle);
                         break;
-                    //All three vertices are on the right side of the mesh.
                     case false when !triangleBLeftSide && !triangleCLeftSide:
                         rightMesh.AddTriangle(currentTriangle);
                         break;
@@ -137,21 +160,18 @@ public class Cutter : MonoBehaviour
     /// <returns></returns>
     private static MeshTriangle GetTriangle(int _triangleIndexA, int _triangleIndexB, int _triangleIndexC, int _submeshIndex)
     {
-        //Adding the Vertices at the triangleIndex
         Vector3[] verticesToAdd = {
             originalMesh.vertices[_triangleIndexA],
             originalMesh.vertices[_triangleIndexB],
             originalMesh.vertices[_triangleIndexC]
         };
 
-        //Adding the normals at the triangle index
         Vector3[] normalsToAdd = {
             originalMesh.normals[_triangleIndexA],
             originalMesh.normals[_triangleIndexB],
             originalMesh.normals[_triangleIndexC]
         };
 
-        //adding the uvs at the triangleIndex
         Vector2[] uvsToAdd = {
             originalMesh.uv[_triangleIndexA],
             originalMesh.uv[_triangleIndexB],
@@ -256,7 +276,6 @@ public class Cutter : MonoBehaviour
         Vector3 normalRight = Vector3.Lerp(leftMeshTriangle.Normals[1], rightMeshTriangle.Normals[1], normalizedDistance);
         Vector2 uvRight = Vector2.Lerp(leftMeshTriangle.UVs[1], rightMeshTriangle.UVs[1], normalizedDistance);
 
-        //TESTING OUR FIRST TRIANGLE
         MeshTriangle currentTriangle;
         Vector3[] updatedVertices = { leftMeshTriangle.Vertices[0], vertLeft, vertRight };
         Vector3[] updatedNormals = { leftMeshTriangle.Normals[0], normalLeft, normalRight };
@@ -264,7 +283,6 @@ public class Cutter : MonoBehaviour
         
        currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
 
-        //If our vertices ant the same
         if(updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
         {
             if(Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0],updatedVertices[2] - updatedVertices[0]),updatedNormals[0]) < 0) 
@@ -274,14 +292,12 @@ public class Cutter : MonoBehaviour
             leftMesh.AddTriangle(currentTriangle);
         }
 
-        //SECOND TRIANGLE 
         updatedVertices = new Vector3[] { leftMeshTriangle.Vertices[0], leftMeshTriangle.Vertices[1], vertRight };
         updatedNormals = new Vector3[] { leftMeshTriangle.Normals[0], leftMeshTriangle.Normals[1], normalRight };
         updatedUVs = new Vector2[] { leftMeshTriangle.UVs[0],leftMeshTriangle.UVs[1], uvRight };
 
 
         currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-        //If our vertices arent the same
         if(updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
         {
             if(Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0],updatedVertices[2] - updatedVertices[0]),updatedNormals[0]) < 0) 
@@ -291,13 +307,11 @@ public class Cutter : MonoBehaviour
             leftMesh.AddTriangle(currentTriangle);
         }
 
-        //THIRD TRIANGLE 
         updatedVertices = new Vector3[] { rightMeshTriangle.Vertices[0], vertLeft, vertRight };
         updatedNormals = new Vector3[] { rightMeshTriangle.Normals[0], normalLeft, normalRight };
         updatedUVs = new Vector2[] { rightMeshTriangle.UVs[0],uvLeft, uvRight };
 
         currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-        //If our vertices arent the same
         if(updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
         {
             if(Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0],updatedVertices[2] - updatedVertices[0]),updatedNormals[0]) < 0) 
@@ -307,13 +321,11 @@ public class Cutter : MonoBehaviour
             rightMesh.AddTriangle(currentTriangle);
         }
 
-        //FOURTH TRIANGLE 
         updatedVertices = new Vector3[] { rightMeshTriangle.Vertices[0], rightMeshTriangle.Vertices[1], vertRight };
         updatedNormals = new Vector3[] { rightMeshTriangle.Normals[0], rightMeshTriangle.Normals[1], normalRight };
         updatedUVs = new Vector2[] { rightMeshTriangle.UVs[0],rightMeshTriangle.UVs[1], uvRight };
 
         currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-        //If our vertices arent the same
         if(updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
         {
             if(Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0],updatedVertices[2] - updatedVertices[0]),updatedNormals[0]) < 0) 
@@ -331,10 +343,10 @@ public class Cutter : MonoBehaviour
         _triangle.Vertices[0] = temp;
 
         temp = _triangle.Normals[2];
-		_triangle.Normals[2] = _triangle.Normals[0];
-		_triangle.Normals[0] = temp;
+       _triangle.Normals[2] = _triangle.Normals[0];
+       _triangle.Normals[0] = temp;
 
-		(_triangle.UVs[2], _triangle.UVs[0]) = (_triangle.UVs[0], _triangle.UVs[2]);
+       (_triangle.UVs[2], _triangle.UVs[0]) = (_triangle.UVs[0], _triangle.UVs[2]);
     }
 
     public static void FillCut(List<Vector3> _addedVertices, Plane _plane, GeneratedMesh _leftMesh, GeneratedMesh _rightMesh)
@@ -385,7 +397,6 @@ public class Cutter : MonoBehaviour
 
     private static void Fill(List<Vector3> _vertices, Plane _plane, GeneratedMesh _leftMesh, GeneratedMesh _rightMesh)
     {
-        //Firstly we need the center we do this by adding up all the vertices and then calculating the average
         Vector3 centerPosition = Vector3.zero;
         for (int i = 0; i < _vertices.Count; i++)
         {
@@ -393,7 +404,6 @@ public class Cutter : MonoBehaviour
         }
         centerPosition /= _vertices.Count;
 
-        //We now need an Upward Axis we use the plane we cut the mesh with for that 
         Vector3 up = new Vector3()
         {
             x = _plane.normal.x,
@@ -424,8 +434,8 @@ public class Cutter : MonoBehaviour
             };
 
             Vector3[] vertices = {_vertices[i], _vertices[(i+1) % _vertices.Count], centerPosition};
-			Vector3[] normals = {-_plane.normal, -_plane.normal, -_plane.normal};
-			Vector2[] uvs   = {uv1, uv2, new(0.5f, 0.5f)};
+          Vector3[] normals = {-_plane.normal, -_plane.normal, -_plane.normal};
+          Vector2[] uvs   = {uv1, uv2, new(0.5f, 0.5f)};
 
             MeshTriangle currentTriangle = new MeshTriangle(vertices, normals, uvs, originalMesh.subMeshCount + 1);
 
@@ -447,4 +457,3 @@ public class Cutter : MonoBehaviour
         } 
     }
 }
-    

@@ -1,13 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using Define;
 
-// NoteJudger.cs에 정의된 JudgementType.NoteDirection enum을 사용하기 위해 필요
-// 만약 NoteJudger가 다른 네임스페이스에 있다면 using NoteJudgerNamespace; 와 같이 추가해야 합니다.
-
-// NoteType enum은 이제 Enums.cs에 정의되어 있으므로 여기서 제거합니다.
-// public enum NoteType { ... } <-- 이 부분 삭제!
 
 [System.Serializable]
 public class RootData
@@ -40,13 +34,13 @@ public class NoteInfo
     public int relative_pos_in_beat;
     public float strength;
     // 이 필드는 JSON에서 직접 파싱되지 않고, SpawnerSelector에서 할당됩니다.
-    public NoteJudger.NoteDirection requiredDirection; 
+    public NoteDirection requiredDirection; 
 
     // 새로 추가: 이 노트의 최종 목표 위치
     public Vector3 calculatedTargetPos; 
 
     // 새로 추가: 왼손/오른손 정보 - 이제 Enums.cs에 정의된 NoteType 사용
-    public NoteType NoteType; 
+    public SaberNoteType NoteType; 
 }
 
 public struct SpawnInfoBundle
@@ -74,9 +68,9 @@ public class SpawnerSelector : MonoBehaviour
     private int _lastUsedSpawnerIndex = -1; 
 
     private Vector3 _lastCalculatedTargetPos = Vector3.zero;
-    private NoteJudger.NoteDirection _lastAssignedDirection = NoteJudger.NoteDirection.Up; 
+    private NoteDirection _lastAssignedDirection = NoteDirection.Up; 
     // 새로 추가: 마지막으로 할당된 손 타입 - 이제 Enums.cs에 정의된 NoteType 사용
-    private NoteType _lastAssignedNoteType = NoteType.RightHand; // 초기값 설정
+    private SaberNoteType _lastAssignedNoteType = SaberNoteType.Right; // 초기값 설정
 
     public float PLAYABLE_X_MIN = -1f;
     public float PLAYABLE_X_MAX = 1f;
@@ -140,16 +134,16 @@ public class SpawnerSelector : MonoBehaviour
 
     private void AssignDirectionsToNotes()
     {
-        NoteJudger.NoteDirection[] possibleDirections = {
-            NoteJudger.NoteDirection.Up,
-            NoteJudger.NoteDirection.Down,
-            NoteJudger.NoteDirection.Left,
-            NoteJudger.NoteDirection.Right,
+        NoteDirection[] possibleDirections = {
+            NoteDirection.Up,
+            NoteDirection.Down,
+            NoteDirection.Left,
+            NoteDirection.Right,
         };
 
-        NoteType[] possibleHands = { // 새로 추가: 가능한 손 타입 - 이제 Enums.cs의 NoteType 사용
-            NoteType.LeftHand,
-            NoteType.RightHand
+        SaberNoteType[] possibleHands = { // 새로 추가: 가능한 손 타입 - 이제 Enums.cs의 NoteType 사용
+            SaberNoteType.Left,
+            SaberNoteType.Right
         };
 
         float lastNoteTime = -1.0f;
@@ -246,7 +240,7 @@ public class SpawnerSelector : MonoBehaviour
 
         if (_lastSpawnedNoteTime != -1.0f && (currentNote.time - _lastSpawnedNoteTime <= copyNoteDataSecOffset))
         {
-            if (currentNote.requiredDirection == NoteJudger.NoteDirection.Any)
+            if (currentNote.requiredDirection == NoteDirection.Any)
             {
                 Debug.LogWarning("CalculateTargetPosition: 현재 노트의 requiredDirection이 Any입니다. 인접 로직 대신 랜덤 TargetPos를 사용합니다.");
                 return defaultTargetPos;
@@ -258,7 +252,7 @@ public class SpawnerSelector : MonoBehaviour
 
             switch (currentNote.requiredDirection)
             {
-                case NoteJudger.NoteDirection.Up:
+                case NoteDirection.Up:
                     float intendedY_Up = basePos.y + moveAmount;
                     if (intendedY_Up > PLAYABLE_Y_MAX) {
                         finalCalculatedPos.y = basePos.y - moveAmount;
@@ -266,7 +260,7 @@ public class SpawnerSelector : MonoBehaviour
                         finalCalculatedPos.y = intendedY_Up;
                     }
                     break;
-                case NoteJudger.NoteDirection.Down:
+                case NoteDirection.Down:
                     float intendedY_Down = basePos.y - moveAmount;
                     if (intendedY_Down < PLAYABLE_Y_MIN) {
                         finalCalculatedPos.y = basePos.y + moveAmount;
@@ -274,7 +268,7 @@ public class SpawnerSelector : MonoBehaviour
                         finalCalculatedPos.y = intendedY_Down;
                     }
                     break;
-                case NoteJudger.NoteDirection.Left:
+                case NoteDirection.Left:
                     float intendedX_Left = basePos.x - moveAmount;
                     if (intendedX_Left < PLAYABLE_X_MIN) {
                         finalCalculatedPos.x = basePos.x + moveAmount;
@@ -282,7 +276,7 @@ public class SpawnerSelector : MonoBehaviour
                         finalCalculatedPos.x = intendedX_Left;
                     }
                     break;
-                case NoteJudger.NoteDirection.Right:
+                case NoteDirection.Right:
                     float intendedX_Right = basePos.x + moveAmount;
                     if (intendedX_Right > PLAYABLE_X_MAX) {
                         finalCalculatedPos.x = basePos.x - moveAmount;

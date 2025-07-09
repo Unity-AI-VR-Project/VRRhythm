@@ -5,7 +5,7 @@ using UnityEngine;
 public class InGameManager : MonoBehaviour
 {
     // 인게임 인스턴스 접근 프로퍼티
-    public static InGameManager instance
+    public static InGameManager Instance
     {
         get
         {
@@ -43,7 +43,7 @@ public class InGameManager : MonoBehaviour
     private void Awake()
     {
         // 인게임 매니저 중복 생성 막는 처리
-        if (instance != this)
+        if (Instance != this)
         {
             Destroy(gameObject);
         }

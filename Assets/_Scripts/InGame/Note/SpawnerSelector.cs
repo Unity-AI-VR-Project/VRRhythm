@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq; 
+using Define;
+using Random = UnityEngine.Random;
 
 // NoteJudger.cs에 정의된 JudgementType.NoteDirection enum을 사용하기 위해 필요
 // 만약 NoteJudger가 다른 네임스페이스에 있다면 using NoteJudgerNamespace; 와 같이 추가해야 합니다.
@@ -290,6 +292,21 @@ public class SpawnerSelector : MonoBehaviour
                     }
                     break;
             }
+
+            Define.eScenes a = Define.eScenes.InGame;
+
+            switch (a)
+            {
+                case eScenes.Title:
+                    break;
+                case eScenes.Lobby:
+                    break;
+                case eScenes.InGame:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
             
             finalCalculatedPos.x = Mathf.Clamp(finalCalculatedPos.x, PLAYABLE_X_MIN, PLAYABLE_X_MAX);
             finalCalculatedPos.y = Mathf.Clamp(finalCalculatedPos.y, PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);

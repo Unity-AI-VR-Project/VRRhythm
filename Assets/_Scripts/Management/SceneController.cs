@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    public eScenes currentScene;
+
+    private void Awake()
+    {
+        currentScene = (eScenes)SceneManager.GetActiveScene().buildIndex;
+    }
+
     public void LoadScene(string sceneName)
     {
         StartCoroutine(LoadSceneAsyncCoroutine(sceneName));

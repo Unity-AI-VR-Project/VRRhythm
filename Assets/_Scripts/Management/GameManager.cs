@@ -1,16 +1,19 @@
-using Unity.VisualScripting;
+using UnityEngine;
+using System;
 
 public class GameManager : Singleton<GameManager>
 {
     public SceneController sceneController;
     public UIManagerBase currentUIManager;
-
+    public SoundManager soundManager;
+    public AIManager aiManager;
     bool isInitialized = false;
+    public bool isDeveloping = true; // 자동생성 됐을때 기본값이 true로 다른 기능 테스트에 방해되지 않도록 설정
 
     protected override void Awake()
     {
         base.Awake();
-        if (!isInitialized)
+        if (!isInitialized && !isDeveloping)
         {
             Initialize();
         }
@@ -19,20 +22,51 @@ public class GameManager : Singleton<GameManager>
     private void Initialize()
     {
         InitializeSceneController();
+        InitializeSoundManager();
+        InitializeAIManager();
 
         isInitialized = true;
     }
 
     private void InitializeSceneController()
     {
-        if (TryGetComponent<SceneController>(out SceneController controller))
+        if (sceneController == null)
         {
-            sceneController = controller;
+            sceneController = FindComponent<SceneController>(typeof(SceneController),transform);
         }
-        else
+    }
+
+    private void InitializeSoundManager()
+    {
+        if(soundManager == null)
         {
-            sceneController = transform.AddComponent<SceneController>();
+            soundManager = FindComponent<SoundManager>(typeof(SoundManager), transform);
         }
+    }
+
+    private void InitializeAIManager()
+    {
+        if (aiManager == null)
+        {
+            aiManager = FindComponent<AIManager>(typeof(AIManager),transform);
+        }
+    }
+
+    public T FindComponent<T>(Type component,Transform parent)
+    {
+        Debug.Log($"{component.Name}가 {parent.name}의 하위 객체에 존재하지 않습니다.\n {parent.name}의 하위 객체로 {component.Name}을 생성합니다.");
+        foreach (Transform child in parent)
+        {
+            if (TryGetComponent<T>(out T instance))
+            {
+                return instance;
+            }
+        }
+        GameObject sceneObj = new GameObject(typeof(T).Name, typeof(T));
+        sceneObj.transform.SetParent(parent);
+        sceneObj.transform.localPosition = Vector3.zero;
+
+        return sceneObj.GetComponent<T>();
     }
 
     public void RegisterUIManager(UIManagerBase uiManager)

@@ -24,7 +24,7 @@ public class InGameUIManager : UIManagerBase
     void Start()
     {
         // 시작 시 체력 초기화
-        startHP = InGameManager.instance.playerHealth;
+        startHP = InGameManager.Instance.playerHealth;
 
 
         // 음악 길이 설정
@@ -42,12 +42,12 @@ public class InGameUIManager : UIManagerBase
         comboText.gameObject.SetActive(false);
 
         // 점수 및 콤보 변경 시 UI 갱신 이벤트 등록
-        InGameManager.instance.OnScoreChanged += UpdateScoreText;
-        InGameManager.instance.OnComboChanged += UpdateComboText;
+        InGameManager.Instance.OnScoreChanged += UpdateScoreText;
+        InGameManager.Instance.OnComboChanged += UpdateComboText;
 
         // UI 텍스트 초기화
-        UpdateScoreText(InGameManager.instance.Score);
-        UpdateComboText(InGameManager.instance.Combo);
+        UpdateScoreText(InGameManager.Instance.Score);
+        UpdateComboText(InGameManager.Instance.Combo);
     }
 
     void Update()
@@ -85,7 +85,7 @@ public class InGameUIManager : UIManagerBase
     // 체력바 UI 갱신 함수
     void UpdateHP()
     {
-        float fillAmount = Mathf.Clamp01(InGameManager.instance.playerHealth / startHP);
+        float fillAmount = Mathf.Clamp01(InGameManager.Instance.playerHealth / startHP);
         hpBar.fillAmount = fillAmount;
     }
 
@@ -113,10 +113,10 @@ public class InGameUIManager : UIManagerBase
     // 오브젝트가 파괴될 때 이벤트 해제 (메모리 누수 방지)
     private void OnDestroy()
     {
-        if (InGameManager.instance != null)
+        if (InGameManager.Instance != null)
         {
-            InGameManager.instance.OnScoreChanged -= UpdateScoreText;
-            InGameManager.instance.OnComboChanged -= UpdateComboText;
+            InGameManager.Instance.OnScoreChanged -= UpdateScoreText;
+            InGameManager.Instance.OnComboChanged -= UpdateComboText;
         }
     }
 }

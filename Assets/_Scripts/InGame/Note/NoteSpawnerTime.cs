@@ -1,131 +1,158 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Define;
 
 public class NoteSpawnerTime : MonoBehaviour
 {
     [Header("Music & Spawner Setup")]
-    [Tooltip("생성할 노트 프리팹.")]
-    public GameObject notePrefab;
-    [Tooltip("스포너 선택 및 노트 데이터 관리를 담당하는 SpawnerSelector 컴포넌트.")]
-    public SpawnerSelector spawnerSelector; // SpawnerSelector 참조
-    [Tooltip("현재 음악 시간을 추적하는 MusicTimeChacker 컴포넌트.")]
-    public MusicTimeChacker timeChacker; 
-    
+    [SerializeField] private SpawnerSelector spawnerSelector;
+    [SerializeField] private MusicTimeChecker timeChecker;
+
+    /// <summary>
+    /// 스크립트 인스턴스가 로드될 때 호출되며, 필요한 컴포넌트 참조를 설정하고 유효성을 검사합니다.
+    /// </summary>
     void Awake()
     {
-        // SpawnerSelector 컴포넌트가 할당되었는지 확인
         if (spawnerSelector == null)
         {
-            spawnerSelector = FindAnyObjectByType<SpawnerSelector>(); 
-            if (spawnerSelector == null)
-            {
-                Debug.LogError("NoteSpawnerTime: SpawnerSelector 컴포넌트가 할당되지 않았습니다. 씬에 SpawnerSelector를 추가하고 할당하거나, 수동으로 할당해주세요.", this);
-                enabled = false; 
-                return;
-            }
+            Debug.LogError("NoteSpawnerTime: SpawnerSelector 컴포넌트가 할당되지 않았습니다. Inspector에서 할당해주세요.", this);
+            enabled = false;
+            return;
         }
 
-        // MusicTimeChacker 컴포넌트가 할당되었는지 확인
-        if (timeChacker == null)
+        if (timeChecker == null)
         {
-            timeChacker = FindAnyObjectByType<MusicTimeChacker>();
-            if (timeChacker == null)
-            {
-                Debug.LogError("NoteSpawnerTime: MusicTimeChacker 컴포넌트가 할당되지 않았습니다. 씬에 MusicTimeChacker를 추가하고 할당하거나, 수동으로 할당해주세요.", this);
-                enabled = false;
-                return;
-            }
+            Debug.LogError("NoteSpawnerTime: MusicTimeChecker 컴포넌트가 할당되지 않았습니다. Inspector에서 할당해주세요.", this);
+            enabled = false;
+            return;
         }
 
-        // NoteMover의 PreSpawnBeats 값을 SpawnerSelector에 전달
-        if (notePrefab != null)
+        if (NoteManager.Instance == null)
         {
-            NoteMover prefabNoteMover = notePrefab.GetComponent<NoteMover>();
-            if (prefabNoteMover != null)
+            Debug.LogError("NoteSpawnerTime: NoteManager가 아직 초기화되지 않았습니다. NoteSpawnerTime의 Awake 실행 순서를 확인해주세요.", this);
+            enabled = false;
+            return;
+        }
+
+        GameObject pooledNotePrefab = NoteManager.Instance.notePrefabToPool;
+        if (pooledNotePrefab != null)
+        {
+            // NoteMover 대신 NoteMovement 사용
+            NoteMovement prefabNoteMovement = pooledNotePrefab.GetComponent<NoteMovement>();
+            if (prefabNoteMovement != null)
             {
-                spawnerSelector.NotePreSpawnBeats = prefabNoteMover.PreSpawnBeats;
+                // prefabNoteMovement.PreSpawnBeats는 이제 private이므로 직접 접근 불가.
+                // NoteMovement 클래스에 PreSpawnBeats 값을 반환하는 public 프로퍼티 또는 메서드를 추가해야 합니다.
+                // 예를 들어 NoteMovement 클래스에 public float GetPreSpawnBeats() { return _preSpawnBeats; } 추가 후 아래 사용.
+                // 아니면 NoteMovement의 _preSpawnBeats를 다시 public으로 변경하는 방법도 있습니다.
+                // 여기서는 NoteMovement에서 GetPreSpawnBeats() 메서드가 있다고 가정합니다.
+                spawnerSelector.NotePreSpawnBeats = prefabNoteMovement.GetPreSpawnBeats(); // <- NoteMovement 수정 필요
             }
             else
             {
-                Debug.LogError("NoteSpawnerTime: 노트 프리팹에 NoteMover 컴포넌트가 없습니다! SpawnerSelector에 PreSpawnBeats를 전달할 수 없습니다.", this);
-                enabled = false; 
+                Debug.LogError("NoteSpawnerTime: NoteManager의 Pool용 노트 프리팹에 NoteMovement 컴포넌트가 없습니다! 노트 이동이 불가능하며, SpawnerSelector에 PreSpawnBeats를 전달할 수 없습니다.", this);
+                enabled = false;
                 return;
             }
         }
         else
         {
-            Debug.LogError("NoteSpawnerTime: 노트 프리팹이 할당되지 않았습니다! SpawnerSelector에 PreSpawnBeats를 전달할 수 없습니다.", this);
+            Debug.LogError("NoteSpawnerTime: NoteManager에 Pool링할 노트 프리팹이 할당되지 않았습니다. Inspector에서 할당해주세요.", this);
             enabled = false;
             return;
         }
     }
 
+    /// <summary>
+    /// 매 프레임 호출되며, 현재 음악 시간에 맞춰 노트를 스폰할지 확인하고 처리합니다.
+    /// </summary>
     void Update()
     {
-        if (timeChacker == null) 
-        {
-            Debug.LogError("NoteSpawnerTime: MusicTimeChacker가 없습니다. 노트를 스폰할 수 없습니다. 스크립트 할당을 확인하세요.", this);
-            return;
-        }
-
-        if (timeChacker.audioSource == null || !timeChacker.audioSource.isPlaying) 
-        {
-            return; 
-        }
-
-        float currentElapsedTime = (float)timeChacker.elapsedTime; 
+        float currentElapsedTime = (float)timeChecker.elapsedTime;
 
         SpawnInfoBundle? spawnInfo = spawnerSelector.GetNoteAndSpawnerForCurrentTime(currentElapsedTime);
 
         if (spawnInfo.HasValue)
         {
-            SpawnNote(spawnInfo.Value.NoteData, spawnInfo.Value.SpawnerTransform, spawnInfo.Value.Tempo);
+            SpawnNote(
+                spawnInfo.Value.NoteData,
+                spawnInfo.Value.SpawnerTransform,
+                spawnInfo.Value.Tempo,
+                spawnInfo.Value.CalculatedTargetPos
+            );
         }
     }
 
     /// <summary>
-    /// 단일 노트를 생성하고 초기 속성을 설정합니다.
+    /// 주어진 정보를 바탕으로 노트를 오브젝트 풀에서 가져와 초기화하고 스폰 위치에 배치합니다.
     /// </summary>
-    /// <param name="noteInfo">생성할 노트의 데이터.</param>
-    /// <param name="selectedSpawner">노트를 스폰할 Spawner Transform.</param>
-    /// <param name="tempo">현재 음악의 템포.</param>
-    void SpawnNote(NoteInfo noteInfo, Transform selectedSpawner, float tempo)
+    /// <param name="noteInfo">스폰할 노트의 정보입니다.</param>
+    /// <param name="selectedSpawner">노트가 스폰될 스포너의 Transform입니다.</param>
+    /// <param name="tempo">현재 음악의 템포(BPM)입니다.</param>
+    /// <param name="calculatedTargetPos">노트가 이동할 최종 목표 위치입니다.</param>
+    void SpawnNote(NoteInfo noteInfo, Transform selectedSpawner, float tempo, Vector3 calculatedTargetPos)
     {
-        // 노트를 생성할 때 스포너의 위치를 기준으로 생성합니다.
-        // Quaternion.identity는 회전이 없는 상태(기본값)를 의미합니다.
-        GameObject spawnedNote = Instantiate(notePrefab, selectedSpawner.position, Quaternion.identity); 
-        NoteMover noteMover = spawnedNote.GetComponent<NoteMover>();
-
-        // --- 여기서 Z축 기준으로 0, 90, 180, 270도 중 랜덤 회전을 적용합니다. ---
-        // 1. 회전시킬 각도들을 배열로 정의합니다.
-        float[] rotationAngles = { 0f, 90f, 180f, 270f };
-        
-        // 2. 배열에서 무작위로 하나의 각도를 선택합니다.
-        // Random.Range(min, max)는 min 이상 max 미만의 정수를 반환하므로,
-        // rotationAngles.Length를 max 값으로 사용하면 배열의 모든 인덱스에 접근할 수 있습니다.
-        float randomZRotation = rotationAngles[Random.Range(0, rotationAngles.Length)];
-        
-        // 3. 선택된 각도를 사용하여 노트의 Z축 회전을 설정합니다.
-        // Quaternion.Euler(x, y, z)는 오일러 각도(일반적인 각도 값)를 유니티의 회전값(쿼터니언)으로 변환해줍니다.
-        // X, Y축 회전은 0으로 유지하고 Z축에만 랜덤 각도를 적용합니다.
-        spawnedNote.transform.rotation = Quaternion.Euler(0, 0, randomZRotation);
-        // --- 랜덤 회전 적용 끝 ---
-
-
-        if (noteMover != null)
+        GameObject spawnedNote = NoteManager.Instance.GetPooledNote();
+        if (spawnedNote == null)
         {
-            noteMover.InitializeNote(
-                selectedSpawner,       
-                tempo,                 
-                noteInfo.time,          
-                noteInfo,               
-                timeChacker             
+            Debug.LogWarning("NoteSpawnerTime: 노트 풀에서 노트를 가져올 수 없습니다. 풀이 비어있거나 문제가 있습니다.");
+            return;
+        }
+
+        // 노트의 초기 위치 및 회전 설정
+        spawnedNote.transform.position = selectedSpawner.position;
+        spawnedNote.transform.rotation = Quaternion.identity;
+
+        float targetZRotation = 0f;
+        switch (noteInfo.requiredDirection)
+        {
+            case NoteDirection.Up: targetZRotation = 0f; break;
+            case NoteDirection.Right: targetZRotation = 90f; break;
+            case NoteDirection.Down: targetZRotation = 180f; break;
+            case NoteDirection.Left: targetZRotation = -90f; break;
+            case NoteDirection.Any: targetZRotation = 0f; break;
+            default:
+                Debug.LogWarning($"NoteSpawnerTime: 알 수 없는 NoteDirection 값 ({noteInfo.requiredDirection})입니다. 기본 회전값 (0도)을 사용합니다.", spawnedNote);
+                break;
+        }
+        spawnedNote.transform.rotation = Quaternion.Euler(0, 0, targetZRotation);
+
+        // NoteMovement 컴포넌트 가져오기 (이름 변경 반영)
+        NoteMovement noteMovement = spawnedNote.GetComponent<NoteMovement>();
+        if (noteMovement != null)
+        {
+            // NoteMovement.InitializeNote 파라미터 변경 반영
+            noteMovement.InitializeNote(
+                selectedSpawner,
+                tempo,
+                noteInfo.time, // targetMusicTime
+                timeChecker,
+                calculatedTargetPos
+            // noteInfo는 이제 NoteMovement 내부에서 Note 컴포넌트를 통해 접근
+            // noteInfo.NoteType은 NoteMovement 내부에서 Note 컴포넌트를 통해 접근
             );
         }
         else
         {
-            Debug.LogWarning("생성된 노트 프리팹에 NoteMover 컴포넌트가 없습니다! 노트 이동이 불가능합니다.", spawnedNote);
-            Destroy(spawnedNote); 
+            Debug.LogError("생성된 노트 프리팹에 NoteMovement 컴포넌트가 없습니다! 노트 이동이 불가능합니다. 이 노트를 풀에 반환합니다.", spawnedNote);
+            NoteManager.Instance.ReturnPooledNote(spawnedNote);
+            return;
+        }
+
+        // Note 컴포넌트에 requiredDirection과 requiredNoteType 할당
+        // 이 부분은 NoteMovement가 내부적으로 Note 컴포넌트의 값을 사용하도록 변경되었으므로,
+        // NoteMovement.InitializeNote가 호출되기 전에 Note 컴포넌트에 값을 설정하는 것이 더 논리적입니다.
+        // 하지만 현재 NoteSpawnerTime이 NoteInfo를 가지고 있으므로 여기서 설정하는 것도 가능합니다.
+        // NoteMovement가 Note 컴포넌트의 값을 사용한다면, 여기서 Note 컴포넌트에 값을 설정하는 것이 중요합니다.
+        Note noteComponent = spawnedNote.GetComponent<Note>();
+        if (noteComponent != null)
+        {
+            noteComponent.requiredDirection = noteInfo.requiredDirection;
+            noteComponent.requiredNoteType = noteInfo.NoteType;
+        }
+        else
+        {
+            Debug.LogWarning($"NoteSpawnerTime: 생성된 노트 프리팹({NoteManager.Instance.notePrefabToPool.name})에 Note 컴포넌트가 없습니다. 판정 시 문제가 발생할 수 있습니다.", spawnedNote);
         }
     }
 }

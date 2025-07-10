@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class ParticlePoolManager : MonoBehaviour
 {
     // 외부에서 접근 가능한 단일 인스턴스
-    public static ParticlePoolManager instance
+    public static ParticlePoolManager Instance
     {
         get
         {
@@ -40,7 +40,7 @@ public class ParticlePoolManager : MonoBehaviour
     private void Awake()
     {
         // 중복 인스턴스 방지: 이미 다른 인스턴스가 존재하면
-        if (instance != this)
+        if (Instance != this)
         {
             Destroy(gameObject);
         }

@@ -6,6 +6,7 @@ public class GameManager : Singleton<GameManager>
     public SceneController sceneController;
     public UIManagerBase currentUIManager;
     public SoundManager soundManager;
+    public DataManager dataManager;
     public AIManager aiManager;
     bool isInitialized = false;
     public bool isDeveloping = true; // 자동생성 됐을때 기본값이 true로 다른 기능 테스트에 방해되지 않도록 설정
@@ -23,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     {
         InitializeSceneController();
         InitializeSoundManager();
+        InitializeDataManager();
         InitializeAIManager();
 
         isInitialized = true;
@@ -41,6 +43,14 @@ public class GameManager : Singleton<GameManager>
         if(soundManager == null)
         {
             soundManager = FindComponent<SoundManager>(typeof(SoundManager), transform);
+        }
+    }
+
+    private void InitializeDataManager()
+    {
+        if (dataManager == null)
+        {
+            dataManager = FindComponent<DataManager>(typeof(DataManager), transform);
         }
     }
 

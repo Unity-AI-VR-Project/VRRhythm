@@ -8,7 +8,7 @@ using Define;
 public class NoteMovement : MonoBehaviour
 {
     // === 외부에서 주입받을 참조들 ===
-    private MusicTimeChecker _musicTimeChecker;
+    private MusicSynchronizer _musicTimeChecker;
 
     // === 노트 관련 정보 (초기화 시 Note 컴포넌트에서 가져옴) ===
     private Note _noteComponent; // 노트 컴포넌트 참조
@@ -72,7 +72,7 @@ public class NoteMovement : MonoBehaviour
     /// <param name="targetMusicTime">노트가 타겟 위치에 도달해야 하는 음악 시간 (초).</param>
     /// <param name="musicTimeChecker">현재 음악 시간을 제공하는 MusicTimeChecker 인스턴스.</param>
     /// <param name="targetPos">노트가 최종적으로 도달할 월드 좌표.</param>
-    public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, MusicTimeChecker musicTimeChecker, Vector3 targetPos)
+    public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, MusicSynchronizer musicTimeChecker, Vector3 targetPos)
     {
         // 초기화 플래그 리셋
         _isInitialized = false;

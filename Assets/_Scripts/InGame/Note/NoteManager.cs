@@ -14,12 +14,12 @@ public class NoteManager : MonoBehaviour
     [SerializeField] private float excellentTimingWindow = 0.1f;
     [SerializeField] private float goodTimingWindow = 0.15f;
 
-    public MusicTimeChecker musicTimeChecker;
+    public MusicSynchronizer musicTimeChecker;
 
     [Header("Note Pooling Setup")]
     [SerializeField] public GameObject notePrefabToPool;
-    [SerializeField] private int defaultPoolSize = 20;
-    [SerializeField] private int maxPoolSize = 50;
+    [SerializeField] private int defaultPoolSize = 10;
+    [SerializeField] private int maxPoolSize = 20;
 
     private IObjectPool<GameObject> notePool;
 
@@ -58,7 +58,7 @@ public class NoteManager : MonoBehaviour
     private void InitializeNotePool()
     {
         notePool = new ObjectPool<GameObject>(CreatePooledNote, OnGetNoteFromPool, OnReleaseNoteToPool, OnDestroyNoteInPool,
-                                                collectionCheck: false, defaultCapacity: defaultPoolSize, maxSize: maxPoolSize);
+                                            collectionCheck: false, defaultCapacity: defaultPoolSize, maxSize: maxPoolSize);
 
         for (int i = 0; i < defaultPoolSize; i++)
         {
@@ -72,6 +72,11 @@ public class NoteManager : MonoBehaviour
     private GameObject CreatePooledNote()
     {
         GameObject note = Instantiate(notePrefabToPool);
+        Note noteComponent = note.GetComponent<Note>();
+        if (noteComponent == null)
+        {
+            noteComponent = note.AddComponent<Note>();
+        }
         return note;
     }
 
@@ -85,6 +90,23 @@ public class NoteManager : MonoBehaviour
         if (noteComponent != null)
         {
             noteComponent.ResetNote();
+            MeshFilter meshFilter = note.GetComponent<MeshFilter>();
+            if (meshFilter != null && noteComponent.OriginalMesh != null)
+            {
+                meshFilter.mesh = noteComponent.OriginalMesh;
+                MeshCollider meshCollider = note.GetComponent<MeshCollider>();
+                if (meshCollider != null)
+                {
+                    meshCollider.sharedMesh = noteComponent.OriginalMesh;
+                    meshCollider.convex = true;
+                    meshCollider.isTrigger = true;
+                }
+            }
+            Collider currentCollider = note.GetComponent<Collider>();
+            if (currentCollider != null)
+            {
+                currentCollider.enabled = true;
+            }
         }
     }
 
@@ -112,22 +134,24 @@ public class NoteManager : MonoBehaviour
     /// <param name="saberSwingDirection">세이버의 스윙 방향입니다.</param>
     public void HandleNoteCutVisuals(GameObject hitNoteObject, Vector3 hitPoint, Vector3 saberSwingDirection)
     {
-        // 기존 로직 유지 (노트 절단 시)
         NoteMovement noteMovement = hitNoteObject.GetComponent<NoteMovement>();
         Collider noteCollider = hitNoteObject.GetComponent<Collider>();
 
-        if (noteMovement != null) noteMovement.enabled = false; // 이동 비활성화
-        if (noteCollider != null) noteCollider.enabled = false; // 콜라이더 비활성화 (충돌 중복 방지)
+        if (noteMovement != null) noteMovement.enabled = false;
+        if (noteCollider != null) noteCollider.enabled = false;
 
-        // Cutter를 사용하여 노트 절단 시각 효과
-        Cutter.Cut(hitNoteObject, hitPoint, saberSwingDirection); // NoteJudger에서 받은 saberSwingDirection 사용
+        Cutter.Cut(hitNoteObject, hitPoint, saberSwingDirection);
 
-        // 풀에 반환
         ReturnPooledNote(hitNoteObject);
     }
 
-    // NoteCleanUp (DeadZone)에서 호출할 수 있도록 오버로드된 메서드 또는 플래그 추가
-    // (isMissed가 true면 절단 연출 없이 바로 풀 반환)
+    /// <summary>
+    /// 노트의 절단 시각 효과를 처리하고 노트를 풀에 반환합니다. 미스 처리 시 절단 연출을 건너뛸 수 있습니다.
+    /// </summary>
+    /// <param name="hitNoteObject">처리될 노트 게임 오브젝트입니다.</param>
+    /// <param name="hitPoint">노트가 충돌한 정확한 지점입니다.</param>
+    /// <param name="saberSwingDirection">세이버의 스윙 방향입니다.</param>
+    /// <param name="isMissed">노트가 미스되었는지 여부입니다.</param>
     public void HandleNoteCutVisuals(GameObject hitNoteObject, Vector3 hitPoint, Vector3 saberSwingDirection, bool isMissed)
     {
         NoteMovement noteMovement = hitNoteObject.GetComponent<NoteMovement>();
@@ -136,11 +160,10 @@ public class NoteManager : MonoBehaviour
         if (noteMovement != null) noteMovement.enabled = false;
         if (noteCollider != null) noteCollider.enabled = false;
 
-        if (!isMissed) // 미스가 아닐 때만 절단 연출
+        if (!isMissed)
         {
             Cutter.Cut(hitNoteObject, hitPoint, saberSwingDirection);
         }
-        // 미스인 경우 Cutter.Cut을 건너뛰고 바로 풀에 반환
 
         ReturnPooledNote(hitNoteObject);
     }

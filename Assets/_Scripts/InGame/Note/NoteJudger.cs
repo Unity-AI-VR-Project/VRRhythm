@@ -1,5 +1,6 @@
 using UnityEngine;
 using Define;
+using System.ComponentModel.Design.Serialization;
 
 public class NoteJudger
 {
@@ -150,7 +151,7 @@ public class NoteJudger
     /// 노트 충돌 정보를 받아 판정을 계산하고, 그 결과에 따라 게임 상태를 업데이트합니다.
     /// 최종적으로 NoteManager에게 노트 컷 연출을 요청합니다.
     /// </summary>
-    public void JudgeAndProcessNote(GameObject hitNoteObject, Saber saber, Collider noteCollider, MusicTimeChecker timeChecker)
+    public void JudgeAndProcessNote(GameObject hitNoteObject, Saber saber, Collider noteCollider, MusicSynchronizer timeChecker)
     {
         // 필수 컴포넌트 유효성 검사
         if (saber == null)
@@ -194,7 +195,7 @@ public class NoteJudger
             NoteScale = noteComponent.transform.localScale,
 
             HitPoint = noteCollider.ClosestPoint(hitNoteObject.transform.position),
-            CurrentMusicTime = timeChecker.elapsedTime,
+            CurrentMusicTime = timeChecker.elapsedTime,//==================================
             TargetMusicTime = noteMovement.TargetMusicTime
         };
 
@@ -247,6 +248,8 @@ public class NoteJudger
             return;
         }
 
+        
+
         // 판정 타입에 따른 점수 및 게임 상태 업데이트
         if ((int)result < (int)JudgementType.BadCut) // Perfect, Excellent, Good
         {
@@ -281,6 +284,7 @@ public class NoteJudger
         }
 
         Debug.Log($"[{context.HitNoteObject.name}] 판정 결과: {result}, 점수: {score}, 콤보 증가: {comboIncreased}");
+        Debug.Log($"[오차 : {context.CurrentMusicTime - context.TargetMusicTime}] 현재 : {context.CurrentMusicTime}, 타겟 : {context.TargetMusicTime}");
 
         ParticlePoolManager.Instance.SpawnParticle(result.ToString(), context.HitNoteObject.transform.position);
     }

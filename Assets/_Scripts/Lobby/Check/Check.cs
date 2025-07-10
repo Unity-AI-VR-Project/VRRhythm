@@ -1,9 +1,14 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI; // CanvasGroup을 위해 추가
+using System; // Action을 위해 추가
 
-public class Check : MonoBehaviour
+public class SongSelect : MonoBehaviour
 {
+    // LobbyUIManager에 알릴 이벤트 정의
+    // 현재 선택된 노래의 인덱스를 전달합니다.
+    public static event Action<int> OnSongChanged;
+
     // 버튼 타입을 정의: 왼쪽 또는 오른쪽
     public enum ButtonType { Left, Right }
     public ButtonType buttonType;
@@ -22,27 +27,31 @@ public class Check : MonoBehaviour
     private AudioSource audioSource;
 
     [Header("Transition Settings")]
-    public float slideDuration = 0.4f;      // 슬라이드 애니메이션 지속 시간
-    public float slideDistance = 1920f;     // 슬라이드할 거리 (화면 너비 기준)
-    public float sidePanelOffset = 1920f;   // 양옆 패널의 초기 오프셋 (선택된 패널과의 거리)
-    public float sidePanelAlpha = 0.5f;     // 양옆 패널의 불투명도 (0.0f - 1.0f)
+    public float slideDuration = 0.4f;    // 슬라이드 애니메이션 지속 시간
+    public float slideDistance = 1920f;   // 슬라이드할 거리 (화면 너비 기준)
+    public float sidePanelOffset = 1920f; // 양옆 패널의 초기 오프셋 (선택된 패널과의 거리)
+    public float sidePanelAlpha = 0.5f;   // 양옆 패널의 불투명도 (0.0f - 1.0f)
+
+    // 선택된 패널의 스케일 배율
+    [Header("Panel Scale Settings")]
+    public float selectedPanelScale = 2.0f; // 선택된 패널의 스케일 배율
+
+    // 양옆 패널의 회전 각도 (Y축)
+    [Header("Panel Rotation Settings")]
+    public float sidePanelRotationAngle = 15f; // 양옆 패널의 회전 각도 (Y축)
 
     private void Start()
     {
-        // 씬에서 AudioSource를 찾아 초기화
         audioSource = FindAnyObjectByType<AudioSource>();
-
         if (audioSource == null)
         {
             Debug.LogError("[SelectSong] AudioSource not found in scene.");
         }
         else
         {
-            // 모든 패널의 CanvasGroup 컴포넌트 확인 및 추가
             SetupPanels();
-            // 초기 상태 설정
             UpdatePanelVisibility(currentIndex);
-            PlayClip(currentIndex); // 해당 패널에 대응하는 음악 재생
+            PlayClip(currentIndex);
         }
     }
 
@@ -54,22 +63,16 @@ public class Check : MonoBehaviour
             {
                 panel.AddComponent<CanvasGroup>();
             }
-            // 시작 시 모든 패널 비활성화 (UpdatePanelVisibility에서 필요한 것만 고 위치 잡음)
             panel.SetActive(false);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Saber 태그를 가진 오브젝트에 의해 트리거될 경우만 반응
         if (!other.CompareTag("Saber")) return;
-
-        // 쿨다운 시간 내에 중복 입력 방지
         if (Time.time - lastTriggerTime < cooldown) return;
 
         lastTriggerTime = Time.time;
-
-        // 버튼 타입에 따라 이동 처리
         OnClick(buttonType);
     }
 
@@ -77,41 +80,32 @@ public class Check : MonoBehaviour
     {
         int nextIndex = currentIndex;
 
-        // 왼쪽 버튼일 경우 이전 인덱스로, 오른쪽이면 다음 인덱스로
         switch (type)
         {
             case ButtonType.Left:
                 nextIndex = (currentIndex - 1 + panels.Length) % panels.Length;
                 break;
-
             case ButtonType.Right:
                 nextIndex = (currentIndex + 1) % panels.Length;
                 break;
         }
 
-        // 인덱스가 변경되었을 경우에만 슬라이드 전환 및 음악 재생
         if (nextIndex != currentIndex)
         {
-            // 슬라이드 전환 시작 전에 이전 상태의 패널들 비활성화
-            // StartCoroutine 안에서 활성화 및 위치 조정이 이루어짐
-            // 현재 패널과 전환될 패널들만 관리하므로 명시적으로 비활성화 필요 없음
-
             StartCoroutine(SlideTransition(currentIndex, nextIndex, type));
             currentIndex = nextIndex;
             PlayClip(currentIndex);
+            OnSongChanged?.Invoke(currentIndex);
         }
     }
 
     IEnumerator SlideTransition(int fromIndex, int toIndex, ButtonType type)
     {
-        // 이전, 현재, 다음 패널 인덱스 계산
         int prevFromIndex = (fromIndex - 1 + panels.Length) % panels.Length;
         int nextFromIndex = (fromIndex + 1) % panels.Length;
-
         int prevToIndex = (toIndex - 1 + panels.Length) % panels.Length;
         int nextToIndex = (toIndex + 1) % panels.Length;
 
-        // 관련 패널들의 RectTransform과 CanvasGroup 가져오기
         RectTransform fromRT = panels[fromIndex].GetComponent<RectTransform>();
         CanvasGroup fromCG = panels[fromIndex].GetComponent<CanvasGroup>();
 
@@ -130,52 +124,56 @@ public class Check : MonoBehaviour
         RectTransform nextToRT = panels[nextToIndex].GetComponent<RectTransform>();
         CanvasGroup nextToCG = panels[nextToIndex].GetComponent<CanvasGroup>();
 
-        // 슬라이드 방향 설정
-        float dir = type == ButtonType.Left ? 1 : -1; // 왼쪽으로 이동하면 패널은 오른쪽으로 이동 (+), 오른쪽으로 이동하면 패널은 왼쪽으로 이동 (-)
+        float dir = type == ButtonType.Left ? 1 : -1;
 
-        // 각 패널의 시작 및 끝 위치 설정 (3개 패널이 나란히 배치되는 기준)
-        // 현재 화면 중앙을 (0,0)으로 가정합니다.
-
-        // from 패널 (이전 선택 패널) 관련
-        // prevFrom (현재 화면 왼쪽) -> (더 왼쪽으로 사라짐)
         Vector2 prevFromStartPos = new Vector2(-sidePanelOffset, 0);
         Vector2 prevFromEndPos = new Vector2(-sidePanelOffset + dir * slideDistance, 0);
 
-        // fromIndex (현재 화면 중앙) -> (왼쪽 또는 오른쪽으로 사라짐)
         Vector2 fromStartPos = Vector2.zero;
         Vector2 fromEndPos = new Vector2(dir * slideDistance, 0);
 
-        // nextFrom (현재 화면 오른쪽) -> (더 오른쪽으로 사라짐)
         Vector2 nextFromStartPos = new Vector2(sidePanelOffset, 0);
         Vector2 nextFromEndPos = new Vector2(sidePanelOffset + dir * slideDistance, 0);
 
-
-        // to 패널 (새로운 선택 패널) 관련
-        // prevTo (이전 위치에서 나타남) -> (새로운 왼쪽 패널 위치)
-        Vector2 prevToStartPos = new Vector2(-sidePanelOffset - dir * slideDistance, 0); // 슬라이드 될 위치에서 시작
+        Vector2 prevToStartPos = new Vector2(-sidePanelOffset - dir * slideDistance, 0);
         Vector2 prevToEndPos = new Vector2(-sidePanelOffset, 0);
 
-        // toIndex (화면 밖에서 나타남) -> (새로운 중앙 패널 위치)
-        Vector2 toStartPos = new Vector2(-dir * slideDistance, 0); // 슬라이드 될 위치에서 시작
+        Vector2 toStartPos = new Vector2(-dir * slideDistance, 0);
         Vector2 toEndPos = Vector2.zero;
 
-        // nextTo (다음 위치에서 나타남) -> (새로운 오른쪽 패널 위치)
-        Vector2 nextToStartPos = new Vector2(sidePanelOffset - dir * slideDistance, 0); // 슬라이드 될 위치에서 시작
+        Vector2 nextToStartPos = new Vector2(sidePanelOffset - dir * slideDistance, 0);
         Vector2 nextToEndPos = new Vector2(sidePanelOffset, 0);
 
-        // --- 초기 상태 설정 ---
-        // 모든 패널 비활성화 후 필요한 패널만 활성화
+        // 스케일 설정
+        Vector3 fromStartScale = Vector3.one * selectedPanelScale;
+        Vector3 fromEndScale = Vector3.one;
+        Vector3 toStartScale = Vector3.one;
+        Vector3 toEndScale = Vector3.one * selectedPanelScale;
+        Vector3 sidePanelFixedScale = Vector3.one;
+
+        // 회전 설정 (Y축으로 변경)
+        // 왼쪽 패널은 Y축 양의 방향으로 회전 (오른쪽으로 돌아가는 느낌)
+        // 오른쪽 패널은 Y축 음의 방향으로 회전 (왼쪽으로 돌아가는 느낌)
+        Quaternion fromStartRot = Quaternion.Euler(0, 0, 0); // 현재 중앙 패널은 회전 없음
+        Quaternion fromEndRot = (type == ButtonType.Left) ? Quaternion.Euler(0, sidePanelRotationAngle, 0) : Quaternion.Euler(0, -sidePanelRotationAngle, 0); // 이동 후 양옆 패널 회전
+        Quaternion toStartRot = (type == ButtonType.Left) ? Quaternion.Euler(0, -sidePanelRotationAngle, 0) : Quaternion.Euler(0, sidePanelRotationAngle, 0); // 이동할 패널은 양옆 패널 회전
+        Quaternion toEndRot = Quaternion.Euler(0, 0, 0); // 이동 후 중앙 패널 회전 없음
+
+        Quaternion sidePanelFixedLeftRot = Quaternion.Euler(0, -sidePanelRotationAngle, 0); // 왼쪽에 배치될 패널은 Y축 음수 회전
+        Quaternion sidePanelFixedRightRot = Quaternion.Euler(0, sidePanelRotationAngle, 0); // 오른쪽에 배치될 패널은 Y축 양수 회전
+
+
         foreach (GameObject p in panels) p.SetActive(false);
 
         panels[prevFromIndex].SetActive(true);
         panels[fromIndex].SetActive(true);
         panels[nextFromIndex].SetActive(true);
 
-        panels[prevToIndex].SetActive(true); // toIndex로 전환될 때 나타날 prev 패널
-        panels[toIndex].SetActive(true);     // toIndex (새로운 중앙 패널)
-        panels[nextToIndex].SetActive(true); // toIndex로 전환될 때 나타날 next 패널
+        panels[prevToIndex].SetActive(true);
+        panels[toIndex].SetActive(true);
+        panels[nextToIndex].SetActive(true);
 
-        // 애니메이션 시작 전 패널들의 초기 위치 설정
+        // 초기 위치 설정
         prevFromRT.anchoredPosition = prevFromStartPos;
         fromRT.anchoredPosition = fromStartPos;
         nextFromRT.anchoredPosition = nextFromStartPos;
@@ -184,43 +182,63 @@ public class Check : MonoBehaviour
         toRT.anchoredPosition = toStartPos;
         nextToRT.anchoredPosition = nextToStartPos;
 
-        // 애니메이션 시작 전 알파값 설정
-        // 기존 3개 패널
+        // 초기 알파 설정
         prevFromCG.alpha = sidePanelAlpha;
         fromCG.alpha = 1f;
         nextFromCG.alpha = sidePanelAlpha;
 
-        // 새롭게 나타날 3개 패널 (transition 시작 시점)
         prevToCG.alpha = sidePanelAlpha;
-        toCG.alpha = sidePanelAlpha; // 일단 불투명하게 시작해서 Lerp로 1f까지 갈 예정
+        toCG.alpha = sidePanelAlpha;
         nextToCG.alpha = sidePanelAlpha;
 
+        // 초기 스케일 설정
+        fromRT.localScale = fromStartScale;
+        toRT.localScale = toStartScale;
+        prevFromRT.localScale = sidePanelFixedScale;
+        nextFromRT.localScale = sidePanelFixedScale;
+        prevToRT.localScale = sidePanelFixedScale;
+        nextToRT.localScale = sidePanelFixedScale;
 
-        // 슬라이드 애니메이션 처리
+        // 초기 회전 설정
+        fromRT.rotation = fromStartRot;
+        toRT.rotation = toStartRot;
+        prevFromRT.rotation = (prevFromRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+        nextFromRT.rotation = (nextFromRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+        prevToRT.rotation = (prevToRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+        nextToRT.rotation = (nextToRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+
+
         float t = 0;
         while (t < slideDuration)
         {
             t += Time.deltaTime;
             float lerpT = t / slideDuration;
 
-            // 기존 패널들 슬라이드
+            // 위치 애니메이션
             prevFromRT.anchoredPosition = Vector2.Lerp(prevFromStartPos, prevFromEndPos, lerpT);
             fromRT.anchoredPosition = Vector2.Lerp(fromStartPos, fromEndPos, lerpT);
             nextFromRT.anchoredPosition = Vector2.Lerp(nextFromStartPos, nextFromEndPos, lerpT);
 
-            // 새롭게 나타날 패널들 슬라이드
             prevToRT.anchoredPosition = Vector2.Lerp(prevToStartPos, prevToEndPos, lerpT);
             toRT.anchoredPosition = Vector2.Lerp(toStartPos, toEndPos, lerpT);
             nextToRT.anchoredPosition = Vector2.Lerp(nextToStartPos, nextToEndPos, lerpT);
 
-            // 알파값 보간 (선택된 패널만 1f로)
-            fromCG.alpha = Mathf.Lerp(1f, sidePanelAlpha, lerpT); // 중앙 패널은 투명해지고
-            toCG.alpha = Mathf.Lerp(sidePanelAlpha, 1f, lerpT);   // 새 중앙 패널은 불투명해짐
+            // 알파 애니메이션
+            fromCG.alpha = Mathf.Lerp(1f, sidePanelAlpha, lerpT);
+            toCG.alpha = Mathf.Lerp(sidePanelAlpha, 1f, lerpT);
+
+            // 스케일 애니메이션
+            fromRT.localScale = Vector3.Lerp(fromStartScale, fromEndScale, lerpT);
+            toRT.localScale = Vector3.Lerp(toStartScale, toEndScale, lerpT);
+
+            // 회전 애니메이션 (Y축으로 변경)
+            fromRT.rotation = Quaternion.Slerp(fromStartRot, fromEndRot, lerpT);
+            toRT.rotation = Quaternion.Slerp(toStartRot, toEndRot, lerpT);
 
             yield return null;
         }
 
-        // 애니메이션 완료 후 최종 위치 및 알파값 설정
+        // 애니메이션 종료 후 최종 상태 설정
         prevFromRT.anchoredPosition = prevFromEndPos;
         fromRT.anchoredPosition = fromEndPos;
         nextFromRT.anchoredPosition = nextFromEndPos;
@@ -237,49 +255,74 @@ public class Check : MonoBehaviour
         toCG.alpha = 1f;
         nextToCG.alpha = sidePanelAlpha;
 
-        // 최종 상태 업데이트: 모든 패널 비활성화 후 현재 인덱스 기준으로 3개만 활성화
+        // 최종 스케일 설정
+        fromRT.localScale = fromEndScale;
+        toRT.localScale = toEndScale;
+        prevFromRT.localScale = sidePanelFixedScale;
+        nextFromRT.localScale = sidePanelFixedScale;
+        prevToRT.localScale = sidePanelFixedScale;
+        nextToRT.localScale = sidePanelFixedScale;
+
+        // 최종 회전 설정 (Y축으로 변경)
+        fromRT.rotation = fromEndRot;
+        toRT.rotation = toEndRot;
+        prevFromRT.rotation = (prevFromRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+        nextFromRT.rotation = (nextFromRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+        prevToRT.rotation = (prevToRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+        nextToRT.rotation = (nextToRT.anchoredPosition.x < 0) ? sidePanelFixedLeftRot : sidePanelFixedRightRot;
+
         UpdatePanelVisibility(toIndex);
     }
 
-    // 패널 가시성 및 투명도 업데이트 메서드
     void UpdatePanelVisibility(int centerIndex)
     {
-        // 모든 패널 비활성화 및 초기 위치, 투명도 설정
+        // 모든 패널의 상태를 초기화
         foreach (GameObject p in panels)
         {
             p.SetActive(false);
             RectTransform rt = p.GetComponent<RectTransform>();
             CanvasGroup cg = p.GetComponent<CanvasGroup>();
-            if (rt != null) rt.anchoredPosition = Vector2.zero; // 중앙으로 초기화
-            if (cg != null) cg.alpha = 1f; // 불투명하게 초기화
+            if (rt != null)
+            {
+                rt.anchoredPosition = Vector2.zero;
+                rt.localScale = Vector3.one;
+                rt.rotation = Quaternion.identity; // 회전 초기화 (0도)
+            }
+            if (cg != null) cg.alpha = 1f;
         }
 
-        // 현재 선택된 패널 (가운데)
+        // 중앙 패널 설정
         panels[centerIndex].SetActive(true);
         panels[centerIndex].GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         panels[centerIndex].GetComponent<CanvasGroup>().alpha = 1f;
+        panels[centerIndex].GetComponent<RectTransform>().localScale = Vector3.one * selectedPanelScale;
+        panels[centerIndex].GetComponent<RectTransform>().rotation = Quaternion.identity; // 회전 없음
 
-        // 왼쪽 패널
+        // 이전 패널 (왼쪽) 설정
         int prevIndex = (centerIndex - 1 + panels.Length) % panels.Length;
         panels[prevIndex].SetActive(true);
-        panels[prevIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(-sidePanelOffset, 0);
+        panels[prevIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(-sidePanelOffset, 100);
         panels[prevIndex].GetComponent<CanvasGroup>().alpha = sidePanelAlpha;
+        panels[prevIndex].GetComponent<RectTransform>().localScale = Vector3.one;
+        // 이전 패널을 왼쪽으로 회전 (Y축 음수 회전)
+        panels[prevIndex].GetComponent<RectTransform>().rotation = Quaternion.Euler(0, -sidePanelRotationAngle, 0);
 
-        // 오른쪽 패널
+        // 다음 패널 (오른쪽) 설정
         int nextIndex = (centerIndex + 1) % panels.Length;
         panels[nextIndex].SetActive(true);
-        panels[nextIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(sidePanelOffset, 0);
+        panels[nextIndex].GetComponent<RectTransform>().anchoredPosition = new Vector2(sidePanelOffset, 100);
         panels[nextIndex].GetComponent<CanvasGroup>().alpha = sidePanelAlpha;
+        panels[nextIndex].GetComponent<RectTransform>().localScale = Vector3.one;
+        // 다음 패널을 오른쪽으로 회전 (Y축 양수 회전)
+        panels[nextIndex].GetComponent<RectTransform>().rotation = Quaternion.Euler(0, sidePanelRotationAngle, 0);
 
         Debug.Log($"[Panels] Current: {centerIndex}, Prev: {prevIndex}, Next: {nextIndex}");
     }
 
     void PlayClip(int index)
     {
-        // 오디오 소스 또는 클립이 없거나 인덱스가 범위를 넘으면 실행 안 함
         if (audioSource == null || clips == null || index >= clips.Length) return;
 
-        // 해당 인덱스의 오디오 클립을 재생
         audioSource.clip = clips[index];
         audioSource.Play();
         Debug.Log($"[Audio] Playing clip: {clips[index].name}");

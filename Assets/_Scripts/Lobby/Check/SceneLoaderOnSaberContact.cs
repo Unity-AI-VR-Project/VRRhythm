@@ -1,63 +1,83 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // 씬 관리를 위해 추가
+using UnityEngine.SceneManagement; // SceneManager를 사용하기 위해 추가
 
 public class SceneLoaderOnSaberContact : MonoBehaviour
 {
-    // 각 패널 인덱스에 매핑될 씬 이름을 배열로 정의합니다.
-    // 인스펙터에서 직접 씬 이름을 입력해야 합니다.
-    [Header("Scene Settings")]
-    public string[] sceneNames;
+    // === 옵저버 패턴을 위한 이벤트 선언 ===
+    // 씬 로드를 요청할 때 외부에 알리는 이벤트
+    public static event System.Action<string> OnSceneLoadRequested;
+    // ======================================
 
-    [Tooltip("씬 전환 시 중복 트리거를 방지하기 위한 쿨다운 시간")]
-    [SerializeField] private float sceneLoadCooldown = 2f;
-    private float _lastSceneLoadTime = -999f; // 마지막 씬 로드 시간 기록
+    [Header("씬 로드 설정")]
+    [Tooltip("CanvasMover의 음악 클립 인덱스에 매칭되는 씬 이름들을 순서대로 할당하세요.")]
+    public string[] scenesToLoad; // 각 음악 인덱스에 매칭되는 씬 이름 배열
 
-    private void OnTriggerEnter(Collider other)
+    [Header("충돌 감지 쿨다운")]
+    [Tooltip("Saber와의 충돌 후 다음 충돌을 감지할 때까지의 시간 (초)")]
+    [SerializeField] private float cooldown = 1.0f; // 버튼 재입력을 막기 위한 쿨다운 설정
+    private float _lastTriggerTime = -999f; // 마지막 트리거 발생 시간
+
+    void Start()
     {
-        // "Saber" 태그를 가진 오브젝트에 의해서만 트리거되도록 합니다.
-        if (!other.CompareTag("Saber"))
+        // CanvasMover 인스턴스 참조를 가져옵니다.
+        // CanvasMover._instance가 private이기 때문에 직접 접근할 수 없습니다.
+        // public static getter를 CanvasMover에 추가하거나, FindFirstObjectByType 사용해야 합니다.
+        // 여기서는 FindFirstObjectByType 사용하는 것이 가장 간단합니다.
+        // (단, 씬에 CanvasMover 컴포넌트가 하나만 있거나, 오디오 재생을 담당하는 CanvasMover를 명확히 찾을 수 있어야 합니다.)
+        CanvasMover masterCanvasMover = FindFirstObjectByType<CanvasMover>();
+
+        if (masterCanvasMover != null)
         {
-            return;
-        }
-
-        // 쿨다운 시간 내에 중복 씬 로드 방지
-        if (Time.time - _lastSceneLoadTime < sceneLoadCooldown)
-        {
-            Debug.LogWarning("[SceneLoaderOnSaberContact] 씬 로드 쿨다운 중입니다. 잠시 후 다시 시도하세요.");
-            return;
-        }
-
-        _lastSceneLoadTime = Time.time; // 씬 로드 시도 시간 기록
-
-        // Check 스크립트에서 현재 선택된 패널의 인덱스를 가져옵니다.
-        int selectedPanelIndex = Check.currentIndex;
-
-        // 유효한 씬 인덱스인지 확인
-        if (selectedPanelIndex >= 0 && selectedPanelIndex < sceneNames.Length)
-        {
-            string sceneToLoad = sceneNames[selectedPanelIndex];
-
-            // 씬이 실제로 존재하는지 확인 (선택 사항이지만 안전을 위해 권장)
-            // 빌드 설정에 추가된 씬만 SceneUtility.GetAllScenePaths()로 확인 가능
-            // Editor Only: UnityEditor.SceneManagement.EditorSceneManager.GetSceneByPath
-            // Runtime: 씬 빌드 설정에 추가된 모든 씬의 이름은 직접 관리해야 합니다.
-
-            // 실제 씬 로드
-            Debug.Log($"[SceneLoaderOnSaberContact] 인덱스 {selectedPanelIndex}에 해당하는 씬 '{sceneToLoad}' 로드를 시도합니다.");
-            SceneManager.LoadScene(sceneToLoad);
+            if (masterCanvasMover.clips != null && scenesToLoad.Length != masterCanvasMover.clips.Length)
+            {
+                Debug.LogWarning($"[SceneLoaderOnSaberContact] 'Scenes To Load' 배열의 길이가 CanvasMover의 'Clips' 배열 길이 ({masterCanvasMover.clips.Length})와 다릅니다. 이는 예상치 못한 동작을 유발할 수 있습니다.");
+            }
         }
         else
         {
-            Debug.LogError($"[SceneLoaderOnSaberContact] 유효하지 않은 패널 인덱스입니다: {selectedPanelIndex}. 씬 이름을 확인할 수 없습니다.");
+            Debug.LogError("[SceneLoaderOnSaberContact] 씬에서 CanvasMover 인스턴스를 찾을 수 없습니다! 'Clips' 배열 길이 검사를 건너뜝니다.");
         }
+
+        Debug.Log("[SceneLoaderOnSaberContact] 스크립트가 준비되었습니다. 'Saber'와 충돌 시 현재 선택된 곡에 해당하는 씬을 로드 요청합니다.");
     }
 
-    /* 만약 특정 씬으로 이동하기 전에 추가적인 확인이 필요하다면 아래와 같은 메서드를 활용할 수 있습니다.
-    public void LoadSelectedScene()
+    /// <summary>
+    /// 콜라이더가 트리거로 설정된 오브젝트에 다른 콜라이더가 진입했을 때 호출됩니다.
+    /// </summary>
+    /// <param name="other">충돌한 다른 콜라이더</param>
+    private void OnTriggerEnter(Collider other)
     {
-        OnTriggerEnter(null); // 더미 호출 (적절한 방식은 아님)
-        // 대신 씬 로드를 직접 호출하는 Public 메서드를 제공하는 것이 좋습니다.
-        // 예를 들어 UI 버튼 클릭 등에 연결할 때 유용합니다.
+        // 충돌한 오브젝트의 태그가 "Saber"인지 확인
+        if (!other.CompareTag("Saber"))
+        {
+            return; // Saber가 아니면 무시
+        }
+
+        // 쿨다운 시간 확인 (연속적인 트리거 방지)
+        if (Time.time - _lastTriggerTime < cooldown)
+        {
+            return; // 쿨다운 중이면 무시
+        }
+
+        _lastTriggerTime = Time.time; // 마지막 트리거 시간 업데이트
+
+        // CanvasMover에서 현재 선택된 곡의 인덱스를 가져옵니다.
+        // CanvasMover.currentSongIndex는 static이므로 직접 접근 가능합니다.
+        int currentSongIndex = CanvasMover.currentSongIndex;
+
+        // 해당 인덱스에 매칭되는 씬 이름을 찾습니다.
+        if (scenesToLoad != null && currentSongIndex >= 0 && currentSongIndex < scenesToLoad.Length)
+        {
+            string sceneNameToLoad = scenesToLoad[currentSongIndex];
+            Debug.Log($"[SceneLoaderOnSaberContact] Saber와의 충돌 감지! 현재 곡 인덱스 {currentSongIndex}에 해당하는 '{sceneNameToLoad}' 씬 로드를 요청합니다.");
+
+            // === 씬 로드 요청 이벤트를 외부에 알림 ===
+            OnSceneLoadRequested?.Invoke(sceneNameToLoad);
+            // ==========================================
+        }
+        else
+        {
+            Debug.LogWarning($"[SceneLoaderOnSaberContact] 유효하지 않은 곡 인덱스 ({currentSongIndex}) 이거나 'Scenes To Load' 배열이 할당되지 않았습니다. 씬 로드를 할 수 없습니다.");
+        }
     }
-    */
 }

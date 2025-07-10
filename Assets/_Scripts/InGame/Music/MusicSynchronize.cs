@@ -17,7 +17,7 @@ public class MusicSynchronizer : MonoBehaviour
     [Tooltip("음악 BPM 정보를 가져오기 위한 SpawnerSelector 컴포넌트.")]
     public SpawnerSelector spawnerSelector; // SpawnerSelector 참조를 추가합니다.
     [Tooltip("음악 경과 시간을 추적하는 MusicTimeChacker 컴포넌트.")]
-    public MusicTimeChacker timeChacker; // MusicTimeChacker 참조를 추가합니다.
+    public MusicTimeChecker timeChecker; // MusicTimeChacker 참조를 추가합니다.
 
     void Awake()
     {
@@ -36,10 +36,10 @@ public class MusicSynchronizer : MonoBehaviour
         }
 
         // MusicTimeChacker 컴포넌트가 할당되었는지 확인합니다.
-        if (timeChacker == null)
+        if (timeChecker == null)
         {
-            timeChacker = FindAnyObjectByType<MusicTimeChacker>();
-            if (timeChacker == null)
+            timeChecker = FindAnyObjectByType<MusicTimeChecker>();
+            if (timeChecker == null)
             {
                 Debug.LogError("MusicSynchronizer: MusicTimeChacker 컴포넌트가 할당되지 않았습니다. 씬에 MusicTimeChacker를 추가하고 할당하거나, 수동으로 할당해주세요.", this);
                 enabled = false;
@@ -66,9 +66,9 @@ public class MusicSynchronizer : MonoBehaviour
         audioSource.PlayScheduled(scheduledStartTime);
 
         // MusicTimeChacker에 음악 시작 예약 시간을 전달하여 시간 추적의 기준점으로 삼습니다.
-        if (timeChacker != null)
+        if (timeChecker != null)
         {
-            timeChacker.InitializeMusicStartTime(scheduledStartTime); // MusicTimeChacker에 초기화 메서드 필요
+            timeChecker.InitializeMusicStartTime(scheduledStartTime); // MusicTimeChacker에 초기화 메서드 필요
         }
         
         Debug.Log($"음악은 {delay + offset:F2}초 후에 재생됩니다. (DSP Time 기준: {scheduledStartTime:F2})");

@@ -27,7 +27,7 @@ public class NoteSpawner : MonoBehaviour
     private float beatTime;              // 한 비트 시간
     private float nextCheckTime = 0f;    // 다음 비트 체크 시각
     private float previousOffset;  // 이전 offset 값을 저장
-    private bool starting = false; // 음악 시작 검사
+    // private bool starting = false; // 음악 시작 검사
     private float energyMin;
     private float energyMax;
     

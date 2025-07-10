@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class MusicTimeChacker : MonoBehaviour
+public class MusicTimeChecker : MonoBehaviour
 {
     // 이 AudioSource는 이제 private이며, 동일 GameObject에서 자동으로 가져옵니다.
     private AudioSource audioSource; 
 
     // 현재 음악의 경과 시간 (외부에서 읽기 전용)
-    public double elapsedTime { get; private set; } 
+    public float elapsedTime { get; private set; } 
 
     // 음악이 재생될 것으로 예약된 DSP 시간
     private double _musicScheduledStartTime; 
@@ -38,7 +38,7 @@ public class MusicTimeChacker : MonoBehaviour
         // 음악이 재생 중이고 AudioSource가 유효할 때만 경과 시간을 업데이트합니다.
         if (_isMusicPlaying && audioSource != null && audioSource.isPlaying) 
         {
-            elapsedTime = AudioSettings.dspTime - _musicScheduledStartTime;
+            elapsedTime = (float)(AudioSettings.dspTime - _musicScheduledStartTime);
             
         }
         else if (_isMusicPlaying && audioSource != null && !audioSource.isPlaying && elapsedTime > 0)

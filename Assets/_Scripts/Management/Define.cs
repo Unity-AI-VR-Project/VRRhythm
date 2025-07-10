@@ -85,4 +85,9 @@ namespace Define
             Emoji = emoji;
         }
     }
+    public struct ChatLog
+    {
+        public eScenes scene;
+        public ChatObjectData chatObjectData;
+    }
 }

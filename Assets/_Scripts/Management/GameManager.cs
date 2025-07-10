@@ -6,8 +6,10 @@ public class GameManager : Singleton<GameManager>
     public SceneController sceneController;
     public UIManagerBase currentUIManager;
     public SoundManager soundManager;
+    public ChatManager chatManager;
     public DataManager dataManager;
     public AIManager aiManager;
+
     bool isInitialized = false;
     public bool isDeveloping = true; // 자동생성 됐을때 기본값이 true로 다른 기능 테스트에 방해되지 않도록 설정
 
@@ -22,43 +24,33 @@ public class GameManager : Singleton<GameManager>
 
     private void Initialize()
     {
-        InitializeSceneController();
-        InitializeSoundManager();
-        InitializeDataManager();
-        InitializeAIManager();
+        InitializeManager();
 
         isInitialized = true;
     }
 
-    private void InitializeSceneController()
+
+    private void InitializeManager()
     {
         if (sceneController == null)
         {
-            sceneController = FindComponent<SceneController>(typeof(SceneController),transform);
+            sceneController = FindComponent<SceneController>(typeof(SceneController), transform);
         }
-    }
-
-    private void InitializeSoundManager()
-    {
-        if(soundManager == null)
+        if (soundManager == null)
         {
             soundManager = FindComponent<SoundManager>(typeof(SoundManager), transform);
         }
-    }
-
-    private void InitializeDataManager()
-    {
+        if (chatManager == null)
+        {
+            chatManager = FindComponent<ChatManager>(typeof(ChatManager), transform);
+        }
         if (dataManager == null)
         {
             dataManager = FindComponent<DataManager>(typeof(DataManager), transform);
         }
-    }
-
-    private void InitializeAIManager()
-    {
         if (aiManager == null)
         {
-            aiManager = FindComponent<AIManager>(typeof(AIManager),transform);
+            aiManager = FindComponent<AIManager>(typeof(AIManager), transform);
         }
     }
 

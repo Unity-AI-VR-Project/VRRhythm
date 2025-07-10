@@ -35,6 +35,8 @@ public class CanvasMover : MonoBehaviour
     [Tooltip("재생할 음악 클립들을 순서대로 할당하세요. (하나의 CanvasMover 인스턴스에만 할당!)")]
     public  AudioClip[] clips;
 
+   
+
     [Header("충돌 감지 쿨다운")]
     [Tooltip("Saber와의 충돌 후 다음 충돌을 감지할 때까지의 시간 (초)")]
     [SerializeField] private float cooldown = 0.5f;
@@ -121,6 +123,7 @@ public class CanvasMover : MonoBehaviour
         if (isScrolling) return;
 
         bool scrollNext = (buttonType == ButtonType.Next);
+      
         ScrollObjects(scrollNext);
     }
 

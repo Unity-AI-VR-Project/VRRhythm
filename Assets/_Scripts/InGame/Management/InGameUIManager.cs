@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 
 // 게임의 점수, 콤보, 타이머, 체력 등의 UI를 관리하는 클래스
-public class UiManager : MonoBehaviour
+public class InGameUIManager : UIManagerBase
 {
     // UI 요소들 (인스펙터에서 할당)
     public TextMeshProUGUI scoreText;    // 점수 텍스트

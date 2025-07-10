@@ -12,9 +12,6 @@ public class SAController : MonoBehaviour
     private Model saModel;
     private Worker saWorker;
 
-    public string sentence;
-    public int result;
-
     private void Awake()
     {
         if (!isInitialized)
@@ -30,10 +27,7 @@ public class SAController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Test(sentence);    
-        }
+
     }
 
     private void Initialize()
@@ -63,34 +57,35 @@ public class SAController : MonoBehaviour
     private void InitializeSAModel()
     {
         saModel = ModelLoader.Load(saModelAsset);
+        saWorker = CreateSAModel();
     }
 
-    public void Test(string testSentence)
+    public int Run(string sentence)
     {
         try
         {
-            Dictionary<string,List<int>> token = tokenizer.Encode(testSentence,128,true,true);
+            Dictionary<string,List<int>> token = tokenizer.Encode(sentence, 128,true,true);
 
             Tensor<int> inputIdsTensor = new Tensor<int>(new TensorShape(1, 128), token["input_ids"].ToArray());
             Tensor<int> attentionMaskTensor = new Tensor<int>(new TensorShape(1, 128), token["attention_mask"].ToArray());
 
-            saWorker = CreateSAModel();
             saWorker.SetInput(0, inputIdsTensor);
             saWorker.SetInput(1, attentionMaskTensor);
 
             saWorker.Schedule();
 
-            result = (saWorker.PeekOutput()).ReleaseTensorData().Download<int>(saWorker.PeekOutput().shape[0]).ToArray()[0];
+            int result = (saWorker.PeekOutput()).ReleaseTensorData().Download<int>(saWorker.PeekOutput().shape[0]).ToArray()[0];
 
             inputIdsTensor?.Dispose();
             attentionMaskTensor?.Dispose();
-            saWorker?.Dispose();
+
+            return result;
         }
         catch (Exception e)
         {
             Debug.LogError($"Tensor 생성 중 오류 발생: {e.Message}");
             Debug.LogError($"{e.StackTrace}");
-            return;
+            return -1;
         }
     }
 

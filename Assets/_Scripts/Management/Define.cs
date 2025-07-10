@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Define
@@ -30,6 +31,16 @@ namespace Define
         BadCut,
         Miss,
     }
+    public enum eButton
+    {
+        Continue,
+        Restart,
+        Settings,
+        Lobby,
+        Chat,
+        Exit,
+        Count
+    }
     /// <summary>
     /// 노트 충돌 및 판정에 필요한 모든 관련 정보를 담는 구조체입니다.
     /// </summary>
@@ -60,5 +71,18 @@ namespace Define
         public float swingAngleBeforeCut; // 노트를 치기 전 스윙 각도 (비트 세이버 기준 0~100)
         public float swingAngleAfterCut;  // 노트를 친 후 스윙 각도 (비트 세이버 기준 0~100)
         public float cutAccuracy;         // 노트 중앙을 얼마나 정확히 맞췄는지 (0~1 사이)
+    }
+    public struct ChatObjectData
+    {
+        public DateTime TimeStamp;
+        public string Content;
+        public int Emoji;
+
+        public ChatObjectData(DateTime timeStamp, string content, int emoji)
+        {
+            TimeStamp = timeStamp;
+            Content = content;
+            Emoji = emoji;
+        }
     }
 }

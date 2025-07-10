@@ -332,8 +332,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8247f8ba4422b8149b33ac1c8f306942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saberHandType: 0
+  saberNoteType: 0
   minMovementThreshold: 0.01
+  minVelocityThreshold: 0.05
+--- !u!114 &444352108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444352101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82887e8768f1eef42a124cb0b18b9991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _saber: {fileID: 0}
 --- !u!1 &471795550 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6293621912950982207, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
@@ -502,9 +516,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2942774647333424178, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 444352107}
+    - targetCorrespondingSourceObject: {fileID: 2942774647333424178, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 444352108}
     - targetCorrespondingSourceObject: {fileID: 4991995547435381379, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1686213952}
+    - targetCorrespondingSourceObject: {fileID: 4991995547435381379, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1686213953}
   m_SourcePrefab: {fileID: 100100000, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
 --- !u!114 &908688949 stripped
 MonoBehaviour:
@@ -748,8 +768,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8247f8ba4422b8149b33ac1c8f306942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saberHandType: 1
+  saberNoteType: 0
   minMovementThreshold: 0.01
+  minVelocityThreshold: 0.05
+--- !u!114 &1686213953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686213946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82887e8768f1eef42a124cb0b18b9991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _saber: {fileID: 0}
 --- !u!1 &1694594604
 GameObject:
   m_ObjectHideFlags: 0

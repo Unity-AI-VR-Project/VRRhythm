@@ -152,14 +152,18 @@ public class NoteMovement : MonoBehaviour
     /// <param name="spawnerParent">스폰 위치를 포함하는 부모 트랜스폼.</param>
     private void InitializePositions(Transform spawnerParent)
     {
-        Transform tempSpawn = spawnerParent.Find("SpawnPos");
-        Transform tempSet = spawnerParent.Find("SetPos");
+        float spawnPosXMin = 2f;
+        float spawnPosXMax = 2f;
+        float spawnPosYMax = 3f;
+        float spawnPosYMin = -3f;
+        float randomX = Random.Range(spawnPosXMin, spawnPosXMax);
+        float randomY = Random.Range(spawnPosYMin, spawnPosYMax);
 
-        _spawnPosition = (tempSpawn != null) ? tempSpawn.position : Vector3.zero;
-        if (tempSpawn == null) Debug.LogError($"NoteMovement: Spawner '{spawnerParent.name}'에서 'SpawnPos' 자식 Transform을 찾지 못했습니다. 노트 스폰 위치가 0,0,0이 됩니다.", this);
+        Vector3 tempSpawn = new Vector3(randomX, randomY, 20f);
+        Vector3 tempSet = new Vector3(tempSpawn.x, _targetPosition.y, 20f);
 
-        _setPointPosition = (tempSet != null) ? tempSet.position : Vector3.zero;
-        if (tempSet == null) Debug.LogWarning($"NoteMovement: Spawner '{spawnerParent.name}'에서 'SetPos' 자식 Transform을 찾지 못했습니다. 중간 기믹이 작동하지 않을 수 있습니다.", this);
+        _spawnPosition = tempSpawn;
+        _setPointPosition = tempSet;
     }
 
     /// <summary>

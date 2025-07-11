@@ -1268,10 +1268,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 925844013818090710, guid: aadb88d662986cb47ad44b525fc61567, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 925844013818090710, guid: aadb88d662986cb47ad44b525fc61567, type: 3}
       propertyPath: timeChecker
       value: 
       objectReference: {fileID: 1116489397}
@@ -1323,8 +1319,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1971057136142438223, guid: aadb88d662986cb47ad44b525fc61567, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1492,6 +1487,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 316583224}
+  - {fileID: 6130415300695064402}
   - {fileID: 650363573}
   - {fileID: 1694594608}
   - {fileID: 2090382991}
@@ -1503,6 +1499,5 @@ SceneRoots:
   - {fileID: 7269921176458558289}
   - {fileID: 8563133934984857209}
   - {fileID: 1656560926}
-  - {fileID: 6130415300695064402}
   - {fileID: 2006000374}
   - {fileID: 1733070430}

@@ -9,6 +9,13 @@ public class Cutter : MonoBehaviour
     private static Vector3[] originalNormals;
     private static Vector2[] originalUVs;
 
+    // 절단면에 사용될 머티리얼을 외부에서 설정할 수 있도록 추가
+    [Tooltip("The material to be applied to the cut surface. If null, the original mesh's first material will be used.")]
+    public static Material cutPlaneMaterial; // 인스펙터에서 설정하거나 코드에서 할당
+
+    // 부동 소수점 비교를 위한 작은 임계값
+    private const float Epsilon = 0.0001f; // 매우 작은 값, 필요에 따라 조정 가능
+
     /// <summary>
     /// 지정된 게임 오브젝트를 주어진 절단 평면을 기준으로 두 부분으로 자릅니다.
     /// 잘린 부분 중 한 쪽은 원본 오브젝트에 유지되고, 다른 한 쪽은 새 오브젝트로 생성되어 물리 효과가 적용된 후 자동으로 제거됩니다.
@@ -19,98 +26,171 @@ public class Cutter : MonoBehaviour
     public static void Cut(GameObject originalGameObject, Vector3 contactPoint, Vector3 cutNormal)
     {
         if (isBusy)
+        {
+            Debug.LogWarning("Cutter is busy, skipping cut operation for " + originalGameObject.name);
             return;
+        }
 
-        isBusy = true;
+        isBusy = true; // 작업 시작 플래그 설정
 
         MeshFilter meshFilter = originalGameObject.GetComponent<MeshFilter>();
         MeshRenderer meshRenderer = originalGameObject.GetComponent<MeshRenderer>();
 
         if (meshFilter == null || meshFilter.mesh == null)
         {
-            Debug.LogError("Need mesh to cut or MeshFilter missing.");
-            isBusy = false;
+            Debug.LogError("Cutter: Need mesh to cut or MeshFilter missing on " + originalGameObject.name);
+            isBusy = false; // 에러 시 즉시 해제
             return;
         }
 
-        originalMesh = meshFilter.mesh;
-        originalVertices = originalMesh.vertices;
-        originalNormals = originalMesh.normals;
-        originalUVs = originalMesh.uv;
-
-        Vector3 localSaberSwingDirection = originalGameObject.transform.InverseTransformDirection(cutNormal);
-        Vector3 planeNormal = Vector3.Cross(localSaberSwingDirection, Vector3.forward);
-
-        if (planeNormal.magnitude < 0.0001f)
+        // try-finally 블록을 사용하여 isBusy 상태를 항상 올바르게 관리
+        try
         {
-            planeNormal = Vector3.up;
+            originalMesh = meshFilter.mesh;
+            originalVertices = originalMesh.vertices;
+            originalNormals = originalMesh.normals;
+            originalUVs = originalMesh.uv;
+
+            // 로컬 공간으로 변환된 절단 방향 사용
+            Vector3 localSaberSwingDirection = originalGameObject.transform.InverseTransformDirection(cutNormal).normalized; // 정규화 추가
+
+            // 절단 평면의 법선 계산 개선: localSaberSwingDirection에 수직이면서 가장 잘 정의된 벡터를 찾음
+            Vector3 planeNormal;
+            // localSaberSwingDirection이 Vector3.up과 거의 평행한지 확인
+            Vector3 tempAxis = Vector3.up;
+            if (Vector3.Dot(localSaberSwingDirection, Vector3.up) > 0.999f || Vector3.Dot(localSaberSwingDirection, Vector3.up) < -0.999f)
+            {
+                tempAxis = Vector3.forward; // 거의 평행하다면 Vector3.forward를 대안으로 사용
+            }
+            planeNormal = Vector3.Cross(localSaberSwingDirection, tempAxis).normalized;
+
+            // 만약 Cross 결과가 여전히 0에 가깝다면 (아주 특이한 경우), 다른 축을 시도
+            if (planeNormal.sqrMagnitude < Epsilon * Epsilon)
+            {
+                planeNormal = Vector3.Cross(localSaberSwingDirection, Vector3.right).normalized;
+            }
+            if (planeNormal.sqrMagnitude < Epsilon * Epsilon) // 여전히 실패한다면 (정말 드문 경우)
+            {
+                Debug.LogError("Cutter: Failed to determine a stable plane normal for cutting.");
+                return;
+            }
+
+            // 디버깅을 위해 평면 법선을 시각화 (유니티 에디터에서만 보임)
+            // Debug.DrawRay(originalGameObject.transform.position, originalGameObject.transform.TransformDirection(planeNormal) * 2f, Color.red, 5f);
+
+
+            Plane cutPlane = new Plane(planeNormal, originalGameObject.transform.InverseTransformPoint(contactPoint));
+
+            List<Vector3> addedVertices = new List<Vector3>();
+            GeneratedMesh leftMesh = new GeneratedMesh();
+            GeneratedMesh rightMesh = new GeneratedMesh();
+
+            SeparateMeshes(leftMesh, rightMesh, cutPlane, addedVertices);
+            FillCut(addedVertices, cutPlane, leftMesh, rightMesh);
+
+            Mesh finishedLeftMesh = leftMesh.GetGeneratedMesh();
+            Mesh finishedRightMesh = rightMesh.GetGeneratedMesh();
+
+            // 메시가 유효한지 확인 (삼각형이 하나라도 있는지)
+            if (finishedLeftMesh.vertexCount == 0 || finishedRightMesh.vertexCount == 0)
+            {
+                Debug.LogWarning("Cutter: One or both cut meshes are empty. Skipping cut operation for " + originalGameObject.name);
+                Destroy(finishedLeftMesh);
+                Destroy(finishedRightMesh);
+                return;
+            }
+
+            // 기존 콜라이더 제거
+            var originalCols = originalGameObject.GetComponents<Collider>();
+            foreach (var col in originalCols)
+                Destroy(col);
+
+            // 원본 오브젝트 (왼쪽) 설정
+            meshFilter.mesh = finishedLeftMesh;
+            MeshCollider leftCollider = originalGameObject.AddComponent<MeshCollider>();
+            leftCollider.sharedMesh = finishedLeftMesh;
+            leftCollider.convex = true;
+            leftCollider.isTrigger = true; // 물리적 상호작용 의도에 따라 조정 필요 (예: 검이 통과해야 하므로 Trigger)
+
+            // 머티리얼 할당 개선: 기존 서브메시 + 새로운 서브메시 (절단면)
+            Material[] originalMaterials = meshRenderer.materials;
+            int totalSubMeshesLeft = finishedLeftMesh.subMeshCount;
+            Material[] newLeftMaterials = new Material[totalSubMeshesLeft];
+
+            for (int i = 0; i < totalSubMeshesLeft; i++)
+            {
+                if (i < originalMaterials.Length)
+                {
+                    newLeftMaterials[i] = originalMaterials[i];
+                }
+                else if (i == originalMesh.subMeshCount) // 새로운 절단면 서브메시 인덱스
+                {
+                    newLeftMaterials[i] = cutPlaneMaterial != null ? cutPlaneMaterial : (originalMaterials.Length > 0 ? originalMaterials[0] : null);
+                }
+                else // 혹시 모를 경우를 대비하여 기본 머티리얼 할당
+                {
+                    newLeftMaterials[i] = originalMaterials.Length > 0 ? originalMaterials[0] : null;
+                }
+                if (newLeftMaterials[i] == null) Debug.LogError("Cutter: Missing material for submesh " + i + " on left part of " + originalGameObject.name);
+            }
+            meshRenderer.materials = newLeftMaterials;
+
+
+            // 오른쪽 조각 오브젝트 생성
+            GameObject right = new GameObject("CutPiece_Right_" + originalGameObject.name);
+            right.transform.position = originalGameObject.transform.position;
+            right.transform.rotation = originalGameObject.transform.rotation;
+            right.transform.localScale = originalGameObject.transform.localScale;
+
+            MeshRenderer rightMeshRenderer = right.AddComponent<MeshRenderer>();
+            int totalSubMeshesRight = finishedRightMesh.subMeshCount;
+            Material[] newRightMaterials = new Material[totalSubMeshesRight];
+            for (int i = 0; i < totalSubMeshesRight; i++)
+            {
+                if (i < originalMaterials.Length)
+                {
+                    newRightMaterials[i] = originalMaterials[i];
+                }
+                else if (i == originalMesh.subMeshCount) // 새로운 절단면 서브메시 인덱스
+                {
+                    newRightMaterials[i] = cutPlaneMaterial != null ? cutPlaneMaterial : (originalMaterials.Length > 0 ? originalMaterials[0] : null);
+                }
+                else
+                {
+                    newRightMaterials[i] = originalMaterials.Length > 0 ? originalMaterials[0] : null;
+                }
+                if (newRightMaterials[i] == null) Debug.LogError("Cutter: Missing material for submesh " + i + " on right part of " + originalGameObject.name);
+            }
+            rightMeshRenderer.materials = newRightMaterials;
+            right.AddComponent<MeshFilter>().mesh = finishedRightMesh;
+
+            MeshCollider rightCollider = right.AddComponent<MeshCollider>();
+            rightCollider.sharedMesh = finishedRightMesh;
+            rightCollider.convex = true;
+            rightCollider.isTrigger = false; // 잘린 조각은 물리적 상호작용 (바닥에 떨어지도록)
+
+            Rigidbody rightRigidbody = right.AddComponent<Rigidbody>();
+            // 절단면에 수직 방향으로 힘을 가해 분리
+            // 힘의 방향은 planeNormal의 반대 방향 (절단된 면이 밀려나가는 방향)
+            rightRigidbody.AddForceAtPosition(-cutPlane.normal * 250f, originalGameObject.transform.TransformPoint(contactPoint), ForceMode.Impulse);
+            rightRigidbody.useGravity = true;
+
+            Destroy(right, 2.0f); // 2초 후 제거 (물리 시뮬레이션을 충분히 볼 수 있도록)
         }
-
-        Plane cutPlane = new Plane(planeNormal, originalGameObject.transform.InverseTransformPoint(contactPoint));
-
-        List<Vector3> addedVertices = new List<Vector3>();
-        GeneratedMesh leftMesh = new GeneratedMesh();
-        GeneratedMesh rightMesh = new GeneratedMesh();
-
-        SeparateMeshes(leftMesh, rightMesh, cutPlane, addedVertices);
-        FillCut(addedVertices, cutPlane, leftMesh, rightMesh);
-
-        Mesh finishedLeftMesh = leftMesh.GetGeneratedMesh();
-        Mesh finishedRightMesh = rightMesh.GetGeneratedMesh();
-
-        var originalCols = originalGameObject.GetComponents<Collider>();
-        foreach (var col in originalCols)
-            Destroy(col);
-
-        meshFilter.mesh = finishedLeftMesh;
-        var collider = originalGameObject.AddComponent<MeshCollider>();
-        collider.sharedMesh = finishedLeftMesh;
-        collider.convex = true;
-        collider.isTrigger = true;
-
-        Material[] mats = new Material[finishedLeftMesh.subMeshCount];
-        for (int i = 0; i < finishedLeftMesh.subMeshCount; i++)
+        catch (System.Exception e)
         {
-            mats[i] = meshRenderer.material;
+            Debug.LogError("Cutter: An error occurred during cutting on " + originalGameObject.name + ": " + e.Message + "\n" + e.StackTrace);
         }
-        meshRenderer.materials = mats;
-
-        GameObject right = new GameObject("CutPiece_Right");
-        right.transform.position = originalGameObject.transform.position + (Vector3.up * .05f);
-        right.transform.rotation = originalGameObject.transform.rotation;
-        right.transform.localScale = originalGameObject.transform.localScale;
-
-        MeshRenderer rightMeshRenderer = right.AddComponent<MeshRenderer>();
-        mats = new Material[finishedRightMesh.subMeshCount];
-        for (int i = 0; i < finishedRightMesh.subMeshCount; i++)
+        finally
         {
-            mats[i] = meshRenderer.material; // 원본 메쉬의 머티리얼 재사용
+            isBusy = false; // 작업 완료 또는 오류 발생 시 항상 해제
         }
-        rightMeshRenderer.materials = mats;
-        right.AddComponent<MeshFilter>().mesh = finishedRightMesh;
-
-        MeshCollider rightCollider = right.AddComponent<MeshCollider>();
-        rightCollider.sharedMesh = finishedRightMesh;
-        rightCollider.convex = true;
-        rightCollider.isTrigger = false;
-
-        Rigidbody rightRigidbody = right.AddComponent<Rigidbody>();
-        rightRigidbody.AddRelativeForce(-cutPlane.normal * 250f);
-        rightRigidbody.useGravity = true;
-
-        Destroy(right, 1.0f);
-
-        isBusy = false;
     }
 
     /// <summary>
     /// 원본 메시의 모든 서브메시의 모든 삼각형을 순회하여,
     /// 절단 평면의 왼쪽에 있는 메시와 오른쪽에 있는 메시를 분리하여 개별 메시로 생성합니다.
     /// </summary>
-    /// <param name="leftMesh">절단 평면의 왼쪽에 해당하는 메시 데이터를 담을 GeneratedMesh 객체입니다.</param>
-    /// <param name="rightMesh">절단 평면의 오른쪽에 해당하는 메시 데이터를 담을 GeneratedMesh 객체입니다.</param>
-    /// <param name="plane">메시를 분리하는 데 사용될 절단 평면입니다.</param>
-    /// <param name="addedVertices">절단 과정에서 새로 추가된 정점들을 저장하는 리스트입니다.</param>
     private static void SeparateMeshes(GeneratedMesh leftMesh, GeneratedMesh rightMesh, Plane plane, List<Vector3> addedVertices)
     {
         for (int i = 0; i < originalMesh.subMeshCount; i++)
@@ -125,21 +205,24 @@ public class Cutter : MonoBehaviour
 
                 MeshTriangle currentTriangle = GetTriangle(triangleIndexA, triangleIndexB, triangleIndexC, i);
 
-                bool triangleALeftSide = plane.GetSide(originalVertices[triangleIndexA]);
-                bool triangleBLeftSide = plane.GetSide(originalVertices[triangleIndexB]);
-                bool triangleCLeftSide = plane.GetSide(originalVertices[triangleIndexC]);
+                // Plane.GetSide는 평면의 양쪽 중 어느 쪽에 점이 있는지 확인합니다.
+                // 부동 소수점 오차를 고려하여 Plane.GetSide 결과를 직접 사용합니다.
+                bool triangleALeftSide = plane.GetSide(currentTriangle.Vertices[0]);
+                bool triangleBLeftSide = plane.GetSide(currentTriangle.Vertices[1]);
+                bool triangleCLeftSide = plane.GetSide(currentTriangle.Vertices[2]);
 
-                switch (triangleALeftSide)
+                // 모든 정점이 한 쪽에 있는 경우
+                if (triangleALeftSide && triangleBLeftSide && triangleCLeftSide)
                 {
-                    case true when triangleBLeftSide && triangleCLeftSide:
-                        leftMesh.AddTriangle(currentTriangle);
-                        break;
-                    case false when !triangleBLeftSide && !triangleCLeftSide:
-                        rightMesh.AddTriangle(currentTriangle);
-                        break;
-                    default:
-                        CutTriangle(plane, currentTriangle, triangleALeftSide, triangleBLeftSide, triangleCLeftSide, leftMesh, rightMesh, addedVertices);
-                        break;
+                    leftMesh.AddTriangle(currentTriangle);
+                }
+                else if (!triangleALeftSide && !triangleBLeftSide && !triangleCLeftSide)
+                {
+                    rightMesh.AddTriangle(currentTriangle);
+                }
+                else // 삼각형이 평면을 가로지르는 경우
+                {
+                    CutTriangle(plane, currentTriangle, triangleALeftSide, triangleBLeftSide, triangleCLeftSide, leftMesh, rightMesh, addedVertices);
                 }
             }
         }
@@ -148,11 +231,6 @@ public class Cutter : MonoBehaviour
     /// <summary>
     /// 삼각형의 세 정점을 MeshTriangle 객체로 반환하여 코드 가독성을 높입니다.
     /// </summary>
-    /// <param name="_triangleIndexA">첫 번째 정점의 인덱스입니다.</param>
-    /// <param name="_triangleIndexB">두 번째 정점의 인덱스입니다.</param>
-    /// <param name="_triangleIndexC">세 번째 정점의 인덱스입니다.</param>
-    /// <param name="_submeshIndex">해당 삼각형이 속한 서브메시의 인덱스입니다.</param>
-    /// <returns>생성된 MeshTriangle 객체입니다.</returns>
     private static MeshTriangle GetTriangle(int _triangleIndexA, int _triangleIndexB, int _triangleIndexC, int _submeshIndex)
     {
         Vector3[] verticesToAdd = {
@@ -180,154 +258,127 @@ public class Cutter : MonoBehaviour
     /// 절단 평면의 양쪽에 걸쳐 있는 삼각형을 잘라내어,
     /// 양쪽에 온전한 삼각형을 만들기 위해 필요한 추가 정점들을 생성하고 각 메시(좌/우)에 추가합니다.
     /// </summary>
-    /// <param name="plane">절단 평면입니다.</param>
-    /// <param name="triangle">절단할 메시 삼각형입니다.</param>
-    /// <param name="triangleALeftSide">삼각형 첫 번째 정점이 평면의 왼쪽에 있는지 여부입니다.</param>
-    /// <param name="triangleBLeftSide">삼각형 두 번째 정점이 평면의 왼쪽에 있는지 여부입니다.</param>
-    /// <param name="triangleCLeftSide">삼각형 세 번째 정점이 평면의 왼쪽에 있는지 여부입니다.</param>
-    /// <param name="leftMesh">평면의 왼쪽에 생성될 메시를 담을 GeneratedMesh 객체입니다.</param>
-    /// <param name="rightMesh">평면의 오른쪽에 생성될 메시를 담을 GeneratedMesh 객체입니다.</param>
-    /// <param name="addedVertices">절단 과정에서 새로 추가된 정점들을 저장하는 리스트입니다.</param>
     private static void CutTriangle(Plane plane, MeshTriangle triangle, bool triangleALeftSide, bool triangleBLeftSide, bool triangleCLeftSide,
-    GeneratedMesh leftMesh, GeneratedMesh rightMesh, List<Vector3> addedVertices)
+                                    GeneratedMesh leftMesh, GeneratedMesh rightMesh, List<Vector3> addedVertices)
     {
-        List<bool> leftSide = new List<bool>();
-        leftSide.Add(triangleALeftSide);
-        leftSide.Add(triangleBLeftSide);
-        leftSide.Add(triangleCLeftSide);
+        List<bool> leftSideFlags = new List<bool> { triangleALeftSide, triangleBLeftSide, triangleCLeftSide };
 
-        MeshTriangle leftMeshTriangle = new MeshTriangle(new Vector3[2], new Vector3[2], new Vector2[2], triangle.SubmeshIndex);
-        MeshTriangle rightMeshTriangle = new MeshTriangle(new Vector3[2], new Vector3[2], new Vector2[2], triangle.SubmeshIndex);
-
-        bool left = false;
-        bool right = false;
+        List<int> leftIndices = new List<int>();
+        List<int> rightIndices = new List<int>();
 
         for (int i = 0; i < 3; i++)
         {
-            if (leftSide[i])
-            {
-                if (!left)
-                {
-                    left = true;
-
-                    leftMeshTriangle.Vertices[0] = triangle.Vertices[i];
-                    leftMeshTriangle.Vertices[1] = leftMeshTriangle.Vertices[0];
-
-                    leftMeshTriangle.UVs[0] = triangle.UVs[i];
-                    leftMeshTriangle.UVs[1] = leftMeshTriangle.UVs[0];
-
-                    leftMeshTriangle.Normals[0] = triangle.Normals[i];
-                    leftMeshTriangle.Normals[1] = leftMeshTriangle.Normals[0];
-                }
-                else
-                {
-                    leftMeshTriangle.Vertices[1] = triangle.Vertices[i];
-                    leftMeshTriangle.Normals[1] = triangle.Normals[i];
-                    leftMeshTriangle.UVs[1] = triangle.UVs[i];
-                }
-            }
+            if (leftSideFlags[i])
+                leftIndices.Add(i);
             else
-            {
-                if (!right)
-                {
-                    right = true;
-
-                    rightMeshTriangle.Vertices[0] = triangle.Vertices[i];
-                    rightMeshTriangle.Vertices[1] = rightMeshTriangle.Vertices[0];
-
-                    rightMeshTriangle.UVs[0] = triangle.UVs[i];
-                    rightMeshTriangle.UVs[1] = rightMeshTriangle.UVs[0];
-
-                    rightMeshTriangle.Normals[0] = triangle.Normals[i];
-                    rightMeshTriangle.Normals[1] = rightMeshTriangle.Normals[0];
-
-                }
-                else
-                {
-                    rightMeshTriangle.Vertices[1] = triangle.Vertices[i];
-                    rightMeshTriangle.Normals[1] = triangle.Normals[i];
-                    rightMeshTriangle.UVs[1] = triangle.UVs[i];
-                }
-            }
+                rightIndices.Add(i);
         }
 
-        float normalizedDistance;
-        float distance;
-        plane.Raycast(new Ray(leftMeshTriangle.Vertices[0], (rightMeshTriangle.Vertices[0] - leftMeshTriangle.Vertices[0]).normalized), out distance);
-
-        normalizedDistance = distance / (rightMeshTriangle.Vertices[0] - leftMeshTriangle.Vertices[0]).magnitude;
-        Vector3 vertLeft = Vector3.Lerp(leftMeshTriangle.Vertices[0], rightMeshTriangle.Vertices[0], normalizedDistance);
-        addedVertices.Add(vertLeft);
-
-        Vector3 normalLeft = Vector3.Lerp(leftMeshTriangle.Normals[0], rightMeshTriangle.Normals[0], normalizedDistance);
-        Vector2 uvLeft = Vector2.Lerp(leftMeshTriangle.UVs[0], rightMeshTriangle.UVs[0], normalizedDistance);
-
-        plane.Raycast(new Ray(leftMeshTriangle.Vertices[1], (rightMeshTriangle.Vertices[1] - leftMeshTriangle.Vertices[1]).normalized), out distance);
-
-        normalizedDistance = distance / (rightMeshTriangle.Vertices[1] - leftMeshTriangle.Vertices[1]).magnitude;
-        Vector3 vertRight = Vector3.Lerp(leftMeshTriangle.Vertices[1], rightMeshTriangle.Vertices[1], normalizedDistance);
-        addedVertices.Add(vertRight);
-
-        Vector3 normalRight = Vector3.Lerp(leftMeshTriangle.Normals[1], rightMeshTriangle.Normals[1], normalizedDistance);
-        Vector2 uvRight = Vector2.Lerp(leftMeshTriangle.UVs[1], rightMeshTriangle.UVs[1], normalizedDistance);
-
-        MeshTriangle currentTriangle;
-        Vector3[] updatedVertices = { leftMeshTriangle.Vertices[0], vertLeft, vertRight };
-        Vector3[] updatedNormals = { leftMeshTriangle.Normals[0], normalLeft, normalRight };
-        Vector2[] updatedUVs = { leftMeshTriangle.UVs[0], uvLeft, uvRight };
-
-        currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-
-        if (updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
+        // 교차점 계산을 위한 도우미 함수
+        (Vector3 vert, Vector3 normal, Vector2 uv) GetIntersection(Vector3 v1, Vector3 v2, Vector3 n1, Vector3 n2, Vector2 uv1, Vector2 uv2, Plane p)
         {
-            if (Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0], updatedVertices[2] - updatedVertices[0]), updatedNormals[0]) < 0)
+            // Raycast 대신 Plane.ClosestPointOnPlane을 이용해 선분-평면 교차점 계산을 시도합니다.
+            // 또는 Line-Plane Intersection 공식 사용 (Line: P1 + t * (P2-P1), Plane: N . (X - P0) = 0)
+            // t = (N . (P0 - P1)) / (N . (P2 - P1))
+
+            Vector3 lineDir = v2 - v1;
+            float dotNormalLine = Vector3.Dot(plane.normal, lineDir);
+
+            // 선분이 평면과 거의 평행한 경우 처리 (Epsilon 값으로 비교)
+            if (Mathf.Abs(dotNormalLine) < Epsilon)
             {
-                FlipTriangel(currentTriangle);
+                // 평행한 경우, 교차점이 없거나 무수히 많음. 이 경우 절단이 안되거나 오작동 가능성.
+                // 이 상황은 이전에 SeparateMeshes에서 이미 처리했어야 함 (즉, 한쪽으로만 분류되어야 함)
+                // 여기에 도달했다면 로직 오류일 수 있음. 일단 Lerp 0.5로 대체 (임시 방편)
+                Debug.LogWarning("CutTriangle: Line is almost parallel to plane. Using mid-point as intersection.");
+                return (Vector3.Lerp(v1, v2, 0.5f), Vector3.Lerp(n1, n2, 0.5f), Vector2.Lerp(uv1, uv2, 0.5f));
             }
-            leftMesh.AddTriangle(currentTriangle);
+
+            float t = Vector3.Dot(plane.normal, plane.normal * plane.distance - v1) / dotNormalLine; // P0 대신 plane.normal * plane.distance 사용
+
+            // t 값이 [0, 1] 범위를 벗어날 경우 처리 (선분 밖의 교차점)
+            t = Mathf.Clamp01(t); // 선분 위에서만 교차점이 생기도록 보정
+
+            Vector3 newVert = Vector3.Lerp(v1, v2, t);
+            Vector3 newNormal = Vector3.Lerp(n1, n2, t);
+            Vector2 newUV = Vector2.Lerp(uv1, uv2, t);
+
+            return (newVert, newNormal, newUV);
         }
 
-        updatedVertices = new Vector3[] { leftMeshTriangle.Vertices[0], leftMeshTriangle.Vertices[1], vertRight };
-        updatedNormals = new Vector3[] { leftMeshTriangle.Normals[0], leftMeshTriangle.Normals[1], normalRight };
-        updatedUVs = new Vector2[] { leftMeshTriangle.UVs[0], leftMeshTriangle.UVs[1], uvRight };
+        // 교차점 1: 왼쪽에 있는 정점 중 하나와 오른쪽에 있는 정점 중 하나를 연결하는 선분
+        var (vert1, normal1, uv1) = GetIntersection(
+            triangle.Vertices[leftIndices[0]], triangle.Vertices[rightIndices[0]],
+            triangle.Normals[leftIndices[0]], triangle.Normals[rightIndices[0]],
+            triangle.UVs[leftIndices[0]], triangle.UVs[rightIndices[0]], plane);
 
+        // 교차점 2: 나머지 한 쌍의 정점을 연결하는 선분
+        var (vert2, normal2, uv2) = GetIntersection(
+            triangle.Vertices[leftIndices[leftIndices.Count - 1]], triangle.Vertices[rightIndices[rightIndices.Count - 1]],
+            triangle.Normals[leftIndices[leftIndices.Count - 1]], triangle.Normals[rightIndices[rightIndices.Count - 1]],
+            triangle.UVs[leftIndices[leftIndices.Count - 1]], triangle.UVs[rightIndices[rightIndices.Count - 1]], plane);
 
-        currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-        if (updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
+        // 새로운 정점을 addedVertices에 추가 (절단면 생성을 위함)
+        // 두 교차점 순서가 일관되도록 정렬 (예: X좌표 기준)
+        if (vert1.x > vert2.x) // 간단한 정렬 방식, 복잡한 경우 Vector3.ProjectOnPlane 등 활용
         {
-            if (Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0], updatedVertices[2] - updatedVertices[0]), updatedNormals[0]) < 0)
-            {
-                FlipTriangel(currentTriangle);
-            }
-            leftMesh.AddTriangle(currentTriangle);
+            (vert1, vert2) = (vert2, vert1);
+            (normal1, normal2) = (normal2, normal1);
+            (uv1, uv2) = (uv2, uv1);
         }
 
-        updatedVertices = new Vector3[] { rightMeshTriangle.Vertices[0], vertLeft, vertRight };
-        updatedNormals = new Vector3[] { rightMeshTriangle.Normals[0], normalLeft, normalRight };
-        updatedUVs = new Vector2[] { rightMeshTriangle.UVs[0], uvLeft, uvRight };
+        addedVertices.Add(vert1);
+        addedVertices.Add(vert2);
 
-        currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-        if (updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
+        // --- 왼쪽 메쉬를 구성하는 삼각형 ---
+        if (leftIndices.Count == 2) // 2개의 정점이 왼쪽에, 1개의 정점이 오른쪽에 있는 경우 (Left: A, B; Right: C)
         {
-            if (Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0], updatedVertices[2] - updatedVertices[0]), updatedNormals[0]) < 0)
-            {
-                FlipTriangel(currentTriangle);
-            }
-            rightMesh.AddTriangle(currentTriangle);
+            // 왼쪽 1: (Left[0], Vert1, Vert2)
+            leftMesh.AddTriangle(new MeshTriangle(
+                new Vector3[] { triangle.Vertices[leftIndices[0]], vert1, vert2 },
+                new Vector3[] { triangle.Normals[leftIndices[0]], normal1, normal2 },
+                new Vector2[] { triangle.UVs[leftIndices[0]], uv1, uv2 },
+                triangle.SubmeshIndex));
+
+            // 왼쪽 2: (Left[0], Left[1], Vert2)
+            leftMesh.AddTriangle(new MeshTriangle(
+                new Vector3[] { triangle.Vertices[leftIndices[0]], triangle.Vertices[leftIndices[1]], vert2 },
+                new Vector3[] { triangle.Normals[leftIndices[0]], triangle.Normals[leftIndices[1]], normal2 },
+                new Vector2[] { triangle.UVs[leftIndices[0]], triangle.UVs[leftIndices[1]], uv2 },
+                triangle.SubmeshIndex));
+
+            // --- 오른쪽 메쉬를 구성하는 삼각형 ---
+            // 오른쪽 1: (Right[0], Vert2, Vert1) - 법선 방향 유지를 위해 순서 중요
+            rightMesh.AddTriangle(new MeshTriangle(
+                new Vector3[] { triangle.Vertices[rightIndices[0]], vert2, vert1 },
+                new Vector3[] { triangle.Normals[rightIndices[0]], normal2, normal1 },
+                new Vector2[] { triangle.UVs[rightIndices[0]], uv2, uv1 },
+                triangle.SubmeshIndex));
         }
-
-        updatedVertices = new Vector3[] { rightMeshTriangle.Vertices[0], rightMeshTriangle.Vertices[1], vertRight };
-        updatedNormals = new Vector3[] { rightMeshTriangle.Normals[0], rightMeshTriangle.Normals[1], normalRight };
-        updatedUVs = new Vector2[] { rightMeshTriangle.UVs[0], rightMeshTriangle.UVs[1], uvRight };
-
-        currentTriangle = new MeshTriangle(updatedVertices, updatedNormals, updatedUVs, triangle.SubmeshIndex);
-        if (updatedVertices[0] != updatedVertices[1] && updatedVertices[0] != updatedVertices[2])
+        else // leftIndices.Count == 1 // 1개의 정점이 왼쪽에, 2개의 정점이 오른쪽에 있는 경우 (Left: A; Right: B, C)
         {
-            if (Vector3.Dot(Vector3.Cross(updatedVertices[1] - updatedVertices[0], updatedVertices[2] - updatedVertices[0]), updatedNormals[0]) < 0)
-            {
-                FlipTriangel(currentTriangle);
-            }
-            rightMesh.AddTriangle(currentTriangle);
+            // --- 왼쪽 메쉬를 구성하는 삼각형 ---
+            // 왼쪽 1: (Left[0], Vert1, Vert2)
+            leftMesh.AddTriangle(new MeshTriangle(
+                new Vector3[] { triangle.Vertices[leftIndices[0]], vert1, vert2 },
+                new Vector3[] { triangle.Normals[leftIndices[0]], normal1, normal2 },
+                new Vector2[] { triangle.UVs[leftIndices[0]], uv1, uv2 },
+                triangle.SubmeshIndex));
+
+            // --- 오른쪽 메쉬를 구성하는 삼각형 ---
+            // 오른쪽 1: (Right[0], Vert1, Right[1])
+            rightMesh.AddTriangle(new MeshTriangle(
+                new Vector3[] { triangle.Vertices[rightIndices[0]], vert1, triangle.Vertices[rightIndices[1]] },
+                new Vector3[] { triangle.Normals[rightIndices[0]], normal1, triangle.Normals[rightIndices[1]] },
+                new Vector2[] { triangle.UVs[rightIndices[0]], uv1, triangle.UVs[rightIndices[1]] },
+                triangle.SubmeshIndex));
+
+            // 오른쪽 2: (Right[0], Vert2, Right[1]) - 법선 방향 유지를 위해 순서 중요
+            rightMesh.AddTriangle(new MeshTriangle(
+                new Vector3[] { triangle.Vertices[rightIndices[0]], vert2, triangle.Vertices[rightIndices[1]] },
+                new Vector3[] { triangle.Normals[rightIndices[0]], normal2, triangle.Normals[rightIndices[1]] },
+                new Vector2[] { triangle.UVs[rightIndices[0]], uv2, triangle.UVs[rightIndices[1]] },
+                triangle.SubmeshIndex));
         }
     }
 
@@ -335,49 +386,57 @@ public class Cutter : MonoBehaviour
     /// 주어진 메시 삼각형의 정점 순서를 뒤집어 면의 법선 방향을 반전시킵니다.
     /// 이는 메시가 잘못된 방향을 향할 때 면이 올바르게 렌더링되도록 합니다.
     /// </summary>
-    /// <param name="_triangle">뒤집을 메시 삼각형입니다.</param>
     private static void FlipTriangel(MeshTriangle _triangle)
     {
-        Vector3 temp = _triangle.Vertices[2];
+        // 정점 순서 뒤집기 (0과 2 교환)
+        Vector3 tempV = _triangle.Vertices[2];
         _triangle.Vertices[2] = _triangle.Vertices[0];
-        _triangle.Vertices[0] = temp;
+        _triangle.Vertices[0] = tempV;
 
-        temp = _triangle.Normals[2];
+        // 법선 순서 뒤집기 (0과 2 교환)
+        Vector3 tempN = _triangle.Normals[2];
         _triangle.Normals[2] = _triangle.Normals[0];
-        _triangle.Normals[0] = temp;
+        _triangle.Normals[0] = tempN;
 
-        (_triangle.UVs[2], _triangle.UVs[0]) = (_triangle.UVs[0], _triangle.UVs[2]);
+        // UV 순서 뒤집기 (0과 2 교환)
+        Vector2 tempU = _triangle.UVs[2];
+        _triangle.UVs[2] = _triangle.UVs[0];
+        _triangle.UVs[0] = tempU;
     }
 
     /// <summary>
     /// 절단 과정에서 새로 추가된 정점들을 이용하여 절단면을 채웁니다.
     /// 이 과정은 잘린 메시의 내부를 닫아 시각적으로 온전하게 보이도록 합니다.
     /// </summary>
-    /// <param name="_addedVertices">절단 과정에서 생성된 새로운 정점들의 리스트입니다.</param>
-    /// <param name="_plane">절단에 사용된 평면입니다.</param>
-    /// <param name="_leftMesh">절단된 메시의 왼쪽 부분을 나타내는 GeneratedMesh 객체입니다.</param>
-    /// <param name="_rightMesh">절단된 메시의 오른쪽 부분을 나타내는 GeneratedMesh 객체입니다.</param>
     public static void FillCut(List<Vector3> _addedVertices, Plane _plane, GeneratedMesh _leftMesh, GeneratedMesh _rightMesh)
     {
-        // HashSet을 사용하여 정점 중복 검사를 O(1)에 가깝게 수행
-        HashSet<Vector3> processedVertices = new HashSet<Vector3>();
-        List<Vector3> polygon = new List<Vector3>();
+        if (_addedVertices.Count < 2) return; // 절단선이 없으면 채울 필요 없음
 
-        for (int i = 0; i < _addedVertices.Count; i += 2) // 정점은 항상 쌍으로 추가되므로 i+=2로 건너뛰어도 됨
+        HashSet<Vector3> processedVertices = new HashSet<Vector3>();
+        List<Vector3> currentPolygon = new List<Vector3>();
+
+        // _addedVertices는 (P1, P2), (P2, P3), (P3, P1)과 같은 쌍으로 구성되어야 함
+        // 각 쌍은 절단면에 새로 생성된 두 정점
+        for (int i = 0; i < _addedVertices.Count; i += 2)
         {
             // 이미 처리된 정점 쌍의 시작점을 건너뜁니다.
-            if (!processedVertices.Contains(_addedVertices[i]))
+            if (ContainsApprox(processedVertices, _addedVertices[i]) && ContainsApprox(processedVertices, _addedVertices[i + 1]))
             {
-                polygon.Clear();
-                polygon.Add(_addedVertices[i]);
-                polygon.Add(_addedVertices[i + 1]);
-
-                processedVertices.Add(_addedVertices[i]);
-                processedVertices.Add(_addedVertices[i + 1]);
-
-                EvaluatePairs(_addedVertices, processedVertices, polygon); // HashSet으로 변경
-                Fill(polygon, _plane, _leftMesh, _rightMesh);
+                continue;
             }
+
+            currentPolygon.Clear();
+            currentPolygon.Add(_addedVertices[i]);
+            currentPolygon.Add(_addedVertices[i + 1]);
+
+            processedVertices.Add(_addedVertices[i]); // 정확한 값으로 추가
+            processedVertices.Add(_addedVertices[i + 1]);
+
+            // 이 쌍에 연결되는 다음 쌍을 찾아서 폴리곤을 완성합니다.
+            EvaluatePairs(_addedVertices, processedVertices, currentPolygon);
+
+            // 완성된 폴리곤으로 절단면을 채웁니다.
+            Fill(currentPolygon, _plane, _leftMesh, _rightMesh);
         }
     }
 
@@ -385,100 +444,150 @@ public class Cutter : MonoBehaviour
     /// 주어진 정점 쌍들을 평가하여 폴리곤을 완성합니다.
     /// 이는 절단면에 생긴 복잡한 다각형을 구성하는 데 사용됩니다.
     /// </summary>
-    /// <param name="_addedVertices">절단 과정에서 추가된 모든 정점 쌍의 리스트입니다.</param>
-    /// <param name="processedVertices">이미 처리된 정점들을 추적하는 HashSet입니다.</param>
-    /// <param name="_polygone">현재 구성 중인 폴리곤의 정점 리스트입니다.</param>
-    public static void EvaluatePairs(List<Vector3> _addedVertices, HashSet<Vector3> processedVertices, List<Vector3> _polygone)
+    public static void EvaluatePairs(List<Vector3> _addedVertices, HashSet<Vector3> processedVertices, List<Vector3> _polygon)
     {
         bool isDone = false;
-        while (!isDone)
+        int maxIterations = _addedVertices.Count * 2; // 무한 루프 방지용 최대 반복 횟수
+        int currentIteration = 0;
+
+        while (!isDone && currentIteration < maxIterations)
         {
-            isDone = true;
+            isDone = true; // 이번 순회에서 더이상 추가되지 않으면 종료
+            Vector3 lastVertexInPolygon = _polygon[_polygon.Count - 1];
+
             for (int i = 0; i < _addedVertices.Count; i += 2)
             {
-                // 현재 폴리곤의 마지막 정점과 _addedVertices[i]가 일치하고, _addedVertices[i+1]이 아직 처리되지 않았다면
-                if (_addedVertices[i] == _polygone[_polygone.Count - 1] && !processedVertices.Contains(_addedVertices[i + 1]))
+                Vector3 vertA = _addedVertices[i];
+                Vector3 vertB = _addedVertices[i + 1];
+
+                // 현재 폴리곤의 마지막 정점과 _addedVertices[i]가 일치하고, _addedVertices[i+1]이 아직 폴리곤에 추가되지 않았다면
+                if (Vector3.Distance(vertA, lastVertexInPolygon) < Epsilon && !ContainsApprox(_polygon, vertB))
                 {
                     isDone = false;
-                    _polygone.Add(_addedVertices[i + 1]);
-                    processedVertices.Add(_addedVertices[i + 1]);
+                    _polygon.Add(vertB);
+                    processedVertices.Add(vertB);
+                    break; // 다음 탐색은 새로 추가된 정점에서 시작해야 하므로 break
                 }
-                // 현재 폴리곤의 마지막 정점과 _addedVertices[i+1]이 일치하고, _addedVertices[i]가 아직 처리되지 않았다면
-                else if (_addedVertices[i + 1] == _polygone[_polygone.Count - 1] && !processedVertices.Contains(_addedVertices[i]))
+                // 현재 폴리곤의 마지막 정점과 _addedVertices[i+1]이 일치하고, _addedVertices[i]가 아직 폴리곤에 추가되지 않았다면
+                else if (Vector3.Distance(vertB, lastVertexInPolygon) < Epsilon && !ContainsApprox(_polygon, vertA))
                 {
                     isDone = false;
-                    _polygone.Add(_addedVertices[i]);
-                    processedVertices.Add(_addedVertices[i]);
+                    _polygon.Add(vertA);
+                    processedVertices.Add(vertA);
+                    break; // 다음 탐색은 새로 추가된 정점에서 시작해야 하므로 break
                 }
             }
+            currentIteration++;
+        }
+
+        if (currentIteration >= maxIterations && Vector3.Distance(_polygon[0], _polygon[_polygon.Count - 1]) >= Epsilon)
+        {
+            Debug.LogWarning("EvaluatePairs: Exceeded max iterations. Polygon might not be perfectly closed. Number of points: " + _polygon.Count);
         }
     }
+
+    // List<Vector3>에 특정 Vector3가 근사적으로 포함되어 있는지 확인하는 도우미 함수
+    // HashSet이 아니라 List<Vector3>에 대한 ContainsApprox를 사용하여 _polygon 내의 중복 확인
+    private static bool ContainsApprox(List<Vector3> list, Vector3 target)
+    {
+        foreach (Vector3 v in list)
+        {
+            if (Vector3.Distance(v, target) < Epsilon)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // HashSet<Vector3>에 특정 Vector3가 근사적으로 포함되어 있는지 확인하는 도우미 함수
+    private static bool ContainsApprox(HashSet<Vector3> hashSet, Vector3 target)
+    {
+        foreach (Vector3 v in hashSet)
+        {
+            if (Vector3.Distance(v, target) < Epsilon)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /// <summary>
     /// 완성된 폴리곤과 절단 평면을 사용하여 잘린 메시의 절단면을 삼각형으로 채웁니다.
     /// 이는 잘린 면에 텍스처 좌표와 법선을 부여하여 시각적으로 올바르게 렌더링되도록 합니다.
     /// </summary>
-    /// <param name="_vertices">절단면을 구성하는 폴리곤의 정점 리스트입니다.</param>
-    /// <param name="_plane">절단에 사용된 평면입니다.</param>
-    /// <param name="_leftMesh">왼쪽 메시를 나타내는 GeneratedMesh 객체입니다.</param>
-    /// <param name="_rightMesh">오른쪽 메시를 나타내는 GeneratedMesh 객체입니다.</param>
     private static void Fill(List<Vector3> _vertices, Plane _plane, GeneratedMesh _leftMesh, GeneratedMesh _rightMesh)
     {
-        Vector3 centerPosition = Vector3.zero;
-        for (int i = 0; i < _vertices.Count; i++)
+        if (_vertices.Count < 3)
         {
-            centerPosition += _vertices[i];
+            Debug.LogWarning("Fill: Polygon has less than 3 vertices, cannot form triangles. Vertices count: " + _vertices.Count);
+            return; // 삼각형을 만들 수 없는 경우
+        }
+
+        // 폴리곤의 중심점 계산
+        Vector3 centerPosition = Vector3.zero;
+        foreach (Vector3 v in _vertices)
+        {
+            centerPosition += v;
         }
         centerPosition /= _vertices.Count;
 
+        // UV 계산을 위한 로컬 축 생성 (평면상에서 UV를 매핑)
         Vector3 planeNormal = _plane.normal;
-        Vector3 up = new Vector3(planeNormal.x, planeNormal.y, planeNormal.z);
-        Vector3 left = Vector3.Cross(planeNormal, up);
-
-        // UV 계산을 위한 평면상의 정규화된 축 사용 (필요하다면 더 최적화된 UV 매핑 방식 고려)
-        if (left.sqrMagnitude < 0.0001f) // left가 0벡터에 가까우면 수직 평면이므로 다른 축 사용
+        Vector3 uAxis = Vector3.Cross(planeNormal, Vector3.up);
+        if (uAxis.sqrMagnitude < Epsilon * Epsilon) // uAxis가 0에 가까우면 (planeNormal이 거의 Vector3.up 또는 Vector3.down인 경우)
         {
-            left = Vector3.Cross(planeNormal, Vector3.up);
-            if (left.sqrMagnitude < 0.0001f) // 여전히 0벡터에 가까우면 다른 축 사용 (Z축)
-            {
-                left = Vector3.Cross(planeNormal, Vector3.forward);
-            }
+            uAxis = Vector3.Cross(planeNormal, Vector3.forward); // 다른 축을 사용
         }
-        left.Normalize();
-        up = Vector3.Cross(left, planeNormal).normalized;
+        uAxis.Normalize();
+        Vector3 vAxis = Vector3.Cross(planeNormal, uAxis).normalized; // vAxis는 uAxis와 planeNormal에 수직
 
+
+        // 삼각형 팬(triangle fan) 방식으로 폴리곤 채우기 (중심점 + 두 정점)
+        int cutSubmeshIndex = originalMesh.subMeshCount; // 새로운 서브메시 인덱스
 
         for (int i = 0; i < _vertices.Count; i++)
         {
             Vector3 currentVertex = _vertices[i];
-            Vector3 nextVertex = _vertices[(i + 1) % _vertices.Count];
+            Vector3 nextVertex = _vertices[(i + 1) % _vertices.Count]; // 다음 정점 (마지막은 첫 번째와 연결)
 
-            Vector3 displacement1 = currentVertex - centerPosition;
-            Vector2 uv1 = new Vector2(0.5f + Vector3.Dot(displacement1, left), 0.5f + Vector3.Dot(displacement1, up));
+            // UV 매핑: 중심을 (0,0)으로 하는 로컬 좌표를 생성하고, 이를 UV 공간의 스케일로 사용
+            // 이 UV는 쉐이더에서 _MainTex_ST 속성을 사용하여 타일링을 조절해야 합니다.
+            Vector2 uvCurrent = new Vector2(Vector3.Dot(currentVertex - centerPosition, uAxis),
+                                            Vector3.Dot(currentVertex - centerPosition, vAxis));
+            Vector2 uvNext = new Vector2(Vector3.Dot(nextVertex - centerPosition, uAxis),
+                                         Vector3.Dot(nextVertex - centerPosition, vAxis));
+            Vector2 uvCenter = Vector2.zero; // 중심점 UV (0,0)
 
-            Vector3 displacement2 = nextVertex - centerPosition;
-            Vector2 uv2 = new Vector2(0.5f + Vector3.Dot(displacement2, left), 0.5f + Vector3.Dot(displacement2, up));
+            // 왼쪽 메시 (법선이 -planeNormal, 즉 절단 평면의 '안쪽'을 향함)
+            Vector3[] verticesLeft = { currentVertex, nextVertex, centerPosition };
+            Vector3[] normalsLeft = { -planeNormal, -planeNormal, -planeNormal };
+            Vector2[] uvsLeft = { uvCurrent, uvNext, uvCenter };
 
-            Vector3[] vertices = { currentVertex, nextVertex, centerPosition };
-            Vector3[] normals = { -planeNormal, -planeNormal, -planeNormal };
-            Vector2[] uvs = { uv1, uv2, new(0.5f, 0.5f) };
-
-            MeshTriangle currentTriangle = new MeshTriangle(vertices, normals, uvs, originalMesh.subMeshCount + 1);
-
-            if (Vector3.Dot(Vector3.Cross(vertices[1] - vertices[0], vertices[2] - vertices[0]), normals[0]) < 0)
+            MeshTriangle triangleLeft = new MeshTriangle(verticesLeft, normalsLeft, uvsLeft, cutSubmeshIndex);
+            // 법선 방향이 올바른지 확인 (시계 반대 방향 - Counter-Clockwise)
+            // 즉, (V1-V0) x (V2-V0) . Normal > 0 이 되도록
+            if (Vector3.Dot(Vector3.Cross(verticesLeft[1] - verticesLeft[0], verticesLeft[2] - verticesLeft[0]), normalsLeft[0]) < 0)
             {
-                FlipTriangel(currentTriangle);
+                FlipTriangel(triangleLeft); // 법선 방향이 틀리면 뒤집기
             }
-            _leftMesh.AddTriangle(currentTriangle);
+            _leftMesh.AddTriangle(triangleLeft);
 
-            normals = new[] { planeNormal, planeNormal, planeNormal };
-            currentTriangle = new MeshTriangle(vertices, normals, uvs, originalMesh.subMeshCount + 1);
+            // 오른쪽 메시 (법선이 planeNormal, 즉 절단 평면의 '바깥쪽'을 향함)
+            // 정점 순서를 바꿔서 법선 방향이 올바르게 외부로 향하도록
+            Vector3[] verticesRight = { currentVertex, centerPosition, nextVertex };
+            Vector3[] normalsRight = { planeNormal, planeNormal, planeNormal };
+            Vector2[] uvsRight = { uvCurrent, uvCenter, uvNext }; // UV 순서도 정점 순서에 맞춰야 함
 
-            if (Vector3.Dot(Vector3.Cross(vertices[1] - vertices[0], vertices[2] - vertices[0]), normals[0]) < 0)
+            MeshTriangle triangleRight = new MeshTriangle(verticesRight, normalsRight, uvsRight, cutSubmeshIndex);
+            // 법선 방향이 올바른지 확인 (시계 반대 방향 - Counter-Clockwise)
+            if (Vector3.Dot(Vector3.Cross(verticesRight[1] - verticesRight[0], verticesRight[2] - verticesRight[0]), normalsRight[0]) < 0)
             {
-                FlipTriangel(currentTriangle);
+                FlipTriangel(triangleRight); // 법선 방향이 틀리면 뒤집기
             }
-            _rightMesh.AddTriangle(currentTriangle);
+            _rightMesh.AddTriangle(triangleRight);
         }
     }
 }

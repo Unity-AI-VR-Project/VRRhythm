@@ -74,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7168153769802138777}
   - component: {fileID: 925844013818090710}
-  - component: {fileID: 1971057136142438223}
   m_Layer: 0
   m_Name: SpawnPos
   m_TagString: Untagged
@@ -104,33 +103,10 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4978788043697569747}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22eede340b10e9a458a8ca0a807ede01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerSelector: {fileID: 0}
   timeChecker: {fileID: 0}
---- !u!114 &1971057136142438223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4978788043697569747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34530d9d6e748ad4790351c4f2c9d28a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  musicSynchronizer: {fileID: 0}
-  playerTransform: {fileID: 0}
-  mapJsonFile: {fileID: 0}
-  noteSpawnDistance: 20
-  noteTravelDuration: 2
-  lowBandY: -0.6
-  midBandY: 0
-  highBandY: 0.6
-  leftLaneX: -0.7
-  rightLaneX: 0.7
-  centerLaneX: 0

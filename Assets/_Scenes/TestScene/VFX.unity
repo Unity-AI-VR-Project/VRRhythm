@@ -4637,7 +4637,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 89513dedb6ebd3648bf99fabbe8d7f1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6310,7 +6310,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 6c8b5221361bd494ca7b17b86354a090, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8429,7 +8429,7 @@ MonoBehaviour:
   ignoreVisibility: 0
   executeInEditMode: 0
   ignoreFrames: 0
-  duration: 0.5
+  duration: 0.35
   continuous: 0
   smooth: 0
   checkWorldPosition: 0
@@ -8437,9 +8437,9 @@ MonoBehaviour:
   worldPositionRelativeOption: 0
   worldPositionRelativeTransform: {fileID: 0}
   checkScreenPosition: 1
-  minPixelDistance: 10
+  minPixelDistance: 1
   stepsBufferSize: 1023
-  maxStepsPerFrame: 12
+  maxStepsPerFrame: 50
   checkTime: 0
   timeInterval: 1
   checkCollisions: 0
@@ -8523,7 +8523,7 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  cam: {fileID: 0}
+  cam: {fileID: 923984035552443555}
   effect: 0
   customMaterial: {fileID: 0}
   texture: {fileID: 0}
@@ -9619,8 +9619,8 @@ MonoBehaviour:
   _active: 1
   ignoreVisibility: 0
   executeInEditMode: 0
-  ignoreFrames: 0
-  duration: 0.5
+  ignoreFrames: 1
+  duration: 0.35
   continuous: 0
   smooth: 0
   checkWorldPosition: 0
@@ -9628,9 +9628,9 @@ MonoBehaviour:
   worldPositionRelativeOption: 0
   worldPositionRelativeTransform: {fileID: 0}
   checkScreenPosition: 1
-  minPixelDistance: 10
+  minPixelDistance: 0
   stepsBufferSize: 1023
-  maxStepsPerFrame: 12
+  maxStepsPerFrame: 50
   checkTime: 0
   timeInterval: 1
   checkCollisions: 0
@@ -9714,7 +9714,7 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  cam: {fileID: 0}
+  cam: {fileID: 923984035552443555}
   effect: 0
   customMaterial: {fileID: 0}
   texture: {fileID: 0}

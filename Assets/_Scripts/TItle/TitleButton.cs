@@ -8,28 +8,59 @@ public class TitleButton : MonoBehaviour
     [SerializeField] private string nextSceneName = "YourNextScene"; // 이동할 다음 씬 이름
 
     [Header("페이드 아웃 캔버스")]
-    [SerializeField] private CanvasFader targetCanvasFader; // 페이드 아웃시킬 CanvasFader 컴포넌트 참조
+    [SerializeField] private CanvasFader[] targetCanvasFaders; // 페이드 아웃시킬 CanvasFader 컴포넌트 배열 참조
 
     private bool hasTriggered = false; // 중복 트리거 방지 플래그
+    private int completedFades = 0; // 페이드 아웃이 완료된 캔버스 개수
     AudioSource audio;
     public AudioClip clip;
+
     void Start()
     {
         audio = GetComponent<AudioSource>();
-        // 캔버스 페이드 아웃 완료 이벤트에 씬 전환 메서드를 구독합니다.
-        CanvasFader.onFadeComplete += LoadNextScene;
+        // 각 CanvasFader의 페이드 아웃 완료 이벤트에 씬 전환 카운터 메서드를 구독합니다.
+        // CanvasFader.onFadeComplete += LoadNextScene; 이 방식은 여러 캔버스에 적합하지 않습니다.
+        // 각 CanvasFader가 완료될 때마다 이벤트를 개별적으로 처리하고,
+        // 모든 캔버스의 페이드 아웃이 완료되면 씬을 전환하도록 변경합니다.
 
-        // targetCanvasFader가 할당되지 않았다면 경고 메시지 출력
-        if (targetCanvasFader == null)
+        // CanvasFader가 할당되지 않았다면 경고 메시지 출력
+        if (targetCanvasFaders == null || targetCanvasFaders.Length == 0)
         {
-            Debug.LogWarning("CanvasFader가 할당되지 않았습니다. 인스펙터에서 할당해주세요.", this);
+            Debug.LogWarning("CanvasFader가 할당되지 않았거나 배열이 비어있습니다. 인스펙터에서 할당해주세요.", this);
         }
     }
 
-    void OnDestroy()
+    void OnEnable()
     {
-        // 스크립트가 파괴될 때 이벤트 구독을 해제하여 메모리 누수를 방지합니다.
-        CanvasFader.onFadeComplete -= LoadNextScene;
+        // 스크립트가 활성화될 때마다 이벤트 구독을 초기화합니다.
+        CanvasFader.onFadeComplete += OnCanvasFadeComplete;
+        completedFades = 0; // 활성화될 때마다 카운터 초기화
+        hasTriggered = false; // 활성화될 때마다 트리거 플래그 초기화
+    }
+
+    void OnDisable()
+    {
+        // 스크립트가 비활성화될 때 이벤트 구독을 해제하여 메모리 누수를 방지합니다.
+        CanvasFader.onFadeComplete -= OnCanvasFadeComplete;
+    }
+
+    /// <summary>
+    /// CanvasFader의 페이드 아웃이 완료될 때 호출되는 메서드.
+    /// 모든 캔버스의 페이드 아웃이 완료되면 씬을 전환합니다.
+    /// </summary>
+    private void OnCanvasFadeComplete()
+    {
+        completedFades++;
+        if (targetCanvasFaders != null && completedFades >= targetCanvasFaders.Length)
+        {
+            // 모든 캔버스의 페이드 아웃이 완료되면 씬 전환
+            LoadNextScene();
+        }
+        else if (targetCanvasFaders == null || targetCanvasFaders.Length == 0)
+        {
+            // CanvasFader가 할당되지 않은 경우, 즉시 씬 전환
+            LoadNextScene();
+        }
     }
 
     // Is Trigger가 체크된 Collider와 충돌했을 때 호출됩니다.
@@ -44,11 +75,29 @@ public class TitleButton : MonoBehaviour
 
         Debug.Log(other.name + "와 충돌! Canvas 페이드 아웃 및 씬 전환 시작.");
         hasTriggered = true; // 중복 트리거 방지
+        completedFades = 0; // 페이드 아웃 카운터 초기화
 
-        // CanvasFader가 할당되어 있다면 페이드 아웃 시작
-        if (targetCanvasFader != null)
+        // CanvasFader 배열이 할당되어 있고 비어있지 않다면 모든 캔버스 페이드 아웃 시작
+        if (targetCanvasFaders != null && targetCanvasFaders.Length > 0)
         {
-            targetCanvasFader.StartFadeOut();
+            foreach (CanvasFader fader in targetCanvasFaders)
+            {
+                if (fader != null)
+                {
+                    fader.StartFadeOut();
+                }
+                else
+                {
+                    Debug.LogWarning("targetCanvasFaders 배열에 null 참조가 있습니다. 확인해주세요.", this);
+                    // null인 경우에도 카운트를 증가시켜 다음 캔버스 처리에 영향을 주지 않도록 함
+                    completedFades++;
+                }
+            }
+            // 모든 캔버스 중에 유효한 fader가 하나도 없어서 OnCanvasFadeComplete가 호출되지 않을 경우를 대비
+            if (completedFades >= targetCanvasFaders.Length)
+            {
+                LoadNextScene();
+            }
         }
         else
         {
@@ -71,6 +120,9 @@ public class TitleButton : MonoBehaviour
         }
 
         // 빌드 설정에 씬이 추가되어 있는지 확인하는 것이 좋습니다.
+        // SceneUtility.GetBuildIndexByScenePath는 에디터에서만 잘 작동하므로,
+        // 빌드된 게임에서는 SceneManager.GetSceneByName 등의 방법을 사용하는 것이 더 안전합니다.
+        // 여기서는 편의상 GetBuildIndexByScenePath를 유지합니다.
         int nextSceneIndex = SceneUtility.GetBuildIndexByScenePath(nextSceneName);
         if (nextSceneIndex == -1)
         {

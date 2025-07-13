@@ -51,35 +51,17 @@ public class Cutter : MonoBehaviour
             originalNormals = originalMesh.normals;
             originalUVs = originalMesh.uv;
 
-            // 로컬 공간으로 변환된 절단 방향 사용
-            Vector3 localSaberSwingDirection = originalGameObject.transform.InverseTransformDirection(cutNormal).normalized; // 정규화 추가
+            // === 변경된 부분: 절단 평면의 법선을 cutNormal (세이버 스윙 방향)으로 직접 사용 ===
+            // cutNormal은 이미 월드 공간 방향이며 정규화되어 들어온다고 가정합니다.
+            Vector3 worldPlaneNormal = cutNormal.normalized; 
 
-            // 절단 평면의 법선 계산 개선: localSaberSwingDirection에 수직이면서 가장 잘 정의된 벡터를 찾음
-            Vector3 planeNormal;
-            // localSaberSwingDirection이 Vector3.up과 거의 평행한지 확인
-            Vector3 tempAxis = Vector3.up;
-            if (Vector3.Dot(localSaberSwingDirection, Vector3.up) > 0.999f || Vector3.Dot(localSaberSwingDirection, Vector3.up) < -0.999f)
-            {
-                tempAxis = Vector3.forward; // 거의 평행하다면 Vector3.forward를 대안으로 사용
-            }
-            planeNormal = Vector3.Cross(localSaberSwingDirection, tempAxis).normalized;
-
-            // 만약 Cross 결과가 여전히 0에 가깝다면 (아주 특이한 경우), 다른 축을 시도
-            if (planeNormal.sqrMagnitude < Epsilon * Epsilon)
-            {
-                planeNormal = Vector3.Cross(localSaberSwingDirection, Vector3.right).normalized;
-            }
-            if (planeNormal.sqrMagnitude < Epsilon * Epsilon) // 여전히 실패한다면 (정말 드문 경우)
-            {
-                Debug.LogError("Cutter: Failed to determine a stable plane normal for cutting.");
-                return;
-            }
-
-            // 디버깅을 위해 평면 법선을 시각화 (유니티 에디터에서만 보임)
-            // Debug.DrawRay(originalGameObject.transform.position, originalGameObject.transform.TransformDirection(planeNormal) * 2f, Color.red, 5f);
-
-
-            Plane cutPlane = new Plane(planeNormal, originalGameObject.transform.InverseTransformPoint(contactPoint));
+            // 절단 평면의 법선과 시작점은 오브젝트의 로컬 공간으로 변환되어야 합니다.
+            Vector3 localPlaneNormal = originalGameObject.transform.InverseTransformDirection(worldPlaneNormal);
+            Vector3 localContactPoint = originalGameObject.transform.InverseTransformPoint(contactPoint);
+            
+            // Plane 생성: 법선은 로컬 공간의 planeNormal, 점은 로컬 공간의 contactPoint
+            Plane cutPlane = new Plane(localPlaneNormal, localContactPoint);
+            // =======================================================================
 
             List<Vector3> addedVertices = new List<Vector3>();
             GeneratedMesh leftMesh = new GeneratedMesh();
@@ -92,11 +74,12 @@ public class Cutter : MonoBehaviour
             Mesh finishedRightMesh = rightMesh.GetGeneratedMesh();
 
             // 메시가 유효한지 확인 (삼각형이 하나라도 있는지)
-            if (finishedLeftMesh.vertexCount == 0 || finishedRightMesh.vertexCount == 0)
+            if (finishedLeftMesh == null || finishedLeftMesh.vertexCount == 0 || finishedRightMesh == null || finishedRightMesh.vertexCount == 0)
             {
-                Debug.LogWarning("Cutter: One or both cut meshes are empty. Skipping cut operation for " + originalGameObject.name);
-                Destroy(finishedLeftMesh);
-                Destroy(finishedRightMesh);
+                Debug.LogWarning("Cutter: One or both cut meshes are empty or null. Skipping cut operation for " + originalGameObject.name);
+                // null 체크를 추가하여 혹시 모를 GetGeneratedMesh 실패 상황에 대비
+                if (finishedLeftMesh != null) Destroy(finishedLeftMesh);
+                if (finishedRightMesh != null) Destroy(finishedRightMesh);
                 return;
             }
 
@@ -171,8 +154,11 @@ public class Cutter : MonoBehaviour
 
             Rigidbody rightRigidbody = right.AddComponent<Rigidbody>();
             // 절단면에 수직 방향으로 힘을 가해 분리
-            // 힘의 방향은 planeNormal의 반대 방향 (절단된 면이 밀려나가는 방향)
-            rightRigidbody.AddForceAtPosition(-cutPlane.normal * 250f, originalGameObject.transform.TransformPoint(contactPoint), ForceMode.Impulse);
+            // 힘의 방향은 localPlaneNormal의 월드 공간 변환 방향에 250f의 힘을 가합니다.
+            // CutNormal 방향으로 노트를 쳐서 분리하는 것이 일반적이므로 -localPlaneNormal 대신 worldPlaneNormal에 힘을 주는 것이 더 자연스러울 수 있습니다.
+            // 여기서는 잘린 면이 튀어나가는 방향을 기준으로 (즉, localPlaneNormal의 반대 방향으로) 힘을 가합니다.
+            // 이는 세이버가 지나간 방향으로 조각이 밀려나가는 것처럼 보일 것입니다.
+            rightRigidbody.AddForceAtPosition(originalGameObject.transform.TransformDirection(-localPlaneNormal) * 250f, contactPoint, ForceMode.Impulse);
             rightRigidbody.useGravity = true;
 
             Destroy(right, 2.0f); // 2초 후 제거 (물리 시뮬레이션을 충분히 볼 수 있도록)
@@ -277,27 +263,19 @@ public class Cutter : MonoBehaviour
         // 교차점 계산을 위한 도우미 함수
         (Vector3 vert, Vector3 normal, Vector2 uv) GetIntersection(Vector3 v1, Vector3 v2, Vector3 n1, Vector3 n2, Vector2 uv1, Vector2 uv2, Plane p)
         {
-            // Raycast 대신 Plane.ClosestPointOnPlane을 이용해 선분-평면 교차점 계산을 시도합니다.
-            // 또는 Line-Plane Intersection 공식 사용 (Line: P1 + t * (P2-P1), Plane: N . (X - P0) = 0)
-            // t = (N . (P0 - P1)) / (N . (P2 - P1))
-
             Vector3 lineDir = v2 - v1;
             float dotNormalLine = Vector3.Dot(plane.normal, lineDir);
 
-            // 선분이 평면과 거의 평행한 경우 처리 (Epsilon 값으로 비교)
             if (Mathf.Abs(dotNormalLine) < Epsilon)
             {
-                // 평행한 경우, 교차점이 없거나 무수히 많음. 이 경우 절단이 안되거나 오작동 가능성.
-                // 이 상황은 이전에 SeparateMeshes에서 이미 처리했어야 함 (즉, 한쪽으로만 분류되어야 함)
-                // 여기에 도달했다면 로직 오류일 수 있음. 일단 Lerp 0.5로 대체 (임시 방편)
+                // 선분이 평면과 거의 평행한 경우 (이전처럼 에러를 내지 않고, 중간 지점을 반환)
+                // 이 상황은 매우 드물어야 하지만, 만약을 대비하여 Lerp로 안전하게 처리
                 Debug.LogWarning("CutTriangle: Line is almost parallel to plane. Using mid-point as intersection.");
                 return (Vector3.Lerp(v1, v2, 0.5f), Vector3.Lerp(n1, n2, 0.5f), Vector2.Lerp(uv1, uv2, 0.5f));
             }
 
-            float t = Vector3.Dot(plane.normal, plane.normal * plane.distance - v1) / dotNormalLine; // P0 대신 plane.normal * plane.distance 사용
-
-            // t 값이 [0, 1] 범위를 벗어날 경우 처리 (선분 밖의 교차점)
-            t = Mathf.Clamp01(t); // 선분 위에서만 교차점이 생기도록 보정
+            float t = Vector3.Dot(plane.normal, plane.normal * plane.distance - v1) / dotNormalLine; 
+            t = Mathf.Clamp01(t); 
 
             Vector3 newVert = Vector3.Lerp(v1, v2, t);
             Vector3 newNormal = Vector3.Lerp(n1, n2, t);
@@ -320,6 +298,7 @@ public class Cutter : MonoBehaviour
 
         // 새로운 정점을 addedVertices에 추가 (절단면 생성을 위함)
         // 두 교차점 순서가 일관되도록 정렬 (예: X좌표 기준)
+        // 이 정렬은 FillCut에서 폴리곤을 구성할 때 일관성을 유지하는 데 도움이 됩니다.
         if (vert1.x > vert2.x) // 간단한 정렬 방식, 복잡한 경우 Vector3.ProjectOnPlane 등 활용
         {
             (vert1, vert2) = (vert2, vert1);

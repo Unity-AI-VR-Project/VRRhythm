@@ -18,6 +18,7 @@
     "com.unity.xr.interaction.toolkit": "3.0.8",
     "com.unity.xr.management": "4.4.0",
     "com.unity.xr.openxr": "1.14.3",
+    "com.unity.xr.picoxr": "https://github.com/Pico-Developer/PICO-Unity-Integration-SDK.git",
     "com.whisper.unity": "https://github.com/Macoron/whisper.unity.git?path=/Packages/com.whisper.unity",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",

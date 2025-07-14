@@ -92,10 +92,6 @@ public class NoteMovement : MonoBehaviour
 
         _isInitialized = true;
 
-        // 디버그 로그 (초기화 값 확인)
-        Debug.Log($"Initialized Note: Start={_noteActualStartTime:F2}, Target={_targetMusicTime:F2}, Remove={_noteRemovalTime:F2}");
-        Debug.Log($"Positions: Spawn={_spawnPosition}, SetPoint={_setPointPosition}, Target={_targetPosition}, Exit={_exitPosition}");
-        Debug.Log($"Z Travel: SpawnToTarget={_zTravelTimeSpawnToTarget:F2}, TargetToExit={_zTravelTimeTargetToExit:F2}");
     }
 
     public void ResetNote()
@@ -160,15 +156,15 @@ public class NoteMovement : MonoBehaviour
         float randomY = Random.Range(spawnPosYMin, spawnPosYMax);
 
         // Z축이 플레이어로부터 멀리(큰 Z값)에서 가까이(작은 Z값)로 이동한다고 가정
-        float fixedSpawnZ = 35f; // 예시값. 실제 게임 환경에 맞춰야 합니다.
+        float fixedSpawnZ = 40f; // 예시값. 실제 게임 환경에 맞춰야 합니다.
         // _targetPosition은 InitializeNote에서 주입받음 (예: Z=0f)
 
         _spawnPosition = new Vector3(randomX, randomY, fixedSpawnZ); 
 
         // SetPointPosition은 Spawn과 Target의 Z 중간 지점
         _setPointPosition = new Vector3(
-            Mathf.Lerp(_spawnPosition.x, _targetPosition.x, 0.5f), 
-            _targetPosition.y, 
+            Mathf.Lerp(_spawnPosition.x, _targetPosition.x, 0.5f),
+            Mathf.Lerp(_spawnPosition.y, _targetPosition.y, 0.5f), // <-- 이 부분을 수정
             Mathf.Lerp(_spawnPosition.z, _targetPosition.z, 0.5f)
         );
 
@@ -217,7 +213,7 @@ public class NoteMovement : MonoBehaviour
         Vector3 currentXY;
 
         // SetPoint가 Spawn-Target 전체 Z 이동 중 어느 비율에 있는지 정의
-        float setPointZProgressRatio = 0.3f; 
+        float setPointZProgressRatio = 0.5f; 
 
         if (segmentProgress <= setPointZProgressRatio)
         {

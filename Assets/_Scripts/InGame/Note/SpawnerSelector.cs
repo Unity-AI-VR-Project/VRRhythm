@@ -36,14 +36,11 @@ public class NoteInfo
     public string band;
     public int relative_pos_in_beat;
     public float strength;
-    // 이 필드는 JSON에서 직접 파싱되지 않고, SpawnerSelector에서 할당됩니다.
-    public NoteDirection requiredDirection; 
+    public NoteDirection requiredDirection;
 
-    // 새로 추가: 이 노트의 최종 목표 위치
-    public Vector3 calculatedTargetPos; 
+    public Vector3 calculatedTargetPos;
 
-    // 새로 추가: 왼손/오른손 정보 - 이제 Enums.cs에 정의된 NoteType 사용
-    public SaberNoteType NoteType; 
+    public SaberNoteType NoteType;
 }
 
 public struct SpawnInfoBundle
@@ -51,40 +48,38 @@ public struct SpawnInfoBundle
     public NoteInfo NoteData;
     public Transform SpawnerTransform;
     public float Tempo;
-    public Vector3 CalculatedTargetPos; // SpawnerSelector에서 계산된 TargetPos
+    public Vector3 CalculatedTargetPos;
 }
 
 public class SpawnerSelector : MonoBehaviour
 {
     [Header("JSON Data & Spawner Setup")]
-    public TextAsset musicJsonFile; 
-    public List<Transform> spawners; 
+    public TextAsset musicJsonFile;
+    public List<Transform> spawners;
 
     [HideInInspector] public float NotePreSpawnBeats;
 
-    private RootData _currentSongData; 
-    public List<NoteInfo> _allNotes; 
-    private int _nextNoteIndex = 0; 
+    private RootData _currentSongData;
+    public List<NoteInfo> _allNotes;
+    private int _nextNoteIndex = 0;
 
     private string _lastSpawnedNoteBand = null;
-    private float _lastSpawnedNoteTime = -1.0f; 
-    private int _lastUsedSpawnerIndex = -1; 
+    private float _lastSpawnedNoteTime = -1.0f;
+    private int _lastUsedSpawnerIndex = -1;
 
     private Vector3 _lastCalculatedTargetPos = Vector3.zero;
-    private NoteDirection _lastAssignedDirection = NoteDirection.Up; 
-    // 새로 추가: 마지막으로 할당된 손 타입 - 이제 Enums.cs에 정의된 NoteType 사용
-    private SaberNoteType _lastAssignedNoteType = SaberNoteType.Right; // 초기값 설정
+    private NoteDirection _lastAssignedDirection = NoteDirection.Up;
+    private SaberNoteType _lastAssignedNoteType = SaberNoteType.Right;
 
     public float PLAYABLE_X_MIN = -1f;
     public float PLAYABLE_X_MAX = 1f;
     public float PLAYABLE_Y_MIN = 0.7f;
     public float PLAYABLE_Y_MAX = 1.4f;
-    public float PLAYABLE_Z = 1.5f; // 플레이 가능한 Z 위치 (카메라와의 거리)
+    public float PLAYABLE_Z = 1.5f;
 
-    public float copyNoteDataSecOffset = 0.125f; 
+    public float copyNoteDataSecOffset = 0.125f;
     public float moveAmount = 0.35f;
-    
-    // (이하 기존 코드 유지)
+
     void Awake()
     {
         LoadMusicData();
@@ -97,7 +92,6 @@ public class SpawnerSelector : MonoBehaviour
 
     private void Start()
     {
-
         // 1/8 한박자 시간 - 0.01(오프셋) 보다 가까우면 인접한 노트로 인식
         copyNoteDataSecOffset = (60 / _currentSongData.metadata.tempo / 2) - 0.01f;
     }
@@ -113,7 +107,7 @@ public class SpawnerSelector : MonoBehaviour
         try
         {
             _currentSongData = JsonUtility.FromJson<RootData>(musicJsonFile.text);
-            
+
             if (_currentSongData == null || _currentSongData.metadata == null || _currentSongData.beats == null)
             {
                 Debug.LogError("SpawnerSelector: JSON 데이터를 파싱하는 데 실패했습니다. JSON 파일의 형식을 확인하세요.", this);
@@ -125,13 +119,13 @@ public class SpawnerSelector : MonoBehaviour
             {
                 if (beat.notes != null)
                 {
-                    foreach(var note in beat.notes)
+                    foreach (var note in beat.notes)
                     {
                         _allNotes.Add(note);
                     }
                 }
             }
-            _allNotes.Sort((n1, n2) => n1.time.CompareTo(n2.time)); 
+            _allNotes.Sort((n1, n2) => n1.time.CompareTo(n2.time));
 
             AssignDirectionsToNotes();
 
@@ -146,54 +140,53 @@ public class SpawnerSelector : MonoBehaviour
     private void AssignDirectionsToNotes()
     {
         NoteDirection[] possibleDirections = {
-            NoteDirection.Up,
-            NoteDirection.Down,
-            NoteDirection.Left,
-            NoteDirection.Right,
-        };
+        NoteDirection.Up,
+        NoteDirection.Down,
+        NoteDirection.Left,
+        NoteDirection.Right,
+        NoteDirection.Any // 'Any' 방향도 포함하는 것이 좋습니다.
+    };
 
-        SaberNoteType[] possibleHands = { // 새로 추가: 가능한 손 타입 - 이제 Enums.cs의 NoteType 사용
-            SaberNoteType.Left,
-            SaberNoteType.Right
-        };
+        SaberNoteType[] possibleHands = {
+        SaberNoteType.Left,
+        SaberNoteType.Right
+    };
 
-        
         float lastNoteTime = -1.0f;
 
-
-        // 모든 노트를 조건에 맞게 검사하여 _allNotes에 담음
         for (int i = 0; i < _allNotes.Count; i++)
         {
-            NoteInfo note = _allNotes[i];
+            // 구조체이므로, 원본을 직접 가져와서 수정합니다.
+            // 또는, 복사본을 만들어서 수정하고 다시 리스트에 할당하는 방식도 가능합니다.
+            // 여기서는 복사본을 만들어서 수정하고 다시 할당하는 방식으로 구현합니다.
+            // (직접 수정하는 방식은 C# 7.2 이상의 ref struct 또는 Span<T>와 관련되어 복잡해질 수 있으므로 이 방식이 일반적입니다.)
+            NoteInfo currentNote = _allNotes[i]; // 원본의 복사본을 가져옴
 
-            // 인접 노트인지 검사하는 조건
-            bool isCloseToLastNote = (note.time - lastNoteTime <= copyNoteDataSecOffset && lastNoteTime != -1.0f);
+            bool isCloseToLastNote = (currentNote.time - lastNoteTime <= copyNoteDataSecOffset && lastNoteTime != -1.0f);
 
-            lastNoteTime = note.time;
+            lastNoteTime = currentNote.time; // 현재 노트의 시간을 마지막 노트 시간으로 업데이트
 
             if (isCloseToLastNote)
             {
-                // 인접 노트의 경우, 이전 노트의 방향과 손 타입 모두 그대로 사용
-                note.requiredDirection = _lastAssignedDirection; 
-                note.NoteType = _lastAssignedNoteType; // 손 타입도 복사
-                note.time = lastNoteTime;
+                currentNote.requiredDirection = _lastAssignedDirection; // 복사본 수정
+                currentNote.NoteType = _lastAssignedNoteType; // 복사본 수정
+                                                              // note.time = lastNoteTime; // 이 부분은 JSON에서 읽어온 time 값을 사용하므로 변경할 필요 없습니다.
             }
             else
             {
-                // 인접하지 않은 노트는 랜덤 방향과 랜덤 손 타입 할당
                 int randomDirectionIndex = Random.Range(0, possibleDirections.Length);
-                note.requiredDirection = possibleDirections[randomDirectionIndex];
+                currentNote.requiredDirection = possibleDirections[randomDirectionIndex]; // 복사본 수정
 
-                int randomHandIndex = Random.Range(0, possibleHands.Length); // 랜덤 손 타입 할당
-                note.NoteType = possibleHands[randomHandIndex];
+                int randomHandIndex = Random.Range(0, possibleHands.Length);
+                currentNote.NoteType = possibleHands[randomHandIndex]; // 복사본 수정
             }
-            
-            // _lastAssignedDirection과 _lastAssignedNoteType 갱신 (다음 노트의 로직을 위해)
-            _lastAssignedDirection = note.requiredDirection;
-            _lastAssignedNoteType = note.NoteType; // 손 타입도 갱신
-            
 
-            _allNotes[i] = note;
+            // 복사본의 변경사항을 원본 리스트에 다시 저장
+            _allNotes[i] = currentNote;
+
+            // 다음 노트를 위해 현재 할당된 방향/타입을 업데이트
+            _lastAssignedDirection = currentNote.requiredDirection;
+            _lastAssignedNoteType = currentNote.NoteType;
         }
     }
 
@@ -202,33 +195,31 @@ public class SpawnerSelector : MonoBehaviour
     {
         if (_allNotes == null || _currentSongData == null || _currentSongData.metadata == null || _nextNoteIndex >= _allNotes.Count)
         {
-            return null; 
+            return null;
         }
 
-        // 다음 노트의 데이터를 가져옴
         NoteInfo nextNote = _allNotes[_nextNoteIndex];
-        
 
         float tempo = _currentSongData.metadata.tempo;
-        if (tempo == 0f) 
+        if (tempo == 0f)
         {
             Debug.LogWarning("SpawnerSelector: 템포가 유효하지 않습니다 (0). 노트 스폰 시간을 계산할 수 없습니다.", this);
             return null;
         }
-        float preSpawnTime = NotePreSpawnBeats * (60f / tempo); 
+        float preSpawnTime = NotePreSpawnBeats * (60f / tempo);
 
-        float noteAbsoluteTime = nextNote.time; 
+        float noteAbsoluteTime = nextNote.time;
 
         if (currentTime >= noteAbsoluteTime - preSpawnTime)
         {
             nextNote.calculatedTargetPos = CalculateTargetPosition(nextNote);
-            _allNotes[_nextNoteIndex] = nextNote; 
+            _allNotes[_nextNoteIndex] = nextNote;
 
-            Transform selectedSpawner = FindAppropriateSpawner(nextNote); 
+            Transform selectedSpawner = FindAppropriateSpawner(nextNote);
 
-            if (selectedSpawner == null) 
+            if (selectedSpawner == null)
             {
-                return null; 
+                return null;
             }
 
             SpawnInfoBundle bundle = new SpawnInfoBundle
@@ -239,7 +230,7 @@ public class SpawnerSelector : MonoBehaviour
                 CalculatedTargetPos = nextNote.calculatedTargetPos
             };
 
-            _nextNoteIndex++; 
+            _nextNoteIndex++;
             _lastSpawnedNoteBand = nextNote.band;
             _lastSpawnedNoteTime = nextNote.time;
             _lastCalculatedTargetPos = nextNote.calculatedTargetPos;
@@ -247,22 +238,28 @@ public class SpawnerSelector : MonoBehaviour
             return bundle;
         }
 
-        return null; 
+        return null;
     }
 
     private Vector3 CalculateTargetPosition(NoteInfo currentNote)
     {
+        // === 중요 수정: PLAYABLE_X_MIN과 PLAYABLE_X_MAX를 매번 수정하지 않고 임시 변수를 사용 ===
+        float currentPlayableXMin = PLAYABLE_X_MIN;
+        float currentPlayableXMax = PLAYABLE_X_MAX;
+
         if (currentNote.NoteType == SaberNoteType.Left)
         {
-            PLAYABLE_X_MAX = PLAYABLE_X_MAX / 4; // 왼손 노트는 플레이 가능한 영역을 왼쪽 1/4로 제한
+            currentPlayableXMax = PLAYABLE_X_MAX / 4f; // 왼손 노트는 플레이 가능한 영역을 왼쪽 1/4로 제한
+            currentPlayableXMin = PLAYABLE_X_MIN; // 왼쪽 전체 영역을 기준으로 함
         }
-        else
+        else // Right
         {
-            PLAYABLE_X_MIN = PLAYABLE_X_MIN / 4; // 오른손 노트는 플레이 가능한 영역을 오른쪽 1/4로 제한
+            currentPlayableXMin = PLAYABLE_X_MIN / 4f; // 오른손 노트는 플레이 가능한 영역을 오른쪽 1/4로 제한
+            currentPlayableXMax = PLAYABLE_X_MAX; // 오른쪽 전체 영역을 기준으로 함
         }
 
         Vector3 defaultTargetPos = new Vector3(
-            Random.Range(PLAYABLE_X_MIN + 0.1f, PLAYABLE_X_MAX - 0.1f),
+            Random.Range(currentPlayableXMin + 0.1f, currentPlayableXMax - 0.1f),
             Random.Range(PLAYABLE_Y_MIN + 0.1f, PLAYABLE_Y_MAX - 0.1f),
             PLAYABLE_Z // 플레이 가능한 Z 위치 (카메라와의 거리)
         );
@@ -275,71 +272,78 @@ public class SpawnerSelector : MonoBehaviour
                 return defaultTargetPos;
             }
 
-            Vector3 basePos = _lastCalculatedTargetPos; 
-            float moveAmount = this.moveAmount; // 멤버 변수 moveAmount 사용
-            Vector3 finalCalculatedPos = basePos; 
+            Vector3 basePos = _lastCalculatedTargetPos;
+            float moveAmount = this.moveAmount;
+            Vector3 finalCalculatedPos = basePos;
 
             switch (currentNote.requiredDirection)
             {
                 case NoteDirection.Up:
                     float intendedY_Up = basePos.y + moveAmount;
-                    if (intendedY_Up > PLAYABLE_Y_MAX) {
+                    if (intendedY_Up > PLAYABLE_Y_MAX)
+                    {
                         finalCalculatedPos.y = basePos.y - moveAmount;
-                    } else {
+                    }
+                    else
+                    {
                         finalCalculatedPos.y = intendedY_Up;
                     }
                     break;
                 case NoteDirection.Down:
                     float intendedY_Down = basePos.y - moveAmount;
-                    if (intendedY_Down < PLAYABLE_Y_MIN) {
+                    if (intendedY_Down < PLAYABLE_Y_MIN)
+                    {
                         finalCalculatedPos.y = basePos.y + moveAmount;
-                    } else {
+                    }
+                    else
+                    {
                         finalCalculatedPos.y = intendedY_Down;
                     }
                     break;
                 case NoteDirection.Left:
                     float intendedX_Left = basePos.x - moveAmount;
-                    if (intendedX_Left < PLAYABLE_X_MIN) {
+                    if (intendedX_Left < currentPlayableXMin)
+                    { // === 수정: PLAYABLE_X_MIN 대신 currentPlayableXMin 사용 ===
                         finalCalculatedPos.x = basePos.x + moveAmount;
-                    } else {
+                    }
+                    else
+                    {
                         finalCalculatedPos.x = intendedX_Left;
                     }
                     break;
                 case NoteDirection.Right:
                     float intendedX_Right = basePos.x + moveAmount;
-                    if (intendedX_Right > PLAYABLE_X_MAX) {
+                    if (intendedX_Right > currentPlayableXMax)
+                    { // === 수정: PLAYABLE_X_MAX 대신 currentPlayableXMax 사용 ===
                         finalCalculatedPos.x = basePos.x - moveAmount;
-                    } else {
+                    }
+                    else
+                    {
                         finalCalculatedPos.x = intendedX_Right;
                     }
                     break;
             }
 
-            Define.eScenes a = Define.eScenes.InGame;
+            // eScenes 스위치 문은 현재 로직과 관련이 없으며 Dead Code로 보입니다.
+            // 제거하거나 주석 처리하는 것이 좋습니다.
+            // Define.eScenes a = Define.eScenes.InGame;
+            // switch (a)
+            // {
+            //     case eScenes.Title: break;
+            //     case eScenes.Lobby: break;
+            //     case eScenes.InGame: break;
+            //     default: throw new ArgumentOutOfRangeException();
+            // }
 
-            switch (a)
-            {
-                case eScenes.Title:
-                    break;
-                case eScenes.Lobby:
-                    break;
-                case eScenes.InGame:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            
-            
-            finalCalculatedPos.x = Mathf.Clamp(finalCalculatedPos.x, PLAYABLE_X_MIN, PLAYABLE_X_MAX);
+            // 최종 클램핑 시에도 임시 변수를 사용
+            finalCalculatedPos.x = Mathf.Clamp(finalCalculatedPos.x, currentPlayableXMin, currentPlayableXMax); // === 수정 ===
             finalCalculatedPos.y = Mathf.Clamp(finalCalculatedPos.y, PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
-            finalCalculatedPos.z = PLAYABLE_Z; 
+            finalCalculatedPos.z = PLAYABLE_Z;
 
-            //Debug.Log($"인접 노트 타겟 포지션 계산: 이전 노트 시간: {_lastSpawnedNoteTime}, 현재 노트 시간: {currentNote.time}, 요청 방향: {currentNote.requiredDirection}, 최종 타겟: {finalCalculatedPos}, 손 타입: {currentNote.NoteType}");
             return finalCalculatedPos;
         }
 
-        //Debug.Log($"랜덤 타겟 포지션 계산: 최종 타겟: {defaultTargetPos}, 노트 타격방향: {currentNote.requiredDirection}, 손 타입: {currentNote.NoteType}");
-        return defaultTargetPos; 
+        return defaultTargetPos;
     }
 
     private Transform FindAppropriateSpawner(NoteInfo currentNote)
@@ -347,15 +351,23 @@ public class SpawnerSelector : MonoBehaviour
         if (spawners == null || spawners.Count == 0)
         {
             Debug.LogError("SpawnerSelector: 스포너가 할당되지 않았습니다! 최소한 하나의 스포너를 할당해야 합니다.", this);
-            return null; 
+            return null;
         }
 
-        int numSpawners = spawners.Count;
-        int startIndex = (_lastUsedSpawnerIndex + 1) % numSpawners; 
-
-        if (_lastUsedSpawnerIndex == -1) 
+        // === 핵심 수정: 스포너가 하나일 경우 항상 첫 번째 스포너를 반환 ===
+        if (spawners.Count == 1)
         {
-            _lastUsedSpawnerIndex = startIndex; 
+            _lastUsedSpawnerIndex = 0; // 항상 0번 스포너 사용
+            return spawners[0];
+        }
+
+        // 스포너가 여러 개일 경우에만 기존 로직을 따릅니다.
+        int numSpawners = spawners.Count;
+        int startIndex = (_lastUsedSpawnerIndex + 1) % numSpawners;
+
+        if (_lastUsedSpawnerIndex == -1)
+        {
+            _lastUsedSpawnerIndex = startIndex;
             return spawners[startIndex];
         }
 
@@ -378,19 +390,19 @@ public class SpawnerSelector : MonoBehaviour
             {
                 requiresDifferentSpawner = true;
             }
-            
+
             if (potentialSpawnerIndex == _lastUsedSpawnerIndex && requiresDifferentSpawner)
             {
-                continue; 
+                continue;
             }
-            
-            _lastUsedSpawnerIndex = potentialSpawnerIndex; 
+
+            _lastUsedSpawnerIndex = potentialSpawnerIndex;
             return spawners[potentialSpawnerIndex];
         }
 
         Debug.LogWarning("SpawnerSelector: 조건에 맞는 스포너를 찾지 못했습니다. 다음 순서의 스포너를 강제로 사용합니다. 스포너 개수나 조건 검토가 필요할 수 있습니다.", this);
-        int fallbackIndex = startIndex; 
-        _lastUsedSpawnerIndex = fallbackIndex; 
+        int fallbackIndex = startIndex;
+        _lastUsedSpawnerIndex = fallbackIndex;
         return spawners[fallbackIndex];
     }
 

@@ -17397,7 +17397,7 @@ MonoBehaviour:
   timerImage: {fileID: 1552921230}
   comboImage: {fileID: 747773907}
   timeText: {fileID: 1202015331}
-  audioSource: {fileID: 969743257}
+  musicSynchronizer: {fileID: 0}
   hpBar: {fileID: 2597930512810135513}
 --- !u!1 &1220199742
 GameObject:

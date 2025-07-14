@@ -41,6 +41,7 @@ namespace Define
         Chat,
         Exit,
         Count
+    }
     public enum InGameState
     {
         PreGame,

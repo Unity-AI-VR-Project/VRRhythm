@@ -10,7 +10,7 @@ public class ParticleCall : MonoBehaviour
         if (other.gameObject.CompareTag("Saber"))
         {
 
-            ParticleManager.Instance.PlayParticle(particleName/*"Red,Blue*/, transform.position, Quaternion.identity);
+            ParticleManager.Instance.PlayParticle(particleName, transform.position, Quaternion.identity);
 
 
         }

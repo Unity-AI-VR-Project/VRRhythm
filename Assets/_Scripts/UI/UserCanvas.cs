@@ -18,10 +18,10 @@ public class UserCanvas : MonoBehaviour
         switch (GameManager.Instance.sceneController.currentScene)
         {
             case eScenes.Title:
-                buttons = new[] { eButton.Settings, eButton.Exit };
+                buttons = new[] { eButton.Settings,eButton.Lobby, eButton.Close,eButton.Exit };
                 break;
             case eScenes.Lobby:
-                buttons = new[] { eButton.Chat, eButton.Settings, eButton.Exit };
+                buttons = new[] { eButton.Chat, eButton.Settings, eButton.Close,eButton.Exit };
                 break;
             case eScenes.InGame:
                 buttons = new[] { eButton.Continue, eButton.Restart, eButton.Settings, eButton.Lobby };

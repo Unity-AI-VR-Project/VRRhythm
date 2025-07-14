@@ -1849,12 +1849,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c58f70ca32034a347bd1aa148d10c455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioDecoder1: {fileID: 0}
-  audioDecoder2: {fileID: 0}
-  audioEncoder: {fileID: 0}
-  logMelSpectro: {fileID: 0}
-  testAudioClip: {fileID: 0}
-  vocabAsset: {fileID: 0}
+  audioDecoder1: {fileID: 5022602860645237092, guid: ff6ff243533f5154f88035a6f9d9728e, type: 3}
+  audioDecoder2: {fileID: 5022602860645237092, guid: 3e4077ffbc3cd1842979c49d5d5f2c14, type: 3}
+  audioEncoder: {fileID: 5022602860645237092, guid: fa70a7e0d28c2d94aad7a25219a80cce, type: 3}
+  logMelSpectro: {fileID: 5022602860645237092, guid: 4988e80b3349e85458673563347af658, type: 3}
+  testAudioClip: {fileID: 8300000, guid: c2feb81020a587b4fab3f6da06988936, type: 3}
+  vocabAsset: {fileID: 4900000, guid: 9ad4438aa6b50774f8d7d33d4c3605f7, type: 3}
 --- !u!114 &1703260610346104233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1868,6 +1868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saModelAsset: {fileID: 5022602860645237092, guid: 58c90a90e92788d43bfb1644ccd4d131, type: 3}
+  vocabAsset: {fileID: 4900000, guid: ae15b94b8d5ccfe4b90804304596d07e, type: 3}
 --- !u!114 &1885072415665973710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1880,7 +1881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abf0def5b913d374a812f8958f6b6caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfxPrefab: {fileID: 0}
+  sfxPrefab: {fileID: 5372956730390672331, guid: 555428e992c28964db4724cf0a974428, type: 3}
   sfxCapacity: 20
   sfxMaxSize: 100
   sfxPoolParent: {fileID: 0}

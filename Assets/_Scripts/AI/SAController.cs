@@ -1,16 +1,17 @@
 using System;
-using System.Collections.Generic;
-using Unity.Sentis;
 using UnityEngine;
+using Unity.Sentis;
 
 public class SAController : MonoBehaviour
 {
-    private WordPieceTokenizer tokenizer = null;
-    bool isInitialized = false;
     [SerializeField]
     private ModelAsset saModelAsset;
-    private Model saModel;
-    private Worker saWorker;
+    [SerializeField]
+    private TextAsset vocabAsset;
+
+    private SentimentInference sentimentInference;
+
+    private bool isInitialized = false;
 
     private void Awake()
     {
@@ -20,92 +21,54 @@ public class SAController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-
-    }
-
     private void Initialize()
     {
         try
         {
-            InitializeTokenizer();
-            InitializeSAModel();
+            if (saModelAsset == null)
+            {
+                Debug.LogError("SA Model Asset이 할당되지 않았습니다. Resources/SA/ 경로에 있는지 확인해주세요.");
+                return;
+            }
+            if (vocabAsset == null)
+            {
+                Debug.LogError("Vocab Asset이 할당되지 않았습니다. Resources/SA/ 경로에 있는지 확인해주세요.");
+                return;
+            }
+
+            sentimentInference = new SentimentInference(ModelLoader.Load(saModelAsset), vocabAsset);
+            Debug.Log("Sentiment Inference 모델이 성공적으로 초기화되었습니다.");
             isInitialized = true;
         }
         catch (Exception e)
         {
-            Debug.LogError(e.Message);
+            Debug.LogError($"SentimentInference 초기화 중 오류 발생: {e.Message}");
             Debug.LogError(e.StackTrace);
         }
     }
 
-    private void InitializeTokenizer()
-    {
-        if (tokenizer == null)
-        {
-            tokenizer = new WordPieceTokenizer("vocab.txt", doLowerCase: false, stripAccents: false, cleanText: true);
-        }
-        Debug.Log($"{tokenizer.GetVocabSize()}개의 단어 어휘집을 불러왔습니다.");
-    }
-
-    private void InitializeSAModel()
-    {
-        saModel = ModelLoader.Load(saModelAsset);
-        saWorker = CreateSAModel();
-    }
-
     public int Run(string sentence)
     {
+        if (!isInitialized)
+        {
+            Debug.LogError("SentimentInference가 초기화되지 않았습니다.");
+            return -1;
+        }
+
         try
         {
-            Dictionary<string,List<int>> token = tokenizer.Encode(sentence, 128,true,true);
-
-            Tensor<int> inputIdsTensor = new Tensor<int>(new TensorShape(1, 128), token["input_ids"].ToArray());
-            Tensor<int> attentionMaskTensor = new Tensor<int>(new TensorShape(1, 128), token["attention_mask"].ToArray());
-
-            saWorker.SetInput(0, inputIdsTensor);
-            saWorker.SetInput(1, attentionMaskTensor);
-
-            saWorker.Schedule();
-
-            int result = (saWorker.PeekOutput()).ReleaseTensorData().Download<int>(saWorker.PeekOutput().shape[0]).ToArray()[0];
-
-            inputIdsTensor?.Dispose();
-            attentionMaskTensor?.Dispose();
-
-            return result;
+            return sentimentInference.Run(sentence);
         }
         catch (Exception e)
         {
-            Debug.LogError($"Tensor 생성 중 오류 발생: {e.Message}");
+            Debug.LogError($"감정 분석 실행 중 오류 발생: {e.Message}");
             Debug.LogError($"{e.StackTrace}");
             return -1;
         }
     }
 
-    private Worker CreateSAModel()
+    private void OnDestroy()
     {
-        FunctionalGraph graph = new FunctionalGraph();
-        FunctionalTensor[] inputs = graph.AddInputs(saModel);
-        FunctionalTensor[] outputs = Functional.Forward(saModel, inputs);
-
-        FunctionalTensor output = Functional.ArgMax(outputs[0], -1);
-
-        Model resultModel = graph.Compile(output);
-
-        Debug.Log($"Sentiment model compiled successfully.");
-
-        return new Worker(resultModel, BackendType.CPU);
-    }
-
-    private void OnApplicationQuit()
-    {
-        saWorker?.Dispose();
+        sentimentInference?.Dispose();
     }
 }

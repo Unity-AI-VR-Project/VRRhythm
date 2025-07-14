@@ -119,6 +119,7 @@ public class RunWhisper : MonoBehaviour
         string finalOutputString = await ProcessAudioClip(recordedClip);
 
         isProcessingAudio = false;
+        GameManager.Instance.aiManager.saController.Run(finalOutputString);
         UnityEngine.Debug.Log("최종 변환 결과: " + finalOutputString);
         UnityEngine.Debug.Log("스페이스바를 눌러 다시 녹음을 시작하세요.");
         UnityEngine.Debug.Log("P 키를 눌러 모델 성능 테스트를 시작하세요.");

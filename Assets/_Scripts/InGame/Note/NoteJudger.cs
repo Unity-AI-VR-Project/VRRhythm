@@ -84,10 +84,10 @@ public class NoteJudger
     /// </summary>
     private bool CheckDirection(Vector3 saberSwingDirection, NoteDirection requiredDirection, Vector3 noteForward)
     {
-        if (requiredDirection == NoteDirection.Any)
-        {
-            return true; // Any 방향은 항상 맞음
-        }
+        //if (requiredDirection == NoteDirection.Any)
+        //{
+        //    return true; // Any 방향은 항상 맞음
+        //}
 
         // 노트를 기준으로 상대적인 방향 벡터를 계산 (노트의 forward를 기준으로)
         // NoteMovement에서 노트가 항상 Z축으로 스폰되므로 noteForward는 보통 Vector3.forward 또는 Vector3.back일 것.
@@ -127,7 +127,7 @@ public class NoteJudger
             case NoteDirection.Down: return Vector3.down;
             case NoteDirection.Left: return Vector3.left;
             case NoteDirection.Right: return Vector3.right;
-            case NoteDirection.Any: return Vector3.zero;
+            //case NoteDirection.Any: return Vector3.zero;
             default: return Vector3.zero;
         }
     }

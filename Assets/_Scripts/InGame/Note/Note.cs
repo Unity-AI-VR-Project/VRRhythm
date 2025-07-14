@@ -70,7 +70,7 @@ public class Note : MonoBehaviour
         // 노트 오브젝트 자체의 위치, 회전, 스케일을 초기화
         _noteTransform.localPosition = Vector3.zero; // 로컬 위치 초기화
        
-        _noteTransform.localScale = _noteTransform.localScale;
+        _noteTransform.localScale = new Vector3(0.25f, 0.25f, 0.25f); // 로컬 스케일 초기화
 
         // 만약 노트의 색상이 외부에서 변경될 수 있다면, 여기서 기본 색상으로 되돌릴 수 있습니다.
         // 하지만 ApplyNoteColor가 NoteMovement에서 호출되므로, 굳이 여기서 할 필요는 없을 수 있습니다.

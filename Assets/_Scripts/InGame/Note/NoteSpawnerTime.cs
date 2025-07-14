@@ -124,7 +124,7 @@ public class NoteSpawnerTime : MonoBehaviour
             case NoteDirection.Right: targetZRotation = 90f; break;
             case NoteDirection.Down: targetZRotation = 180f; break;
             case NoteDirection.Left: targetZRotation = -90f; break;
-            case NoteDirection.Any: targetZRotation = 0f; break; // "Any" 방향에 대한 기본값 설정
+            //case NoteDirection.Any: targetZRotation = 0f; break; // "Any" 방향에 대한 기본값 설정
             default:
                 Debug.LogWarning($"NoteSpawnerTime: 알 수 없는 NoteDirection 값 ({noteInfo.requiredDirection})입니다. 기본 회전값 (0도)을 사용합니다.", spawnedNote);
                 break;

@@ -235,6 +235,7 @@ public class NoteMovement : MonoBehaviour
         if (currentMusicTime >= _noteRemovalTime)
         {
             NoteManager.Instance?.ReturnPooledNote(gameObject);
+            InGameManager.Instance.MissUpdate();
         }
     }
 

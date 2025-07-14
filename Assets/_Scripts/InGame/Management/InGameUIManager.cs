@@ -164,15 +164,9 @@ public class InGameUIManager : UIManagerBase
     {
         if (comboText != null)
         {
-            if (combo > 0)
-            {
-                comboText.gameObject.SetActive(true);
-                comboText.text = $"{combo}";
-            }
-            else
-            {
-                comboText.gameObject.SetActive(false);
-            }
+            
+            comboText.text = $"{combo}";
+            
         }
     }
 

@@ -77,8 +77,8 @@ public class InGameManager : MonoBehaviour
         // 초기 체력 설정
         PlayerHealth = 100;
         Score = 0;
-        Combo = 0;
-        MaxCombo = 0;
+        Combo = 1;
+        MaxCombo = 8;
         Miss = 0;
         IsStarted = false; // 초기에는 게임이 시작되지 않은 상태
     }

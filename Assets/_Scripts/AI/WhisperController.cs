@@ -1,64 +1,63 @@
 using UnityEngine;
 using Whisper.Utils;
 using Whisper;
+using System;
+using Define;
 
-[RequireComponent(typeof(WhisperManager))]
+public delegate void OnRecordDelegate(bool isRecord);
+
+[RequireComponent(typeof(WhisperManager), typeof(MicrophoneRecord))]
 public class WhisperController : MonoBehaviour
 {
     public WhisperManager whisper;
     public MicrophoneRecord record;
-    public WhisperStream stream;
+    public string whisperModelLevel;
+    private string outputText;
+    public string OutputText
+    {
+        get { return outputText; }
+        set
+        {
+            outputText = value;
+            // Sentiment Analysis
+            int result = GameManager.Instance.aiManager.saController.Run(outputText);
+            if (result != -1)
+            {
+                Debug.Log($"SA Result :{result}");
+                ChatObjectData COD = new ChatObjectData(DateTime.Now, OutputText, result);
+            }
+        }
+    }
 
     private void Awake()
     {
-        if (whisper == null) GetComponent<WhisperManager>();
         InitializeWhisper();
     }
 
-    private async void InitializeWhisper()
+    private void InitializeWhisper()
     {
-        stream = await whisper.CreateStream(record);
-        stream.OnResultUpdated += OnResult;
-        stream.OnSegmentUpdated += OnSegmentUpdated;
-        stream.OnSegmentFinished += OnSegmentFinished;
-        stream.OnStreamFinished += OnFinished;
-
+        if (whisper == null) GetComponent<WhisperManager>();
+        if (record == null) GetComponent<MicrophoneRecord>();
+        whisper.ModelPath = $"Whisper/ggml-{whisperModelLevel}.bin";
         record.OnRecordStop += OnRecordStop;
     }
 
-    private void OnRecordStop(AudioChunk recordedAudio)
+    private async void OnRecordStop(AudioChunk recordedAudio)
     {
+        var res = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
+        if (res == null)
+            return;
 
-    }
+        OutputText = res.Result;
 
-    private void OnResult(string result)
-    {
-
-    }
-
-    private void OnSegmentUpdated(WhisperResult segment)
-    {
-
-    }
-
-    private void OnSegmentFinished(WhisperResult segment)
-    {
-
-    }
-
-    private void OnFinished(string finalResult)
-    {
-
+        Debug.Log($"STT Result : {outputText}");
     }
 
     private void OnDestroy()
     {
-        if (stream != null)
+        if (record != null)
         {
-            stream.OnResultUpdated -= OnResult;
-            stream.OnSegmentUpdated -= OnSegmentUpdated;
-            stream.OnSegmentFinished -= OnSegmentFinished;
-            stream.OnStreamFinished -= OnFinished;
+            record.OnRecordStop -= OnRecordStop;
         }
     }
 }

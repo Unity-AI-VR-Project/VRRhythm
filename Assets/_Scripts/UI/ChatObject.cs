@@ -10,8 +10,8 @@ public class ChatObject : MonoBehaviour
 
     public void SetChatObject(ChatObjectData data)
     {
-        timeStamp.text = $"[{data.TimeStamp.Hour}:{data.TimeStamp.Minute}]";
-        chatContent.text = data.Content;
-        emoji.text = $"<sprite={data.Emoji}>";
+        timeStamp.text = $"[{data.timeStamp.Hour}:{data.timeStamp.Minute}]";
+        chatContent.text = data.content;
+        emoji.text = $"<sprite={data.emoji}>";
     }
 }

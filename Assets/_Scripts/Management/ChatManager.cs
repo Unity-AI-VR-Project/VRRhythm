@@ -15,13 +15,13 @@ public class ChatManager : ManagerBase
         base.Initialize();
     }
 
-    public void CreateChatObject(ChatObjectData chatObjectData) 
+    public GameObject CreateChatObject(ChatLog chatLog)
     {
         int prefabType = 0;
-        switch (GameManager.Instance.sceneController.currentScene)  
+        switch (chatLog.scene)
         {
             case eScenes.Title: // 타이틀에서는 채팅창 사용 X
-                return;
+                return null;
             case eScenes.Lobby:
                 prefabType = 0;
                 break;
@@ -29,6 +29,6 @@ public class ChatManager : ManagerBase
                 prefabType = 1;
                 break;
         }
-        Instantiate(chatPrefabs[prefabType]);
+        return Instantiate(chatPrefabs[prefabType]);
     }
 }

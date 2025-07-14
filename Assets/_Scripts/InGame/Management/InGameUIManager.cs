@@ -9,13 +9,13 @@ public class InGameUIManager : UIManagerBase
     public TextMeshProUGUI scoreText;    // 점수 텍스트
     public TextMeshProUGUI comboText;    // 콤보 텍스트
     public Image timerImage;             // 타이머 이미지 (프로그래스 바 형태)
+    public Image comboImage;
     public TextMeshProUGUI timeText;     // 남은 시간 텍스트
     public AudioSource audioSource;      // 음악 재생용 AudioSource
     public Image hpBar;                  // 체력바 이미지
 
     // 체력 관련 변수
     float startHP;                       // 시작 체력 (InGameManager에서 가져옴)
-
 
     // 음악 타이머 관련 변수
     private float totalSongTime;         // 음악 전체 재생 시간
@@ -26,7 +26,10 @@ public class InGameUIManager : UIManagerBase
         // 시작 시 체력 초기화
         startHP = InGameManager.Instance.playerHealth;
 
-
+        if (audioSource == null)
+        {
+            // soundmanager bgm audiosource
+        }
         // 음악 길이 설정
         if (audioSource != null && audioSource.clip != null)
         {

@@ -74,15 +74,20 @@ namespace Define
     }
     public struct ChatObjectData
     {
-        public DateTime TimeStamp;
-        public string Content;
-        public int Emoji;
+        public DateTime timeStamp;
+        public string content;
+        public int emoji;
 
         public ChatObjectData(DateTime timeStamp, string content, int emoji)
         {
-            TimeStamp = timeStamp;
-            Content = content;
-            Emoji = emoji;
+            this.timeStamp = timeStamp;
+            this.content = content;
+            this.emoji = emoji;
         }
+    }
+    public struct ChatLog
+    {
+        public eScenes scene;
+        public ChatObjectData chatObjectData;
     }
 }

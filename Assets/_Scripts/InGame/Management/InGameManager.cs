@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Define;
 
 // 게임 점수, 콤보, 체력 등의 정보를 관리하는 매니저 클래스
 public class InGameManager : MonoBehaviour
@@ -32,6 +33,12 @@ public class InGameManager : MonoBehaviour
 
     // 플레이어 체력
     public float playerHealth { get; private set; }
+
+    // 게임 진행 체크
+    public bool isStarted { get; private set; }
+
+    // 게임 진행상황 변경 시 발생하는 이벤트
+    public event Action<InGameState> OnStarted;
 
     // 점수가 변경되었을 때 발생하는 이벤트
     public event Action<int> OnScoreChanged;
@@ -89,5 +96,10 @@ public class InGameManager : MonoBehaviour
         int bonus = MaxCombo * 10;
         AddScore(bonus);
         Debug.Log($"Max Combo Bonus Applied: {bonus}");
+    }
+
+    public void StartGame()
+    {
+        OnStarted?.Invoke(InGameState.Playing);
     }
 }

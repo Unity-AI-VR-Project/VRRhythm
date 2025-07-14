@@ -6,7 +6,7 @@ public class SaberCollisionHandler : MonoBehaviour
     [SerializeField] private Saber _saber;
 
     private NoteJudger _noteJudgerInstance;
-    private MusicTimeChecker _musicTimeChecker;
+    private MusicSynchronizer _musicTimeChecker;
 
     /// <summary>
     /// 스크립트 인스턴스가 로드될 때 호출되며, 필요한 컴포넌트 참조를 설정하고 유효성을 검사합니다.
@@ -75,6 +75,11 @@ public class SaberCollisionHandler : MonoBehaviour
             }
 
             _noteJudgerInstance.JudgeAndProcessNote(other.gameObject, _saber, other, _musicTimeChecker);
+        }
+        if(other.TryGetComponent<ObjectButton>(out ObjectButton objectButton))
+        {
+            objectButton.OnButtonClick();
+            Destroy(objectButton.gameObject); // 트리거 오브젝트 제거
         }
     }
 }

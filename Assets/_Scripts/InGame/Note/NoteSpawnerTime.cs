@@ -6,7 +6,7 @@ public class NoteSpawnerTime : MonoBehaviour
 {
     [Header("Music & Spawner Setup")]
     [SerializeField] private SpawnerSelector spawnerSelector;
-    [SerializeField] private MusicTimeChecker timeChecker;
+    [SerializeField] private MusicSynchronizer timeChecker;
 
     /// <summary>
     /// 스크립트 인스턴스가 로드될 때 호출되며, 필요한 컴포넌트 참조를 설정하고 유효성을 검사합니다.
@@ -46,7 +46,7 @@ public class NoteSpawnerTime : MonoBehaviour
                 // 예를 들어 NoteMovement 클래스에 public float GetPreSpawnBeats() { return _preSpawnBeats; } 추가 후 아래 사용.
                 // 아니면 NoteMovement의 _preSpawnBeats를 다시 public으로 변경하는 방법도 있습니다.
                 // 여기서는 NoteMovement에서 GetPreSpawnBeats() 메서드가 있다고 가정합니다.
-                spawnerSelector.NotePreSpawnBeats = prefabNoteMovement.GetPreSpawnBeats(); // <- NoteMovement 수정 필요
+                //spawnerSelector.NotePreSpawnBeats = prefabNoteMovement.GetPreSpawnBeats(); // <- NoteMovement 수정 필요
             }
             else
             {
@@ -70,6 +70,7 @@ public class NoteSpawnerTime : MonoBehaviour
     {
         float currentElapsedTime = (float)timeChecker.elapsedTime;
 
+        // Spawner
         SpawnInfoBundle? spawnInfo = spawnerSelector.GetNoteAndSpawnerForCurrentTime(currentElapsedTime);
 
         if (spawnInfo.HasValue)

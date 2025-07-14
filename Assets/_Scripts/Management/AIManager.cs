@@ -2,11 +2,24 @@ using UnityEngine;
 
 public class AIManager : ManagerBase
 {
-    WhisperController whisperController;
+    public WhisperController whisperController;
+    public SAController saController;
     
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            whisperController.record.StartRecord();
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            whisperController.record.StopRecord();
+        }
     }
 
     protected override void Initialize()
@@ -21,6 +34,10 @@ public class AIManager : ManagerBase
         if (whisperController == null)
         {
             whisperController = GameManager.Instance.FindComponent<WhisperController>(typeof(WhisperController), transform);
+        }
+        if (saController == null)
+        {
+            saController = GameManager.Instance.FindComponent<SAController>(typeof(SAController), transform);
         }
     }
 }

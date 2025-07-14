@@ -6,6 +6,8 @@ TagManager:
   tags:
   - DeadZone
   - Saber
+  - Note
+  - Button
   layers:
   - Default
   - TransparentFX

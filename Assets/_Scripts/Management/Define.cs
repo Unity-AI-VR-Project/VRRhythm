@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -40,9 +41,15 @@ namespace Define
         Chat,
         Exit,
         Count
+    public enum InGameState
+    {
+        PreGame,
+        Playing,
+        PlayAsPaused,
+        Paused
     }
     /// <summary>
-    /// ³ëÆ® Ãæµ¹ ¹× ÆÇÁ¤¿¡ ÇÊ¿äÇÑ ¸ðµç °ü·Ã Á¤º¸¸¦ ´ã´Â ±¸Á¶Ã¼ÀÔ´Ï´Ù.
+    /// ï¿½ï¿½Æ® ï¿½æµ¹ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½Ô´Ï´ï¿½.
     /// </summary>
     public struct NoteHitContext
     {
@@ -64,13 +71,13 @@ namespace Define
         public float TargetMusicTime;
     }
     /// <summary>
-    /// ³ëÆ® Àý´Ü ½Ã °è»êµÇ´Â Á¡¼ö ±¸¼º ¿ä¼Ò¸¦ ³ªÅ¸³À´Ï´Ù.
+    /// ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ò¸ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½Ï´ï¿½.
     /// </summary>
     public struct CutScores
     {
-        public float swingAngleBeforeCut; // ³ëÆ®¸¦ Ä¡±â Àü ½ºÀ® °¢µµ (ºñÆ® ¼¼ÀÌ¹ö ±âÁØ 0~100)
-        public float swingAngleAfterCut;  // ³ëÆ®¸¦ Ä£ ÈÄ ½ºÀ® °¢µµ (ºñÆ® ¼¼ÀÌ¹ö ±âÁØ 0~100)
-        public float cutAccuracy;         // ³ëÆ® Áß¾ÓÀ» ¾ó¸¶³ª Á¤È®È÷ ¸ÂÃè´ÂÁö (0~1 »çÀÌ)
+        public float swingAngleBeforeCut; // ï¿½ï¿½Æ®ï¿½ï¿½ Ä¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ 0~100)
+        public float swingAngleAfterCut;  // ï¿½ï¿½Æ®ï¿½ï¿½ Ä£ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ 0~100)
+        public float cutAccuracy;         // ï¿½ï¿½Æ® ï¿½ß¾ï¿½ï¿½ï¿½ ï¿½ó¸¶³ï¿½ ï¿½ï¿½È®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (0~1 ï¿½ï¿½ï¿½ï¿½)
     }
     public struct ChatObjectData
     {
@@ -90,4 +97,46 @@ namespace Define
         public eScenes scene;
         public ChatObjectData chatObjectData;
     }
+    public struct NoteData
+    {
+        public float SpawnTime;
+        public Vector3 SpawnPosition;
+        public NoteDirection RequiredDirection;
+        public SaberNoteType RequiredNoteType;
+        public Vector3 TargetPosition; // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡
+        public float TravelDuration; // ï¿½ï¿½Æ®ï¿½ï¿½ SpawnPositionï¿½ï¿½ï¿½ï¿½ TargetPositionï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+    }
+
+    [Serializable]
+    public class NoteJsonData
+    {
+        public float time;
+        public string band;
+        public int relative_pos_in_beat;
+        public float strength;
+    }
+
+    [Serializable]
+    public class BeatJsonData
+    {
+        public int beat_index;
+        public float beat_time;
+        public List<NoteJsonData> notes;
+    }
+
+    [Serializable]
+    public class MetadataJson
+    {
+        public float tempo;
+        public string time_resolution_unit;
+        public string band_group;
+    }
+
+    [Serializable]
+    public class MapDataJson
+    {
+        public MetadataJson metadata;
+        public List<BeatJsonData> beats;
+    }
+
 }

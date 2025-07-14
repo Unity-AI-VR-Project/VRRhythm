@@ -1,6 +1,9 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Define;
+using System.Linq;
+using Random = UnityEngine.Random;
 
 
 [System.Serializable]
@@ -60,7 +63,7 @@ public class SpawnerSelector : MonoBehaviour
     [HideInInspector] public float NotePreSpawnBeats;
 
     private RootData _currentSongData; 
-    private List<NoteInfo> _allNotes; 
+    public List<NoteInfo> _allNotes; 
     private int _nextNoteIndex = 0; 
 
     private string _lastSpawnedNoteBand = null;
@@ -76,6 +79,7 @@ public class SpawnerSelector : MonoBehaviour
     public float PLAYABLE_X_MAX = 1f;
     public float PLAYABLE_Y_MIN = 0.7f;
     public float PLAYABLE_Y_MAX = 1.4f;
+    public float PLAYABLE_Z = 1.5f; // 플레이 가능한 Z 위치 (카메라와의 거리)
 
     public float copyNoteDataSecOffset = 0.125f; 
     public float moveAmount = 0.35f;
@@ -89,6 +93,13 @@ public class SpawnerSelector : MonoBehaviour
             Debug.LogError("SpawnerSelector: spawners 리스트가 비어 있습니다. 스포너 Transform을 할당해주세요.", this);
             enabled = false;
         }
+    }
+
+    private void Start()
+    {
+
+        // 1/8 한박자 시간 - 0.01(오프셋) 보다 가까우면 인접한 노트로 인식
+        copyNoteDataSecOffset = (60 / _currentSongData.metadata.tempo / 2) - 0.01f;
     }
 
     private void LoadMusicData()
@@ -146,19 +157,26 @@ public class SpawnerSelector : MonoBehaviour
             SaberNoteType.Right
         };
 
+        
         float lastNoteTime = -1.0f;
 
+
+        // 모든 노트를 조건에 맞게 검사하여 _allNotes에 담음
         for (int i = 0; i < _allNotes.Count; i++)
         {
             NoteInfo note = _allNotes[i];
 
-            bool isCloseToLastNote = (note.time - lastNoteTime <= copyNoteDataSecOffset && lastNoteTime != -1.0f); 
+            // 인접 노트인지 검사하는 조건
+            bool isCloseToLastNote = (note.time - lastNoteTime <= copyNoteDataSecOffset && lastNoteTime != -1.0f);
+
+            lastNoteTime = note.time;
 
             if (isCloseToLastNote)
             {
                 // 인접 노트의 경우, 이전 노트의 방향과 손 타입 모두 그대로 사용
                 note.requiredDirection = _lastAssignedDirection; 
                 note.NoteType = _lastAssignedNoteType; // 손 타입도 복사
+                note.time = lastNoteTime;
             }
             else
             {
@@ -173,7 +191,7 @@ public class SpawnerSelector : MonoBehaviour
             // _lastAssignedDirection과 _lastAssignedNoteType 갱신 (다음 노트의 로직을 위해)
             _lastAssignedDirection = note.requiredDirection;
             _lastAssignedNoteType = note.NoteType; // 손 타입도 갱신
-            lastNoteTime = note.time;
+            
 
             _allNotes[i] = note;
         }
@@ -187,8 +205,10 @@ public class SpawnerSelector : MonoBehaviour
             return null; 
         }
 
+        // 다음 노트의 데이터를 가져옴
         NoteInfo nextNote = _allNotes[_nextNoteIndex];
         
+
         float tempo = _currentSongData.metadata.tempo;
         if (tempo == 0f) 
         {
@@ -232,10 +252,19 @@ public class SpawnerSelector : MonoBehaviour
 
     private Vector3 CalculateTargetPosition(NoteInfo currentNote)
     {
+        if (currentNote.NoteType == SaberNoteType.Left)
+        {
+            PLAYABLE_X_MAX = PLAYABLE_X_MAX / 4; // 왼손 노트는 플레이 가능한 영역을 왼쪽 1/4로 제한
+        }
+        else
+        {
+            PLAYABLE_X_MIN = PLAYABLE_X_MIN / 4; // 오른손 노트는 플레이 가능한 영역을 오른쪽 1/4로 제한
+        }
+
         Vector3 defaultTargetPos = new Vector3(
-            Random.Range(PLAYABLE_X_MIN + 0.1f, PLAYABLE_X_MAX - 0.1f), 
-            Random.Range(PLAYABLE_Y_MIN + 0.1f, PLAYABLE_Y_MAX - 0.1f), 
-            5.0f 
+            Random.Range(PLAYABLE_X_MIN + 0.1f, PLAYABLE_X_MAX - 0.1f),
+            Random.Range(PLAYABLE_Y_MIN + 0.1f, PLAYABLE_Y_MAX - 0.1f),
+            PLAYABLE_Z // 플레이 가능한 Z 위치 (카메라와의 거리)
         );
 
         if (_lastSpawnedNoteTime != -1.0f && (currentNote.time - _lastSpawnedNoteTime <= copyNoteDataSecOffset))
@@ -285,10 +314,25 @@ public class SpawnerSelector : MonoBehaviour
                     }
                     break;
             }
+
+            Define.eScenes a = Define.eScenes.InGame;
+
+            switch (a)
+            {
+                case eScenes.Title:
+                    break;
+                case eScenes.Lobby:
+                    break;
+                case eScenes.InGame:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
             
             finalCalculatedPos.x = Mathf.Clamp(finalCalculatedPos.x, PLAYABLE_X_MIN, PLAYABLE_X_MAX);
             finalCalculatedPos.y = Mathf.Clamp(finalCalculatedPos.y, PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
-            finalCalculatedPos.z = 3.0f; 
+            finalCalculatedPos.z = PLAYABLE_Z; 
 
             //Debug.Log($"인접 노트 타겟 포지션 계산: 이전 노트 시간: {_lastSpawnedNoteTime}, 현재 노트 시간: {currentNote.time}, 요청 방향: {currentNote.requiredDirection}, 최종 타겟: {finalCalculatedPos}, 손 타입: {currentNote.NoteType}");
             return finalCalculatedPos;

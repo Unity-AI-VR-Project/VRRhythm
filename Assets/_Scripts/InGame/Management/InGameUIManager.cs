@@ -14,6 +14,8 @@ public class InGameUIManager : UIManagerBase
                                          // MusicSynchronizer에서 음악 시간을 가져오므로 AudioSource 직접 참조는 제거하거나 MusicSynchronizer 참조로 변경
                                          // public AudioSource audioSource; // 직접 참조 대신 MusicSynchronizer를 통해 접근 권장
 
+    public TextMeshProUGUI missText;
+
     // MusicSynchronizer 참조 추가 (음악 시간 동기화용)
     public MusicSynchronizer musicSynchronizer;
 
@@ -71,10 +73,12 @@ public class InGameUIManager : UIManagerBase
         {
             InGameManager.Instance.OnScoreChanged += UpdateScoreText;
             InGameManager.Instance.OnComboChanged += UpdateComboText;
+            InGameManager.Instance.OnMissChanged += UpdateMissText;
 
             // UI 텍스트 초기화
             UpdateScoreText(InGameManager.Instance.Score);
             UpdateComboText(InGameManager.Instance.Combo);
+            UpdateMissText(InGameManager.Instance.Miss);
         }
         else
         {
@@ -151,7 +155,7 @@ public class InGameUIManager : UIManagerBase
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + score;
+            scoreText.text = $"{score}";
         }
     }
 
@@ -163,13 +167,18 @@ public class InGameUIManager : UIManagerBase
             if (combo > 0)
             {
                 comboText.gameObject.SetActive(true);
-                comboText.text = "X " + combo;
+                comboText.text = $"{combo}";
             }
             else
             {
                 comboText.gameObject.SetActive(false);
             }
         }
+    }
+
+    void UpdateMissText(int miss)
+    {
+        missText.text = $"{miss}";
     }
 
     // 오브젝트가 파괴될 때 이벤트 해제 (메모리 누수 방지)

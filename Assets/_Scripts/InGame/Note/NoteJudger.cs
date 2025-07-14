@@ -315,6 +315,7 @@ public class NoteJudger
     {
         int score = 0;
         bool comboIncreased = false;
+        int miss = 0;
 
         if (InGameManager.Instance == null || ParticlePoolManager.Instance == null)
         {
@@ -355,6 +356,8 @@ public class NoteJudger
             InGameManager.Instance.ResetCombo();
             InGameManager.Instance.TakeDamage(20); // Miss 시 데미지 (더 큼)
             score = 0;
+            InGameManager.Instance.MissUpdate();
+           
         }
 
         Debug.Log($"[{context.HitNoteObject.name}] 판정 결과: {result}, 점수: {score}, 콤보 증가: {comboIncreased}");

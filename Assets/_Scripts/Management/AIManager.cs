@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AIManager : ManagerBase
 {
-    public WhisperController whisperController;
+    public RunWhisper whisperController;
     public SAController saController;
     
     protected override void Awake()
@@ -12,13 +12,35 @@ public class AIManager : ManagerBase
 
     private void Update()
     {
+        if (whisperController == null)
+        {
+            UnityEngine.Debug.LogError("AIManager: whisperController가 할당되지 않았습니다. Inspector에서 RunWhisper 컴포넌트를 할당해주세요.");
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            whisperController.record.StartRecord();
+            if (!whisperController.GetAudioProcessor().IsRecording && !whisperController.IsProcessingAudio)
+            {
+                whisperController.StartRecordingPublic();
+            }
         }
-        if (Input.GetKeyUp(KeyCode.Space))
+
+        if (whisperController.GetAudioProcessor().IsRecording)
         {
-            whisperController.record.StopRecord();
+            if (Input.GetKeyUp(KeyCode.Space) ||
+                (Time.time - whisperController.GetAudioProcessor().RecordingStartTime >= whisperController.GetAudioProcessor().maxRecordingSeconds))
+            {
+                whisperController.StopRecordingPublic();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (!whisperController.GetAudioProcessor().IsRecording && !whisperController.IsProcessingAudio)
+            {
+                whisperController.TestModelPerformancePublic();
+            }
         }
     }
 
@@ -31,10 +53,6 @@ public class AIManager : ManagerBase
 
     private void InitializeWhisper()
     {
-        if (whisperController == null)
-        {
-            whisperController = GameManager.Instance.FindComponent<WhisperController>(typeof(WhisperController), transform);
-        }
         if (saController == null)
         {
             saController = GameManager.Instance.FindComponent<SAController>(typeof(SAController), transform);

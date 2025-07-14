@@ -44,6 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a912c26c64884864fa5974c446a61e18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicJsonFile: {fileID: 0}
-  spawners: []
-  NotePreSpawnBeats: 0
+  musicJsonFile: {fileID: 4900000, guid: 1d8295f59e08a1e42ad46e0828d0e96a, type: 3}
+  spawners:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  NotePreSpawnBeats: 1
+  _allNotes: []
+  PLAYABLE_X_MIN: -1
+  PLAYABLE_X_MAX: 1
+  PLAYABLE_Y_MIN: 0.7
+  PLAYABLE_Y_MAX: 1.4
+  PLAYABLE_Z: 1.5
+  copyNoteDataSecOffset: 0.125
+  moveAmount: 0.35

@@ -5,10 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    static public SceneController Instance { get; private set; }   
     public eScenes currentScene;
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         currentScene = (eScenes)SceneManager.GetActiveScene().buildIndex;
     }
 

@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
-using Define;
+using Define; // Define 네임스페이스가 필요합니다 (예: InGameState enum).
 
 // 게임 점수, 콤보, 체력 등의 정보를 관리하는 매니저 클래스
 public class InGameManager : MonoBehaviour
 {
-    // 인게임 인스턴스 접근 프로퍼티
+    // 인게임 인스턴스 접근 프로퍼티 (싱글톤 패턴)
     public static InGameManager Instance
     {
         get
@@ -14,6 +14,13 @@ public class InGameManager : MonoBehaviour
             {
                 // 현재 존재하는 InGameManager를 찾아 할당
                 m_instance = FindAnyObjectByType<InGameManager>();
+                if (m_instance == null)
+                {
+                    // 씬에 인스턴스가 없을 경우 새로 생성 (선택 사항, 보통은 씬에 미리 배치)
+                    GameObject obj = new GameObject("InGameManager");
+                    m_instance = obj.AddComponent<InGameManager>();
+                    Debug.LogWarning("InGameManager: 씬에 인스턴스가 없어 새로 생성했습니다. 일반적으로 씬에 미리 배치하는 것을 권장합니다.");
+                }
             }
             return m_instance;
         }
@@ -32,10 +39,10 @@ public class InGameManager : MonoBehaviour
     public int MaxCombo { get; private set; }
 
     // 플레이어 체력
-    public float playerHealth { get; private set; }
+    public float PlayerHealth { get; private set; } // 프로퍼티 이름 변경 (public 필드와의 혼동 방지)
 
     // 게임 진행 체크
-    public bool isStarted { get; private set; }
+    public bool IsStarted { get; private set; } // 프로퍼티 이름 변경
 
     // 게임 진행상황 변경 시 발생하는 이벤트
     public event Action<InGameState> OnStarted;
@@ -50,13 +57,22 @@ public class InGameManager : MonoBehaviour
     private void Awake()
     {
         // 인게임 매니저 중복 생성 막는 처리
-        if (Instance != this)
+        if (m_instance != null && m_instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        m_instance = this; // 현재 인스턴스를 싱글톤으로 설정
+
+        // 씬 전환 시 파괴되지 않도록 설정 (필요한 경우)
+        // DontDestroyOnLoad(gameObject); 
 
         // 초기 체력 설정
-        playerHealth = 100;
+        PlayerHealth = 100;
+        Score = 0;
+        Combo = 0;
+        MaxCombo = 0;
+        IsStarted = false; // 초기에는 게임이 시작되지 않은 상태
     }
 
     // 점수를 추가하는 메서드
@@ -86,7 +102,14 @@ public class InGameManager : MonoBehaviour
     // 플레이어가 피해를 입었을 때 호출
     public void TakeDamage(int damage)
     {
-        playerHealth -= damage;
+        PlayerHealth -= damage;
+        // 체력이 0 이하가 되면 게임 오버 처리 등 추가 가능
+        if (PlayerHealth <= 0)
+        {
+            PlayerHealth = 0;
+            Debug.Log("플레이어 체력 0! 게임 오버!");
+            // TODO: 게임 오버 로직 호출
+        }
     }
 
     // 게임 종료 시 최대 콤보에 따른 보너스 점수 적용
@@ -98,8 +121,18 @@ public class InGameManager : MonoBehaviour
         Debug.Log($"Max Combo Bonus Applied: {bonus}");
     }
 
+    // 게임 시작을 알리는 메서드 (외부에서 호출)
     public void StartGame()
     {
-        OnStarted?.Invoke(InGameState.Playing);
+        if (!IsStarted) // 이미 시작되지 않았다면
+        {
+            IsStarted = true;
+            OnStarted?.Invoke(InGameState.Playing); // 구독자들에게 게임 시작 알림
+            Debug.Log("게임 시작 이벤트 발생!");
+        }
+        else
+        {
+            Debug.LogWarning("InGameManager: 이미 게임이 시작된 상태입니다.");
+        }
     }
 }

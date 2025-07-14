@@ -146,4 +146,3 @@ MonoBehaviour:
   delayBeat: 4
   offset: 0
   spawnerSelector: {fileID: 0}
-  timeChecker: {fileID: 0}

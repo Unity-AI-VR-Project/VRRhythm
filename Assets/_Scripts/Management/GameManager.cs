@@ -50,7 +50,7 @@ public class GameManager : Singleton<GameManager>
         }
         if (aiManager == null)
         {
-            aiManager = FindComponent<AIManager>(typeof(AIManager), transform);
+            //aiManager = FindComponent<AIManager>(typeof(AIManager), transform);
         }
     }
 

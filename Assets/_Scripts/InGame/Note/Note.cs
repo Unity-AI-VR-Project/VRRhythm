@@ -69,7 +69,7 @@ public class Note : MonoBehaviour
         }
         // 노트 오브젝트 자체의 위치, 회전, 스케일을 초기화
         _noteTransform.localPosition = Vector3.zero; // 로컬 위치 초기화
-        _noteTransform.localRotation = Quaternion.identity; // 로컬 회전 초기화
+       
         _noteTransform.localScale = _noteTransform.localScale;
 
         // 만약 노트의 색상이 외부에서 변경될 수 있다면, 여기서 기본 색상으로 되돌릴 수 있습니다.

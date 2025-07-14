@@ -5,18 +5,22 @@ public class ChatUI : MonoBehaviour
 {
     [SerializeField] private Transform chatParent;
 
-    void Start()
+    private void OnEnable()
     {
         LoadChat();
     }
 
-    void Update()
+    private void initializeChat()
     {
-
+        foreach(Transform child in chatParent)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     private void LoadChat()
     {
+        initializeChat();
         eScenes current = GameManager.Instance.sceneController.currentScene;
         foreach (ChatLog log in GameManager.Instance.dataManager.chatLogs)
         {

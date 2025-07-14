@@ -11,7 +11,7 @@ public class SaberCollisionHandler : MonoBehaviour
     /// <summary>
     /// 스크립트 인스턴스가 로드될 때 호출되며, 필요한 컴포넌트 참조를 설정하고 유효성을 검사합니다.
     /// </summary>
-    void Awake()
+    void Start()
     {
         if (_saber == null)
         {
@@ -22,6 +22,10 @@ public class SaberCollisionHandler : MonoBehaviour
         {
             Debug.LogError("SaberCollisionHandler: Saber 컴포넌트를 찾을 수 없습니다. 이 스크립트는 Saber 컴포넌트와 함께 사용되어야 합니다.", this);
             enabled = false;
+        }
+        if (GameManager.Instance.sceneController.currentScene != eScenes.InGame)
+        {
+            return;
         }
 
         if (NoteManager.Instance != null)

@@ -16,10 +16,7 @@ public class InGameManager : MonoBehaviour
                 m_instance = FindAnyObjectByType<InGameManager>();
                 if (m_instance == null)
                 {
-                    // 씬에 인스턴스가 없을 경우 새로 생성 (선택 사항, 보통은 씬에 미리 배치)
-                    GameObject obj = new GameObject("InGameManager");
-                    m_instance = obj.AddComponent<InGameManager>();
-                    Debug.LogWarning("InGameManager: 씬에 인스턴스가 없어 새로 생성했습니다. 일반적으로 씬에 미리 배치하는 것을 권장합니다.");
+                    return null;
                 }
             }
             return m_instance;

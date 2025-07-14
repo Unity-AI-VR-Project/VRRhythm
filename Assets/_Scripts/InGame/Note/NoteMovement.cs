@@ -8,7 +8,7 @@ using Define;
 public class NoteMovement : MonoBehaviour
 {
     // === 외부에서 주입받을 참조들 ===
-    private MusicTimeChecker _musicTimeChecker;
+    private MusicSynchronizer _musicTimeChecker;
 
     // === 노트 관련 정보 (초기화 시 Note 컴포넌트에서 가져옴) ===
     private Note _noteComponent; // 노트 컴포넌트 참조
@@ -16,40 +16,38 @@ public class NoteMovement : MonoBehaviour
 
     // === 내부에서 사용할 위치 및 이동 계산 값 ===
     private Vector3 _spawnPosition;
-    private Vector3 _setPointPosition;
+    private Vector3 _setPointPosition; // 중간 경유점
     private Vector3 _targetPosition; // Final target position
+    private Vector3 _exitPosition; // 노트가 완전히 사라질 최종 지점 (targetPos 이후)
 
     // === BPM 및 속도 설정 ===
     private float _bpm;
     [SerializeField, Tooltip("노트가 SpawnPos.z에서 TargetPos.z까지 이동하는 데 걸리는 비트 수.")]
-    private float _preSpawnBeats = 4.0f;
-
-    [SerializeField, Tooltip("SetPoint까지의 Z축 거리가 너무 짧을 때, Y축 기믹이 재생될 최소 시간 (초).")]
-    private float _minSetPointAnimTime = 0.2f;
+    private float _preSpawnBeats = 4.0f; 
+    [SerializeField, Tooltip("노트가 TargetPos.z를 지나쳐 완전히 사라지는 데 걸리는 추가 거리.")]
+    private float _postTargetExitDistance = 10.0f; // 타겟 지점을 통과한 후 추가로 이동할 Z 거리 (유니티 단위)
 
     // === 타이밍 관련 변수 ===
     public float TargetMusicTime { get { return _targetMusicTime; } private set { _targetMusicTime = value; } }
     private float _targetMusicTime; // 노트가 TargetPosition에 도달해야 하는 음악 시간
     private float _noteActualStartTime; // 노트가 SpawnPos에서 이동을 시작하는 실제 음악 시간 (BPM 고려)
+    private float _noteRemovalTime; // 노트가 풀로 반환될 실제 음악 시간
 
-    private float _totalZDistance; // SpawnPos.z에서 TargetPos.z까지의 전체 Z 거리
-    private float _zTravelTime; // SpawnPos에서 TargetPos까지 Z축 이동에 걸리는 총 시간
-    private float _zSpeed; // Z축 이동 속도 (미터/초)
-
-    private float _timeToSetPoint; // SpawnPos에서 SetPoint까지 Z축 이동에 걸리는 시간
-    private float _timeFromSetPointToTarget; // SetPoint에서 TargetPos까지 Z축 이동에 걸리는 시간
+    private float _totalZDistanceSpawnToTarget; // SpawnPos.z에서 TargetPos.z까지의 전체 Z 거리 (양수 값)
+    private float _totalZDistanceTargetToExit; // TargetPos.z에서 ExitPos.z까지의 전체 Z 거리 (양수 값)
+    private float _zTravelTimeSpawnToTarget; // SpawnPos에서 TargetPos까지 Z축 이동에 걸리는 총 시간
+    private float _zTravelTimeTargetToExit; // TargetPos에서 ExitPos까지 Z축 이동에 걸리는 총 시간
+    
+    // Z축의 실제 이동 방향 (노트가 플레이어에게서 멀리서 오면 -1, 멀어지면 1)
+    private float _zMoveDirection; 
 
     // === 상태 플래그 ===
     private bool _isInitialized = false;
-    private bool _hasEnteredSetPointStage = false; // SetPoint Y축 이동 단계에 진입했는지 여부
 
     // 캐시된 트랜스폼 (성능 최적화)
     private Transform _cachedTransform;
     private Renderer _noteRenderer;
 
-    /// <summary>
-    /// NoteMover 인스턴스 초기화 시 필요한 컴포넌트 참조를 캐시합니다.
-    /// </summary>
     void Awake()
     {
         _cachedTransform = transform;
@@ -63,28 +61,15 @@ public class NoteMovement : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 이 메서드는 NoteSpawnerTime에서 노트를 스폰한 직후에 호출되어야 합니다.
-    /// 노트 이동에 필요한 모든 초기 데이터를 설정하고 계산을 시작합니다.
-    /// </summary>
-    /// <param name="spawnerParent">스폰, 중간, 타겟 지점을 포함하는 부모 Transform.</param>
-    /// <param name="bpm">음악의 분당 비트 수 (BPM).</param>
-    /// <param name="targetMusicTime">노트가 타겟 위치에 도달해야 하는 음악 시간 (초).</param>
-    /// <param name="musicTimeChecker">현재 음악 시간을 제공하는 MusicTimeChecker 인스턴스.</param>
-    /// <param name="targetPos">노트가 최종적으로 도달할 월드 좌표.</param>
-    public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, MusicTimeChecker musicTimeChecker, Vector3 targetPos)
+    public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, MusicSynchronizer musicTimeChecker, Vector3 targetPos)
     {
-        // 초기화 플래그 리셋
         _isInitialized = false;
-        _hasEnteredSetPointStage = false;
 
-        // 외부 참조 할당
         _bpm = bpm;
         _targetMusicTime = targetMusicTime;
         _musicTimeChecker = musicTimeChecker;
         _targetPosition = targetPos;
 
-        // Note 컴포넌트에서 필요한 정보 가져오기
         if (_noteComponent != null)
         {
             _noteType = _noteComponent.requiredNoteType;
@@ -98,210 +83,167 @@ public class NoteMovement : MonoBehaviour
         // 위치 설정 및 계산
         InitializePositions(spawnerParent);
         CalculateMovementParameters();
-        _noteActualStartTime = _targetMusicTime - _zTravelTime; // 노트 이동 시작 시간
-        CalculateSetPointParameters();
+        
+        _noteActualStartTime = _targetMusicTime - _zTravelTimeSpawnToTarget; 
+        _noteRemovalTime = _targetMusicTime + _zTravelTimeTargetToExit; // Target을 지나 Exit까지 가는 시간
 
-        // 초기 위치 설정
         _cachedTransform.position = _spawnPosition;
-
-        // 노트 색상 적용 (NoteType에 따라)
         ApplyNoteColor(_noteType);
 
         _isInitialized = true;
+
     }
 
-    /// <summary>
-    /// 노트가 오브젝트 풀로 반환될 때 호출되어 상태를 초기화합니다.
-    /// </summary>
     public void ResetNote()
     {
         _isInitialized = false;
-        _hasEnteredSetPointStage = false;
-        _cachedTransform.position = Vector3.zero; // 안전을 위해 위치 초기화
-        _cachedTransform.rotation = Quaternion.identity; // 회전 초기화
-
-        // 필요한 경우, 렌더러와 콜라이더를 다시 활성화합니다.
-        // NoteManager에서 HandleNoteCutVisuals가 비활성화하므로, 풀에서 꺼낼 때 다시 활성화해야 함.
-        // 이 로직은 NoteManager의 OnGetNoteFromPool에서 처리하는 것이 더 적절합니다.
+        _cachedTransform.position = Vector3.zero; 
+        _cachedTransform.rotation = Quaternion.identity;
     }
 
-
-    /// <summary>
-    /// 매 프레임 호출됩니다. 노트의 위치를 업데이트하고 제거 조건을 확인합니다.
-    /// </summary>
     void Update()
     {
         if (!_isInitialized || _musicTimeChecker == null) return;
 
         float currentMusicTime = (float)_musicTimeChecker.elapsedTime;
-        float timeElapsedOverall = currentMusicTime - _noteActualStartTime;
+        float timeElapsedFromStart = currentMusicTime - _noteActualStartTime;
 
-        // Z축 위치 업데이트 (BPM 기반 선형 이동)
-        UpdateZPosition(timeElapsedOverall);
+        Vector3 currentPosition;
 
-        // X/Y축 위치 업데이트 (SetPoint를 기준으로 2단계 이동)
-        UpdateXYPositionByStages(timeElapsedOverall);
+        if (timeElapsedFromStart < _zTravelTimeSpawnToTarget)
+        {
+            // Spawn에서 Target까지 이동 중
+            float progressSpawnToTarget = (_zTravelTimeSpawnToTarget > 0) ? (timeElapsedFromStart / _zTravelTimeSpawnToTarget) : 0f;
+            currentPosition.z = Mathf.Lerp(_spawnPosition.z, _targetPosition.z, progressSpawnToTarget);
+            currentPosition.x = GetXYPositionAlongPath(progressSpawnToTarget).x;
+            currentPosition.y = GetXYPositionAlongPath(progressSpawnToTarget).y;
+        }
+        else
+        {
+            // Target을 지나 Exit까지 이동 중
+            float timeAfterTarget = timeElapsedFromStart - _zTravelTimeSpawnToTarget;
+            float progressTargetToExit = (_zTravelTimeTargetToExit > 0) ? (timeAfterTarget / _zTravelTimeTargetToExit) : 0f;
+            
+            // X/Y는 Target에서 Exit까지 선형 보간
+            currentPosition.x = Mathf.Lerp(_targetPosition.x, _exitPosition.x, progressTargetToExit);
+            currentPosition.y = Mathf.Lerp(_targetPosition.y, _exitPosition.y, progressTargetToExit);
+            // Z는 Target에서 Exit까지 선형 보간 (Mathf.Lerp는 여기서도 클램프되므로 주의!)
+            // 직접 계산으로 변경
+            currentPosition.z = _targetPosition.z + (_zMoveDirection * (_postTargetExitDistance * progressTargetToExit));
 
-        // 노트 제거 조건 확인
+            // 또는: SetPoint-Target과 동일한 방식으로 Lerp를 확장
+            // currentPosition.z = Mathf.Lerp(_targetPosition.z, _exitPosition.z, progressTargetToExit);
+            // 하지만 이것도 결국 progressTargetToExit가 1을 넘으면 _exitPosition에 멈춥니다.
+            // 따라서 Z축은 직접 계산하는 것이 가장 명확합니다.
+        }
+
+        _cachedTransform.position = currentPosition;
+
         CheckForPoolReturn(currentMusicTime);
+
+        // 디버그 로그 (실시간 위치 및 시간 확인)
+        // Debug.Log($"Update: Time={currentMusicTime:F2}, Pos={_cachedTransform.position}, Prog={(currentMusicTime - _noteActualStartTime) / (_zTravelTimeSpawnToTarget + _zTravelTimeTargetToExit):F2}");
     }
 
-    /// <summary>
-    /// SpawnerParent의 자식 Transform에서 SpawnPos, SetPos를 찾아 위치를 저장합니다.
-    /// </summary>
-    /// <param name="spawnerParent">스폰 위치를 포함하는 부모 트랜스폼.</param>
     private void InitializePositions(Transform spawnerParent)
     {
-        Transform tempSpawn = spawnerParent.Find("SpawnPos");
-        Transform tempSet = spawnerParent.Find("SetPos");
+        float spawnPosXMin = -2f; 
+        float spawnPosXMax = 2f;  
+        float spawnPosYMin = 0f;  
+        float spawnPosYMax = 3f;  
 
-        _spawnPosition = (tempSpawn != null) ? tempSpawn.position : Vector3.zero;
-        if (tempSpawn == null) Debug.LogError($"NoteMovement: Spawner '{spawnerParent.name}'에서 'SpawnPos' 자식 Transform을 찾지 못했습니다. 노트 스폰 위치가 0,0,0이 됩니다.", this);
+        float randomX = Random.Range(spawnPosXMin, spawnPosXMax);
+        float randomY = Random.Range(spawnPosYMin, spawnPosYMax);
 
-        _setPointPosition = (tempSet != null) ? tempSet.position : Vector3.zero;
-        if (tempSet == null) Debug.LogWarning($"NoteMovement: Spawner '{spawnerParent.name}'에서 'SetPos' 자식 Transform을 찾지 못했습니다. 중간 기믹이 작동하지 않을 수 있습니다.", this);
+        // Z축이 플레이어로부터 멀리(큰 Z값)에서 가까이(작은 Z값)로 이동한다고 가정
+        float fixedSpawnZ = 40f; // 예시값. 실제 게임 환경에 맞춰야 합니다.
+        // _targetPosition은 InitializeNote에서 주입받음 (예: Z=0f)
+
+        _spawnPosition = new Vector3(randomX, randomY, fixedSpawnZ); 
+
+        // SetPointPosition은 Spawn과 Target의 Z 중간 지점
+        _setPointPosition = new Vector3(
+            Mathf.Lerp(_spawnPosition.x, _targetPosition.x, 0.5f),
+            Mathf.Lerp(_spawnPosition.y, _targetPosition.y, 0.5f), // <-- 이 부분을 수정
+            Mathf.Lerp(_spawnPosition.z, _targetPosition.z, 0.5f)
+        );
+
+        // ExitPosition은 TargetPosition을 지나 _postTargetExitDistance 만큼 더 이동한 지점
+        // Z축 이동 방향을 고려하여 계산
+        _zMoveDirection = Mathf.Sign(_targetPosition.z - _spawnPosition.z); // 음수면 Z 감소 방향 (앞으로)
+        _exitPosition = _targetPosition + new Vector3(0, 0, _zMoveDirection * _postTargetExitDistance);
+
+        _totalZDistanceSpawnToTarget = Mathf.Abs(_targetPosition.z - _spawnPosition.z); 
+        _totalZDistanceTargetToExit = Mathf.Abs(_exitPosition.z - _targetPosition.z); 
     }
 
-    /// <summary>
-    /// Z축 이동에 필요한 매개변수 (속도, 총 이동 시간, 총 거리)를 계산합니다.
-    /// </summary>
     private void CalculateMovementParameters()
     {
         if (_bpm <= 0)
         {
             Debug.LogError("NoteMovement: BPM 값이 0보다 작거나 같습니다. 유효한 BPM을 설정하세요. BPM=" + _bpm, this);
-            _zTravelTime = 0;
-            _zSpeed = 0;
+            _zTravelTimeSpawnToTarget = 0;
+            _zTravelTimeTargetToExit = 0;
             return;
         }
 
-        float beatDuration = 60f / _bpm;
-        _totalZDistance = _targetPosition.z - _spawnPosition.z;
-        _zTravelTime = _preSpawnBeats * beatDuration;
+        float beatDuration = 60f / _bpm; 
+        _zTravelTimeSpawnToTarget = _preSpawnBeats * beatDuration;
 
-        if (_zTravelTime <= 0)
+        // Target에서 Exit까지 이동하는 시간은 Z축 속도를 유지하면서 계산
+        float zSpeed = _totalZDistanceSpawnToTarget / _zTravelTimeSpawnToTarget;
+        _zTravelTimeTargetToExit = _postTargetExitDistance / zSpeed;
+
+        if (_zTravelTimeSpawnToTarget <= 0)
         {
             Debug.LogError("NoteMovement: Z축 이동 시간이 0이거나 음수입니다. 'PreSpawnBeats'와 'Bpm' 설정을 확인하세요.", this);
-            _zSpeed = 0;
+            _zTravelTimeTargetToExit = 0;
+        }
+    }
+
+    /// <summary>
+    /// 전체 진행도(totalProgress)에 따라 X/Y 위치를 2단계 Lerp로 계산합니다.
+    /// 이 함수는 이제 totalProgress가 1.0을 넘어설 때 사용되지 않습니다.
+    /// `Update` 함수에서 `progressSpawnToTarget` 또는 `progressTargetToExit`를 직접 넘겨받아 사용합니다.
+    /// </summary>
+    /// <param name="segmentProgress">현재 세그먼트(Spawn->SetPoint 또는 SetPoint->Target) 내에서의 진행도 (0.0 ~ 1.0).</param>
+    /// <returns>현재 계산된 X/Y 위치.</returns>
+    private Vector3 GetXYPositionAlongPath(float segmentProgress)
+    {
+        Vector3 currentXY;
+
+        // SetPoint가 Spawn-Target 전체 Z 이동 중 어느 비율에 있는지 정의
+        float setPointZProgressRatio = 0.5f; 
+
+        if (segmentProgress <= setPointZProgressRatio)
+        {
+            // Spawn에서 SetPoint까지의 X/Y 진행도
+            float subSegmentProgress = (setPointZProgressRatio > 0) ? segmentProgress / setPointZProgressRatio : 0f;
+            currentXY = Vector3.Lerp(_spawnPosition, _setPointPosition, subSegmentProgress);
         }
         else
         {
-            _zSpeed = _totalZDistance / _zTravelTime;
-        }
-    }
-
-    /// <summary>
-    /// SetPoint 관련 Z축 진행도 및 시간 파라미터를 계산합니다.
-    /// 이 메서드는 _noteActualStartTime이 계산된 후에 호출되어야 합니다.
-    /// </summary>
-    private void CalculateSetPointParameters()
-    {
-        // SetPoint가 없거나, Z축 이동이 없거나, Z축 이동 방향이 잘못된 경우
-        if (_setPointPosition == Vector3.zero || Mathf.Abs(_zSpeed) < 0.001f || _zTravelTime <= 0 ||
-            (Mathf.Sign(_zSpeed) * (_setPointPosition.z - _spawnPosition.z) < 0))
-        {
-            _timeToSetPoint = 0;
-            _timeFromSetPointToTarget = _zTravelTime;
-            return;
+            // SetPoint에서 Target까지의 X/Y 진행도
+            float remainingProgressRange = 1.0f - setPointZProgressRatio; 
+            float subSegmentProgress = (remainingProgressRange > 0) ? (segmentProgress - setPointZProgressRatio) / remainingProgressRange : 0f;
+            currentXY = Vector3.Lerp(_setPointPosition, _targetPosition, subSegmentProgress);
         }
 
-        float zDistanceToSetPoint = _setPointPosition.z - _spawnPosition.z;
-
-        // SetPoint까지 이동하는 시간을 계산하고, 최소 애니메이션 시간을 보장
-        _timeToSetPoint = Mathf.Max(_minSetPointAnimTime, Mathf.Abs(zDistanceToSetPoint) / Mathf.Abs(_zSpeed));
-        _timeToSetPoint = Mathf.Min(_timeToSetPoint, _zTravelTime); // 총 이동 시간을 초과하지 않도록 제한
-
-        _timeFromSetPointToTarget = _zTravelTime - _timeToSetPoint;
+        return new Vector3(currentXY.x, currentXY.y, 0); // Z축은 따로 계산하므로 0 반환
     }
 
-    /// <summary>
-    /// 현재 음악 시간을 기반으로 노트의 Z축 위치를 업데이트합니다.
-    /// </summary>
-    /// <param name="timeElapsedOverall">노트가 스폰된 후 경과한 전체 시간 (초).</param>
-    private void UpdateZPosition(float timeElapsedOverall)
-    {
-        float currentZProgress = (_zTravelTime > 0) ? (timeElapsedOverall / _zTravelTime) : 0f;
-        float currentZ = _spawnPosition.z + (_totalZDistance * currentZProgress);
-
-        Vector3 currentPosition = _cachedTransform.position;
-        _cachedTransform.position = new Vector3(currentPosition.x, currentPosition.y, currentZ);
-    }
 
     /// <summary>
-    /// X/Y축 위치를 업데이트합니다. _spawnPosition에서 _setPointPosition을 거쳐 _targetPosition으로 이동합니다.
+    /// 노트가 _noteRemovalTime에 도달했는지 확인하고 풀로 반환합니다.
     /// </summary>
-    /// <param name="timeElapsedOverall">노트가 스폰된 후 경과한 전체 시간 (초).</param>
-    private void UpdateXYPositionByStages(float timeElapsedOverall)
-    {
-        Vector3 currentPosition = _cachedTransform.position;
-
-        // 첫 번째 단계: SpawnPos에서 SetPoint까지 Y축 이동
-        if (_timeToSetPoint > 0 && timeElapsedOverall <= _timeToSetPoint)
-        {
-            float segmentTimeProgress = Mathf.Clamp01(timeElapsedOverall / _timeToSetPoint);
-            float currentY = Mathf.Lerp(_spawnPosition.y, _setPointPosition.y, segmentTimeProgress);
-
-            _cachedTransform.position = new Vector3(
-                _spawnPosition.x, // X는 스폰 위치 X 고정
-                currentY,
-                currentPosition.z
-            );
-        }
-        // 두 번째 단계: SetPoint에서 TargetPos까지 X/Y축 이동 (Z축 이동과 별개)
-        else
-        {
-            // SetPoint 단계를 처음 진입했으면 시작 위치를 SetPoint로 설정
-            if (!_hasEnteredSetPointStage)
-            {
-                _hasEnteredSetPointStage = true;
-                _cachedTransform.position = new Vector3(_setPointPosition.x, _setPointPosition.y, currentPosition.z);
-            }
-
-            float timeElapsedInSecondStage = timeElapsedOverall - _timeToSetPoint;
-            float progressInSecondStage = (_timeFromSetPointToTarget > 0) ? Mathf.Clamp01(timeElapsedInSecondStage / _timeFromSetPointToTarget) : 0f;
-
-            float currentX = Mathf.Lerp(_setPointPosition.x, _targetPosition.x, progressInSecondStage);
-            float currentY = Mathf.Lerp(_setPointPosition.y, _targetPosition.y, progressInSecondStage);
-
-            _cachedTransform.position = new Vector3(
-                currentX,
-                currentY,
-                currentPosition.z
-            );
-        }
-    }
-
-    /// <summary>
-    /// 노트가 _targetPosition을 지나쳐 화면 밖으로 나갔는지 확인하고 풀로 반환합니다.
-    /// </summary>
-    /// <param name="currentMusicTime">현재 음악 시간 (초).</param>
     private void CheckForPoolReturn(float currentMusicTime)
     {
-        // 타겟 시간을 1초 초과했고, 노트가 타겟 위치에서 충분히 벗어났는지 확인
-        // (Z축 방향에 따라 destroyOffset 적용)
-        const float destroyOffset = 5.0f; // 노트를 풀로 반환하기 위한 추가 Z축 거리
-
-        if (_totalZDistance > 0) // Z축 증가 방향 (뒤에서 앞으로)
+        if (currentMusicTime >= _noteRemovalTime)
         {
-            if (currentMusicTime - _targetMusicTime > 1.0f && _cachedTransform.position.z > (_targetPosition.z + destroyOffset))
-            {
-                NoteManager.Instance?.ReturnPooledNote(gameObject);
-            }
-        }
-        else // Z축 감소 방향 (앞에서 뒤로)
-        {
-            if (currentMusicTime - _targetMusicTime > 1.0f && _cachedTransform.position.z < (_targetPosition.z - destroyOffset))
-            {
-                NoteManager.Instance?.ReturnPooledNote(gameObject);
-            }
+            NoteManager.Instance?.ReturnPooledNote(gameObject);
         }
     }
 
-    /// <summary>
-    /// 노트의 NoteType에 따라 렌더러의 색상을 변경합니다.
-    /// (예: 왼손 노트는 빨강, 오른손 노트는 파랑).
-    /// </summary>
-    /// <param name="type">노트의 SaberNoteType.</param>
     private void ApplyNoteColor(SaberNoteType type)
     {
         if (_noteRenderer != null && _noteRenderer.material != null)
@@ -314,9 +256,8 @@ public class NoteMovement : MonoBehaviour
                 case SaberNoteType.Right:
                     _noteRenderer.material.color = Color.blue;
                     break;
-                // 기타 노트 타입에 대한 처리 (예: Bomb, Any 등)
                 default:
-                    _noteRenderer.material.color = Color.white; // 기본 색상
+                    _noteRenderer.material.color = Color.white; 
                     break;
             }
         }

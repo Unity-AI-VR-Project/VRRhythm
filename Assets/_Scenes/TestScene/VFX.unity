@@ -678,9 +678,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1265984988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e008828388cb1942b026d619dccb218, type: 3}
+  m_Script: {fileID: 11500000, guid: 8606b3f8d05e2c540ab0a040fe3657a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleName: Select
 --- !u!1 &1558327785
 GameObject:
   m_ObjectHideFlags: 0

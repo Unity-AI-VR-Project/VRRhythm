@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Define;
 
 // 게임의 점수, 콤보, 타이머, 체력 등의 UI를 관리하는 클래스
 public class InGameUIManager : UIManagerBase
@@ -13,6 +14,11 @@ public class InGameUIManager : UIManagerBase
     public TextMeshProUGUI timeText;     // 남은 시간 텍스트
                                          // MusicSynchronizer에서 음악 시간을 가져오므로 AudioSource 직접 참조는 제거하거나 MusicSynchronizer 참조로 변경
                                          // public AudioSource audioSource; // 직접 참조 대신 MusicSynchronizer를 통해 접근 권장
+    public GameObject endCanvas;         // 게임 종료 캔버스 (게임 오버 시 활성화)
+    public TextMeshProUGUI endScoreText; // 게임 종료 시 점수 텍스트
+    public TextMeshProUGUI endComboText; // 게임 종료 시 최고 콤보 텍스트
+    public TextMeshProUGUI endMissText;  // 게임 종료 시 미스 수치 텍스트
+
 
     public TextMeshProUGUI missText;
 
@@ -57,15 +63,7 @@ public class InGameUIManager : UIManagerBase
             totalSongTime = 0f; // 기본값 설정
         }
 
-        // 시작 시 콤보 텍스트는 숨김
-        if (comboText != null)
-        {
-            comboText.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.LogWarning("InGameUIManager: comboText가 할당되지 않았습니다.");
-        }
+
 
 
         // InGameManager가 제대로 초기화되었는지 확인 후 이벤트 구독 및 UI 초기화
@@ -74,6 +72,7 @@ public class InGameUIManager : UIManagerBase
             InGameManager.Instance.OnScoreChanged += UpdateScoreText;
             InGameManager.Instance.OnComboChanged += UpdateComboText;
             InGameManager.Instance.OnMissChanged += UpdateMissText;
+            InGameManager.Instance.OnSongEnded += ShowEndCanvas;
 
             // UI 텍스트 초기화
             UpdateScoreText(InGameManager.Instance.Score);
@@ -175,6 +174,30 @@ public class InGameUIManager : UIManagerBase
         missText.text = $"{miss}";
     }
 
+    void ShowEndCanvas(InGameState state)
+    {
+        int maxCombo = InGameManager.Instance.MaxCombo;
+        int miss = InGameManager.Instance.Miss;
+        int score = InGameManager.Instance.Score;
+
+
+        endComboText.text = $"최고 콤보: {maxCombo}";
+        endScoreText.text = $"최종 점수: {score}";
+        endMissText.text = $"미스: {miss}";
+
+        if (endCanvas != null)
+        {
+            endCanvas.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("End Canvas가 할당되지 않았습니다. 게임 종료 UI가 표시되지 않습니다.");
+        }
+
+       
+
+    }
+
     // 오브젝트가 파괴될 때 이벤트 해제 (메모리 누수 방지)
     protected override void OnDestroy()
     {
@@ -186,4 +209,5 @@ public class InGameUIManager : UIManagerBase
             InGameManager.Instance.OnComboChanged -= UpdateComboText;
         }
     }
+
 }

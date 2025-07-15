@@ -48,7 +48,8 @@ namespace Define
         PreGame,
         Playing,
         PlayAsPaused,
-        Paused
+        Paused,
+        Ended,
     }
     /// <summary>
     /// ��Ʈ �浹 �� ������ �ʿ��� ��� ���� ������ ��� ����ü�Դϴ�.

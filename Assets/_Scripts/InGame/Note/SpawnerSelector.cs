@@ -80,12 +80,18 @@ public class SpawnerSelector : MonoBehaviour
     public float PLAYABLE_Y_MAX = 1.1f;
     [Tooltip("노트가 나타날 플레이 가능 영역의 Z 위치 (판정선 Z)")]
     public float PLAYABLE_Z = 2f;
+    [Tooltip("인접 노트가 PLAYABLE 영역 밖으로 벗어날 수 있는 최대 허용 거리")]
+    public float outOfBoundsTolerance = 0.2f;
 
     [Header("Note Spawning Logic Settings")]
     [Tooltip("이전 노트와 현재 노트의 시간 차이가 이 값보다 작으면 인접 노트로 간주합니다. (단위: 초)")]
     public float copyNoteDataSecOffset = 0.120f;
     [Tooltip("인접 노트가 이전 노트로부터 이동할 거리 (단위: 유니티 단위)")]
-    public float moveAmount = 0.3f; // 이 값을 조절하여 노트 간의 간격을 조절하세요.
+    public float moveAmount = 0.3f;
+    [Tooltip("인접 노트가 최소한 떨어져 있어야 하는 거리 (겹침 방지용, 노트 반지름의 2배 정도)")]
+    public float minNoteSeparationDistance = 0.25f;
+    [Tooltip("0.5박자에 해당하는 시간 간격 (템포에 따라 동적으로 계산됨)")]
+    private float _halfBeatDuration;
 
     void Awake()
     {
@@ -101,16 +107,21 @@ public class SpawnerSelector : MonoBehaviour
     {
         if (_currentSongData != null && _currentSongData.metadata != null && _currentSongData.metadata.tempo != 0)
         {
-            // BPM에 따라 copyNoteDataSecOffset을 동적으로 계산합니다.
-            // 0.5비트 간격에서 약간의 여유를 줍니다.
-            copyNoteDataSecOffset = (60 / _currentSongData.metadata.tempo / 2) - 0.01f;
-            // 최소값을 설정하여 너무 작아지는 것을 방지
+            // 0.5박자 시간 계산: (60 / BPM) * 0.5
+            _halfBeatDuration = (60f / _currentSongData.metadata.tempo) * 1.8f;
+
+            // copyNoteDataSecOffset 계산 (이전과 동일)
+            copyNoteDataSecOffset = (_halfBeatDuration / 2) - 0.01f; // 0.25박자보다 약간 작게
             if (copyNoteDataSecOffset < 0.05f) copyNoteDataSecOffset = 0.05f;
+
+            Debug.Log($"SpawnerSelector: 템포 {_currentSongData.metadata.tempo}, 0.5박자 시간: {_halfBeatDuration:F3}s, 인접 노트 시간 임계치: {copyNoteDataSecOffset:F3}s", this);
+
         }
         else
         {
-            Debug.LogWarning("SpawnerSelector: 템포 데이터가 없거나 0이어서 copyNoteDataSecOffset을 기본값으로 설정합니다.", this);
+            Debug.LogWarning("SpawnerSelector: 템포 데이터가 없거나 0이어서 copyNoteDataSecOffset과 _halfBeatDuration을 기본값으로 설정합니다.", this);
             copyNoteDataSecOffset = 0.125f; // 기본값 유지
+            _halfBeatDuration = 0.25f; // 기본 템포 120BPM 기준 0.5박자 (60/120 * 0.5 = 0.25)
         }
     }
 
@@ -158,16 +169,15 @@ public class SpawnerSelector : MonoBehaviour
     /// <summary>
     /// 로드된 노트 데이터에 방향과 손 타입을 할당합니다.
     /// 인접 노트 (시간 간격이 가까운 노트)는 이전 노트의 방향과 손 타입을 따릅니다.
+    /// 0.5박자 이내의 간격이 있는 노트는 이전 노트와 다른 손 타입을 갖도록 합니다.
     /// </summary>
     private void AssignDirectionsToNotes()
     {
-        // NoteDirection.Any를 여기서 제거하여 스폰될 노트는 항상 특정 방향을 가지도록 합니다.
         NoteDirection[] possibleDirections = {
             NoteDirection.Up,
             NoteDirection.Down,
             NoteDirection.Left,
             NoteDirection.Right
-            // NoteDirection.Any // 스폰되는 노트의 시각적 방향으로는 사용하지 않습니다.
         };
 
         SaberNoteType[] possibleHands = {
@@ -181,34 +191,44 @@ public class SpawnerSelector : MonoBehaviour
         {
             NoteInfo currentNote = _allNotes[i];
 
-            // 이전 노트와의 시간 간격이 copyNoteDataSecOffset 이하인지 확인
-            bool isCloseToLastNote = (lastNoteTime != -1.0f && (currentNote.time - lastNoteTime <= copyNoteDataSecOffset));
+            // 이전 노트로부터의 시간 간격 계산
+            float timeSinceLastNote = (lastNoteTime != -1.0f) ? (currentNote.time - lastNoteTime) : float.MaxValue;
 
-            lastNoteTime = currentNote.time;
+            // _halfBeatDuration; // Start()에서 이미 계산되어 있음
 
-            if (isCloseToLastNote)
+            // 첫 노트이거나, 이전 노트로부터 충분히 멀리 떨어진 경우 (0.5박자 이상)
+            if (timeSinceLastNote > _halfBeatDuration || lastNoteTime == -1.0f)
             {
-                // 인접 노트일 경우, 이전 노트와 동일한 방향 및 손 타입 할당
-                currentNote.requiredDirection = _lastAssignedDirection;
-                currentNote.NoteType = _lastAssignedNoteType;
-            }
-            else
-            {
-                // 인접 노트가 아닐 경우, 무작위 방향 및 손 타입 할당
-                // 이전과 다른 방향/손 타입을 강제하는 로직을 추가할 수도 있습니다.
+                // 완전히 새로운 노트로 간주하고 랜덤 방향/손 할당
                 int randomDirectionIndex = Random.Range(0, possibleDirections.Length);
                 currentNote.requiredDirection = possibleDirections[randomDirectionIndex];
 
                 int randomHandIndex = Random.Range(0, possibleHands.Length);
                 currentNote.NoteType = possibleHands[randomHandIndex];
             }
+            // copyNoteDataSecOffset 보다 크지만 0.5박자 이하로 떨어진 경우
+            else if (timeSinceLastNote > copyNoteDataSecOffset && timeSinceLastNote <= _halfBeatDuration)
+            {
+                // 이전 노트와 다른 손 타입을 강제 할당
+                currentNote.NoteType = (_lastAssignedNoteType == SaberNoteType.Left) ? SaberNoteType.Right : SaberNoteType.Left;
+                // 방향은 여전히 랜덤하게 할당 (양손 번갈아 치는 상황을 고려)
+                int randomDirectionIndex = Random.Range(0, possibleDirections.Length);
+                currentNote.requiredDirection = possibleDirections[randomDirectionIndex];
+            }
+            // copyNoteDataSecOffset 이내로 가까운 인접 노트인 경우
+            else // timeSinceLastNote <= copyNoteDataSecOffset
+            {
+                // 이전 노트의 방향과 손 타입을 그대로 따름
+                currentNote.requiredDirection = _lastAssignedDirection;
+                currentNote.NoteType = _lastAssignedNoteType;
+            }
 
-            // struct이므로 변경사항을 반영하기 위해 다시 할당
-            _allNotes[i] = currentNote;
+            _allNotes[i] = currentNote; // 구조체이므로 변경사항을 리스트에 다시 할당
 
-            // 다음 노트를 위해 현재 할당된 방향/타입 업데이트
+            // 다음 노트를 위해 현재 노트의 정보 저장
             _lastAssignedDirection = currentNote.requiredDirection;
             _lastAssignedNoteType = currentNote.NoteType;
+            lastNoteTime = currentNote.time;
         }
     }
 
@@ -233,12 +253,9 @@ public class SpawnerSelector : MonoBehaviour
             return null;
         }
 
-        // 노트가 실제 타겟 위치에 도달하기 전에 미리 스폰되는 시간 계산
         float preSpawnTime = NotePreSpawnBeats * (60f / tempo);
-
         float noteAbsoluteTime = nextNote.time;
 
-        // 현재 시간이 노트의 스폰 시점보다 크거나 같으면 스폰
         if (currentTime >= noteAbsoluteTime - preSpawnTime)
         {
             nextNote.calculatedTargetPos = CalculateTargetPosition(nextNote);
@@ -253,7 +270,7 @@ public class SpawnerSelector : MonoBehaviour
             SpawnInfoBundle bundle = new SpawnInfoBundle
             {
                 NoteData = nextNote,
-                SpawnerTransform = mainSpawner, // 항상 mainSpawner 사용
+                SpawnerTransform = mainSpawner,
                 Tempo = tempo,
                 CalculatedTargetPos = nextNote.calculatedTargetPos
             };
@@ -261,8 +278,7 @@ public class SpawnerSelector : MonoBehaviour
             _nextNoteIndex++;
             _lastSpawnedNoteBand = nextNote.band;
             _lastSpawnedNoteTime = nextNote.time;
-            // 핵심: _lastCalculatedTargetPos를 항상 실제 계산된 목표 위치로 업데이트합니다.
-            _lastCalculatedTargetPos = nextNote.calculatedTargetPos;
+            _lastCalculatedTargetPos = nextNote.calculatedTargetPos; // 최종 계산된 위치를 업데이트
 
             return bundle;
         }
@@ -270,141 +286,132 @@ public class SpawnerSelector : MonoBehaviour
         return null; // 아직 스폰할 시간이 아님
     }
 
-/// <summary>
-/// 노트의 최종 목표 위치를 계산합니다. 인접 노트 여부와 방향에 따라 위치를 조정합니다.
-/// </summary>
-private Vector3 CalculateTargetPosition(NoteInfo currentNote)
-{
-    float currentPlayableXMin = PLAYABLE_X_MIN;
-    float currentPlayableXMax = PLAYABLE_X_MAX;
-
-    // 왼손/오른손 노트에 따라 X축 플레이 가능 영역 조정
-    if (currentNote.NoteType == SaberNoteType.Left)
+    /// <summary>
+    /// 노트의 최종 목표 위치를 계산합니다. 인접 노트 여부와 방향에 따라 위치를 조정합니다.
+    /// 인접 노트는 PLAYABLE 범위를 벗어날 수 있지만, outOfBoundsTolerance 이내로 제한됩니다.
+    /// </summary>
+    private Vector3 CalculateTargetPosition(NoteInfo currentNote)
     {
-        // 왼손 노트는 플레이 가능한 영역을 왼쪽 절반으로 제한
-        currentPlayableXMax = ((PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 3f) * 2;
-    }
-    else // Right (SaberNoteType.Right)
-    {
-        // 오른손 노트는 플레이 가능한 영역을 오른쪽 절반으로 제한
-        currentPlayableXMin = ((PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 3f) * 2;
-    }
+        // === 변경된 부분 시작 ===
+        // 각 손에 대한 플레이 가능 X축 범위를 명확히 정의합니다.
+        // PLAYABLE_X_MIN과 PLAYABLE_X_MAX는 전체 플레이 가능 영역의 X축입니다.
+        // 중앙값을 기준으로 각 손의 영역을 나눕니다.
+        float midX = (PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 2f;
 
-    // 인접 노트 로직: 이전 노트와의 시간 간격이 충분히 짧은 경우
-    if (_lastSpawnedNoteTime != -1.0f && (currentNote.time - _lastSpawnedNoteTime <= copyNoteDataSecOffset))
-    {
-        Vector3 basePos = _lastCalculatedTargetPos; // 이전에 스폰된 노트의 목표 위치를 기준
-        Vector3 finalPos = basePos; // 최종 위치
+        float targetXMin, targetXMax;
 
-        // 각 방향별로 이동을 시도하고 경계를 고려하여 위치 결정
-        switch (currentNote.requiredDirection)
+        if (currentNote.NoteType == SaberNoteType.Left)
         {
-            case NoteDirection.Up:
-                // 위로 이동 가능한 최대치를 넘지 않도록
-                finalPos.y = Mathf.Min(basePos.y + moveAmount, PLAYABLE_Y_MAX);
-                // 만약 위로 이동하려 했으나 경계에 막혔다면, X축으로 약간 이동을 시도하여 겹침 방지
-                if (Mathf.Approximately(finalPos.y, PLAYABLE_Y_MAX) && Mathf.Approximately(finalPos.y, basePos.y))
-                {
-                    // 위로 더 이상 갈 수 없는데, 이전과 위치가 거의 같다면 (겹친다면)
-                    // 현재 손 영역 내에서 X축으로 랜덤 이동 (음수 또는 양수)
-                    finalPos.x = Mathf.Clamp(basePos.x + Random.Range(-moveAmount, moveAmount), currentPlayableXMin, currentPlayableXMax);
-                }
-                break;
-            case NoteDirection.Down:
-                // 아래로 이동 가능한 최소치를 넘지 않도록
-                finalPos.y = Mathf.Max(basePos.y - moveAmount, PLAYABLE_Y_MIN);
-                if (Mathf.Approximately(finalPos.y, PLAYABLE_Y_MIN) && Mathf.Approximately(finalPos.y, basePos.y))
-                {
-                    finalPos.x = Mathf.Clamp(basePos.x + Random.Range(-moveAmount, moveAmount), currentPlayableXMin, currentPlayableXMax);
-                }
-                break;
-            case NoteDirection.Left:
-                // 왼쪽으로 이동 가능한 최소치를 넘지 않도록
-                finalPos.x = Mathf.Max(basePos.x - moveAmount, currentPlayableXMin);
-                if (Mathf.Approximately(finalPos.x, currentPlayableXMin) && Mathf.Approximately(finalPos.x, basePos.x))
-                {
-                    // 왼쪽으로 더 이상 갈 수 없는데, 이전과 위치가 거의 같다면 (겹친다면)
-                    // Y축으로 랜덤 이동
-                    finalPos.y = Mathf.Clamp(basePos.y + Random.Range(-moveAmount, moveAmount), PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
-                }
-                break;
-            case NoteDirection.Right:
-                // 오른쪽으로 이동 가능한 최대치를 넘지 않도록
-                finalPos.x = Mathf.Min(basePos.x + moveAmount, currentPlayableXMax);
-                if (Mathf.Approximately(finalPos.x, currentPlayableXMax) && Mathf.Approximately(finalPos.x, basePos.x))
-                {
-                    finalPos.y = Mathf.Clamp(basePos.y + Random.Range(-moveAmount, moveAmount), PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
-                }
-                break;
+            // 왼손 노트는 중앙선부터 왼쪽까지
+            targetXMin = PLAYABLE_X_MIN;
+            targetXMax = midX;
         }
-
-        finalPos.z = PLAYABLE_Z; // Z축은 고정
-
-        // 최종 검증: 이전 노트와 최소 거리 이상 떨어져 있는지 확인 (안전 장치)
-        // 만약 위 로직으로도 겹침이 발생한다면, 이 부분에서 강제로 조절합니다.
-        // 하지만 이 단계까지 왔다면 이미 문제가 크게 발생하고 있는 것이므로,
-        // 위 switch 문 로직을 더 견고하게 만드는 것이 중요합니다.
-        float minRequiredDistance = moveAmount * 0.8f; // 노트 크기를 고려한 최소 분리 거리
-        if (Vector3.Distance(finalPos, basePos) < minRequiredDistance)
+        else // SaberNoteType.Right
         {
-            // 원하는 방향으로 충분히 이동하지 못했을 경우
-            // 다른 축으로 랜덤 오프셋을 추가하여 겹침을 방지합니다.
-            // 이때 랜덤 오프셋은 대각선 이동으로 보이지 않도록 주의
-            Vector3 fallbackOffset = Vector3.zero;
-            if (Mathf.Abs(finalPos.x - basePos.x) < 0.01f) // X축 이동이 거의 없었다면 Y축으로 이동
-            {
-                fallbackOffset.y = Random.Range(PLAYABLE_Y_MIN, PLAYABLE_Y_MAX); // Y축 전체에서 랜덤으로 이동
-                if (fallbackOffset.y > basePos.y) fallbackOffset.y = basePos.y + minRequiredDistance;
-                else fallbackOffset.y = basePos.y - minRequiredDistance;
-
-                fallbackOffset.y = Mathf.Clamp(fallbackOffset.y, PLAYABLE_Y_MIN, PLAYABLE_Y_MAX);
-                finalPos.y = fallbackOffset.y; // Y 위치를 대체
-            }
-            else if (Mathf.Abs(finalPos.y - basePos.y) < 0.01f) // Y축 이동이 거의 없었다면 X축으로 이동
-            {
-                fallbackOffset.x = Random.Range(currentPlayableXMin, currentPlayableXMax); // X축 전체에서 랜덤으로 이동
-                if (fallbackOffset.x > basePos.x) fallbackOffset.x = basePos.x + minRequiredDistance;
-                else fallbackOffset.x = basePos.x - minRequiredDistance;
-
-                fallbackOffset.x = Mathf.Clamp(fallbackOffset.x, currentPlayableXMin, currentPlayableXMax);
-                finalPos.x = fallbackOffset.x; // X 위치를 대체
-            }
-            // else: 대각선으로 움직였다면, 이 부분은 크게 문제가 되지 않을 수 있음.
-            // 하지만 이전 코드에서 대각선 문제가 있었다고 했으므로, 최대한 직선 이동을 지향합니다.
+            // 오른손 노트는 중앙선부터 오른쪽까지
+            targetXMin = midX;
+            targetXMax = PLAYABLE_X_MAX;
         }
+        // === 변경된 부분 끝 ===
 
-        return finalPos;
-    }
-    else // 인접 노트가 아닐 경우 (시간 간격이 충분히 멀 때)
-    {
-        // 이전 노트와는 완전히 독립적인 새로운 위치를 생성합니다.
-        // 이 경우에도 이전 노트와의 최소 거리를 유지하는 것이 좋습니다.
-        Vector3 targetPos = Vector3.zero;
-        float minInitialSeparation = moveAmount * 2.5f; // 새로운 시작 노트는 이전 노트와 충분히 떨어져 있어야 함
-        
-        int maxAttempts = 10; // 무한 루프 방지를 위한 최대 시도 횟수
-        for (int i = 0; i < maxAttempts; i++)
+
+        // 확장된 클램프 범위 계산 (PLAYABLE + outOfBoundsTolerance)
+        // 이 확장 범위도 이제 targetXMin/Max를 기반으로 합니다.
+        float extendedXMin = targetXMin - outOfBoundsTolerance;
+        float extendedXMax = targetXMax + outOfBoundsTolerance;
+        float extendedYMin = PLAYABLE_Y_MIN - outOfBoundsTolerance;
+        float extendedYMax = PLAYABLE_Y_MAX + outOfBoundsTolerance;
+
+
+        // 인접 노트 로직
+        if (_lastSpawnedNoteTime != -1.0f && (currentNote.time - _lastSpawnedNoteTime <= copyNoteDataSecOffset))
         {
-            targetPos = new Vector3(
-                Random.Range(currentPlayableXMin, currentPlayableXMax),
-                Random.Range(PLAYABLE_Y_MIN, PLAYABLE_Y_MAX),
+            Vector3 basePos = _lastCalculatedTargetPos; // 이전에 스폰된 노트의 목표 위치
+            Vector3 desiredPos = basePos; // 희망하는 이동 방향으로의 위치
+
+            // 1. 주축 방향으로 moveAmount만큼 이동 시도
+            switch (currentNote.requiredDirection)
+            {
+                case NoteDirection.Up: desiredPos.y += moveAmount; break;
+                case NoteDirection.Down: desiredPos.y -= moveAmount; break;
+                case NoteDirection.Left: desiredPos.x -= moveAmount; break;
+                case NoteDirection.Right: desiredPos.x += moveAmount; break;
+            }
+
+            // 2. 확장된 경계 내로 클램프
+            Vector3 clampedToExtendedBoundsPos = new Vector3(
+                Mathf.Clamp(desiredPos.x, extendedXMin, extendedXMax),
+                Mathf.Clamp(desiredPos.y, extendedYMin, extendedYMax),
                 PLAYABLE_Z
             );
 
-            // 이전 노트가 있다면, 새로 생성된 랜덤 위치가 이전 노트와 너무 가깝지 않은지 확인
-            if (_lastCalculatedTargetPos != Vector3.zero && 
-                Vector3.Distance(targetPos, _lastCalculatedTargetPos) < minInitialSeparation)
+            // 3. 이전 노트와의 겹침 확인 (minNoteSeparationDistance 미확보 시)
+            if (Vector3.Distance(clampedToExtendedBoundsPos, basePos) < minNoteSeparationDistance)
             {
-                continue; // 너무 가깝다면 다시 시도
+                Debug.LogWarning($"SpawnerSelector: 인접 노트 겹침 발생. Smart Placement (outOfBounds 허용) 시도. Base: {basePos}, Desired: {desiredPos}, ClampedExtended: {clampedToExtendedBoundsPos}");
+
+                Vector3 finalPos = basePos; // 시작은 이전 노트 위치에서
+
+                // 이전 노트와 최소 분리 거리를 강제로 확보하도록 조정
+                // 이때, 경계는 무시하고 오직 이전 노트와의 분리만 목표로 합니다.
+                // 이후 다시 확장된 경계 내로 클램프합니다.
+                switch (currentNote.requiredDirection)
+                {
+                    case NoteDirection.Up:
+                        finalPos.y = basePos.y + minNoteSeparationDistance;
+                        break;
+                    case NoteDirection.Down:
+                        finalPos.y = basePos.y - minNoteSeparationDistance;
+                        break;
+                    case NoteDirection.Left:
+                        finalPos.x = basePos.x - minNoteSeparationDistance;
+                        break;
+                    case NoteDirection.Right:
+                        finalPos.x = basePos.x + minNoteSeparationDistance;
+                        break;
+                }
+
+                // 최종적으로 계산된 위치를 확장된 영역 내에서 다시 클램프
+                finalPos.x = Mathf.Clamp(finalPos.x, extendedXMin, extendedXMax);
+                finalPos.y = Mathf.Clamp(finalPos.y, extendedYMin, extendedYMax);
+                finalPos.z = PLAYABLE_Z;
+
+                // Debug.Log($"Smart Placement Result (Extended): {finalPos}");
+                return finalPos;
             }
-            else
-            {
-                break; // 충분히 떨어져 있다면 루프 종료
-            }
+
+            // 겹치지 않으면 확장된 경계 내의 위치 반환
+            return clampedToExtendedBoundsPos;
         }
-        return targetPos;
+        else // 인접 노트가 아닐 경우 (시간 간격이 충분히 멀 때)
+        {
+            Vector3 targetPos = Vector3.zero;
+            // 인접하지 않은 노트는 이전 노트와 일정 거리 이상 떨어지도록 시도
+            float minInitialSeparation = moveAmount * 2.5f;
+
+            int maxAttempts = 10;
+            for (int i = 0; i < maxAttempts; i++)
+            {
+                targetPos = new Vector3(
+                    // 변경된 부분: currentPlayableXMin, currentPlayableXMax 대신 targetXMin, targetXMax 사용
+                    Random.Range(targetXMin, targetXMax),
+                    Random.Range(PLAYABLE_Y_MIN, PLAYABLE_Y_MAX),
+                    PLAYABLE_Z
+                );
+
+                if (_lastCalculatedTargetPos != Vector3.zero &&
+                    Vector3.Distance(targetPos, _lastCalculatedTargetPos) < minInitialSeparation)
+                {
+                    continue; // 겹치면 다시 시도
+                }
+                else
+                {
+                    break; // 겹치지 않으면 종료
+                }
+            }
+            return targetPos;
+        }
     }
-}
 
     /// <summary>
     /// 현재 곡의 템포를 반환합니다.
@@ -424,7 +431,7 @@ private Vector3 CalculateTargetPosition(NoteInfo currentNote)
     /// </summary>
     void OnDrawGizmos()
     {
-        // 플레이 가능 영역 시각화 (녹색)
+        // PLAYABLE 영역 시각화 (녹색)
         Gizmos.color = Color.green;
         Vector3 minBounds = new Vector3(PLAYABLE_X_MIN, PLAYABLE_Y_MIN, PLAYABLE_Z);
         Vector3 maxBounds = new Vector3(PLAYABLE_X_MAX, PLAYABLE_Y_MAX, PLAYABLE_Z);
@@ -432,7 +439,18 @@ private Vector3 CalculateTargetPosition(NoteInfo currentNote)
         Vector3 size = maxBounds - minBounds;
         Gizmos.DrawWireCube(center, size);
 
-        // X축 손 영역 분할 시각화 (하늘색)
+        // 확장된 허용 범위 시각화 (노란색)
+        // OnDrawGizmos에서는 실제 노트의 NoteType을 알 수 없으므로,
+        // 전체 PLAYABLE 영역을 기준으로 확장 범위를 그립니다.
+        Gizmos.color = Color.yellow;
+        Vector3 extendedMinBoundsGlobal = new Vector3(PLAYABLE_X_MIN - outOfBoundsTolerance, PLAYABLE_Y_MIN - outOfBoundsTolerance, PLAYABLE_Z);
+        Vector3 extendedMaxBoundsGlobal = new Vector3(PLAYABLE_X_MAX + outOfBoundsTolerance, PLAYABLE_Y_MAX + outOfBoundsTolerance, PLAYABLE_Z);
+        Vector3 extendedCenterGlobal = (extendedMinBoundsGlobal + extendedMaxBoundsGlobal) / 2f;
+        Vector3 extendedSizeGlobal = extendedMaxBoundsGlobal - extendedMinBoundsGlobal;
+        Gizmos.DrawWireCube(extendedCenterGlobal, extendedSizeGlobal);
+
+
+        // X축 손 영역 분할 시각화 (하늘색) - 중앙선
         Gizmos.color = Color.cyan;
         float centerX = (PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 2f;
         Vector3 leftHandLineStart = new Vector3(centerX, PLAYABLE_Y_MIN, PLAYABLE_Z);
@@ -443,7 +461,7 @@ private Vector3 CalculateTargetPosition(NoteInfo currentNote)
         if (_lastCalculatedTargetPos != Vector3.zero)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(_lastCalculatedTargetPos, 0.1f); // 작은 구로 표시
+            Gizmos.DrawSphere(_lastCalculatedTargetPos, 0.1f);
         }
     }
 }

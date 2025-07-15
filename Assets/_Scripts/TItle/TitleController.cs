@@ -25,6 +25,7 @@ public class TitleController : MonoBehaviour
 
     public void LoadNextScene()
     {
+        GameManager.Instance.soundManager.PauseMusic();
         GameManager.Instance.sceneController.LoadScene(eScenes.Lobby);
     }
 }

@@ -45,7 +45,6 @@ public class MusicDisplay : MonoBehaviour
             NextMusic();
         if (Input.GetKeyDown(KeyCode.J))
             PreviousMusic();
-
     }
 
     public void NextMusic()
@@ -58,7 +57,9 @@ public class MusicDisplay : MonoBehaviour
 
     public void SelectMusic()
     {
-
+        GameManager.Instance.soundManager.PauseMusic();
+        GameManager.Instance.dataManager.selectedMusicNumber = currentMusicNumber;
+        GameManager.Instance.sceneController.LoadScene(eScenes.InGame);
     }
 
     public void PreviousMusic()

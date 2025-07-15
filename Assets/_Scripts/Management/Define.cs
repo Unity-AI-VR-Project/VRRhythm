@@ -140,5 +140,18 @@ namespace Define
         public MetadataJson metadata;
         public List<BeatJsonData> beats;
     }
+    [Serializable]
+    public class MusicItem
+    {
+        public string Name;
+        public string Artist;
+        public int BPM;
+        public string Length;
+    }
 
+    [Serializable]
+    public class MusicData
+    {
+        public MusicItem[] Music;
+    }
 }

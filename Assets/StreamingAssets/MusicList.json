@@ -1,0 +1,20 @@
+{
+    "Music":[{
+    "Name" : "Unity",
+    "Artist" : "TheFatRat",
+    "BPM": 105,
+    "Length": "4:09"
+},
+{
+    "Name" : "WindFall",
+    "Artist" : "TheFatRat",
+    "BPM": 102,
+    "Length": "3:48"
+},
+{
+    "Name" : "Ocean",
+    "Artist" : "Seanyy",
+    "BPM": 128,
+    "Length": "2:48"
+}]
+}

@@ -16,7 +16,6 @@ public class NoteMovement : MonoBehaviour
 
     // === 내부에서 사용할 위치 및 이동 계산 값 ===
     private Vector3 _spawnPosition;
-    // private Vector3 _setPointPosition; // 더 이상 중간 경유점으로 사용되지 않음
     private Vector3 _targetPosition; // Final target position (판정선 위치)
     private Vector3 _exitPosition; // 노트가 완전히 사라질 최종 지점 (targetPos 이후)
 
@@ -31,7 +30,7 @@ public class NoteMovement : MonoBehaviour
     // === 타이밍 관련 변수 ===
     public float TargetMusicTime { get; private set; } // 노트가 TargetPosition에 도달해야 하는 음악 시간 (JSON의 time)
     private float _noteActualStartTime; // 노트가 SpawnPos에서 이동을 시작하는 실제 음악 시간 (BPM 고려)
-    private float _noteRemovalTime; // 노트가 풀로 반환될 실제 음악 시간
+    private float _noteRemovalTime; // 노트가 풀로 반환될 실제 음악 시간 (이 시간까지도 판정되지 않으면 Miss 처리)
 
     private float _totalZDistanceSpawnToTarget; // SpawnPos.z에서 TargetPos.z까지의 전체 Z 거리 (양수 값)
     private float _totalZDistanceTargetToExit; // TargetPos.z에서 ExitPos.z까지의 전체 Z 거리 (양수 값)
@@ -43,6 +42,7 @@ public class NoteMovement : MonoBehaviour
 
     // === 상태 플래그 ===
     private bool _isInitialized = false;
+    private bool _isJudged = false; // 이 노트가 이미 판정되었는지 (Hit 또는 Miss) **추가**
 
     // 캐시된 트랜스폼 및 렌더러 (성능 최적화)
     private Transform _cachedTransform;
@@ -76,6 +76,7 @@ public class NoteMovement : MonoBehaviour
     public void InitializeNote(Transform spawnerParent, float bpm, float targetMusicTime, MusicSynchronizer musicTimeChecker, Vector3 targetPos)
     {
         _isInitialized = false;
+        _isJudged = false; // 초기화 시 판정 상태 리셋 **추가**
 
         _bpm = bpm;
         TargetMusicTime = targetMusicTime;
@@ -112,6 +113,7 @@ public class NoteMovement : MonoBehaviour
     public void ResetNote()
     {
         _isInitialized = false;
+        _isJudged = false; // 리셋 시 판정 상태도 리셋 **추가**
         _cachedTransform.position = Vector3.zero;
         _cachedTransform.rotation = Quaternion.identity;
         if (_noteComponent != null)
@@ -119,6 +121,22 @@ public class NoteMovement : MonoBehaviour
             _noteComponent.ResetNote();
         }
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 이 노트가 이미 판정되었는지 여부를 반환합니다. (Hit 또는 Miss) **추가**
+    /// </summary>
+    public bool IsJudged()
+    {
+        return _isJudged;
+    }
+
+    /// <summary>
+    /// 이 노트를 "판정됨" 상태로 설정합니다. NoteJudger가 성공적인 컷을 처리했을 때 호출합니다. **추가**
+    /// </summary>
+    public void SetJudged(bool judged)
+    {
+        _isJudged = judged;
     }
 
     void Update()
@@ -138,16 +156,16 @@ public class NoteMovement : MonoBehaviour
         if (timeElapsedFromStart < _zTravelTimeSpawnToTarget)
         {
             float progressSpawnToTarget = (_zTravelTimeSpawnToTarget > 0)
-                                        ? Mathf.Max(0f, timeElapsedFromStart / _zTravelTimeSpawnToTarget)
-                                        : 0f;
+                                            ? Mathf.Max(0f, timeElapsedFromStart / _zTravelTimeSpawnToTarget)
+                                            : 0f;
             currentPosition.z = Mathf.Lerp(_spawnPosition.z, _targetPosition.z, progressSpawnToTarget);
         }
         else // 노트가 Target을 지나 Exit까지 이동하는 구간
         {
-            float timeAfterTarget = timeElapsedFromStart - _zTravelTimeSpawnToTarget;
+            float timeAfterTarget = currentMusicTime - TargetMusicTime; // 타겟 음악 시간 이후 경과 시간
             float progressTargetToExit = (_zTravelTimeTargetToExit > 0)
-                                        ? Mathf.Min(1f, timeAfterTarget / _zTravelTimeTargetToExit)
-                                        : 0f;
+                                            ? Mathf.Min(1f, timeAfterTarget / _zTravelTimeTargetToExit)
+                                            : 0f;
 
             // Z는 Target에서 Exit까지 직접 계산하여 연속적인 이동 구현
             currentPosition.z = _targetPosition.z + (_zMoveDirection * (_postTargetExitDistance * progressTargetToExit));
@@ -155,12 +173,16 @@ public class NoteMovement : MonoBehaviour
 
         _cachedTransform.position = currentPosition;
 
-        CheckForPoolReturn(currentMusicTime);
+        // Miss 판정 확인 로직 **추가**
+        // 노트가 _noteRemovalTime에 도달했거나 지나쳤는데 아직 판정되지 않았다면 Miss 처리
+        if (currentMusicTime >= _noteRemovalTime && !_isJudged)
+        {
+            TriggerMiss();
+        }
     }
 
     /// <summary>
     /// 노트의 초기 위치(_spawnPosition)와 풀로 반환될 최종 지점(_exitPosition)을 계산합니다.
-    /// _setPointPosition은 더 이상 사용되지 않습니다.
     /// </summary>
     /// <param name="spawnerParent">노트가 스폰되는 스포너의 Transform (Z 위치만 참고).</param>
     private void InitializePositions(Transform spawnerParent)
@@ -171,12 +193,9 @@ public class NoteMovement : MonoBehaviour
 
         _spawnPosition = new Vector3(_targetPosition.x, _targetPosition.y, fixedSpawnZ);
 
-        // _setPointPosition은 더 이상 중간 경유점으로 사용되지 않습니다.
-        // 필요하다면 _targetPosition과 동일하게 설정하여 단순화할 수 있습니다.
-        // _setPointPosition = _targetPosition; 
-
         // _exitPosition은 _targetPosition을 지나 _postTargetExitDistance 만큼 더 이동한 지점
-        _zMoveDirection = Mathf.Sign(_targetPosition.z - _spawnPosition.z); // 대부분 -1이 될 것입니다.
+        // 대부분 _targetPosition.z가 _spawnPosition.z보다 작으므로 _zMoveDirection은 음수(-1)가 될 것입니다.
+        _zMoveDirection = Mathf.Sign(_targetPosition.z - _spawnPosition.z);
         _exitPosition = _targetPosition + new Vector3(0, 0, _zMoveDirection * _postTargetExitDistance);
 
         _totalZDistanceSpawnToTarget = Mathf.Abs(_targetPosition.z - _spawnPosition.z);
@@ -200,7 +219,10 @@ public class NoteMovement : MonoBehaviour
 
         _zTravelTimeSpawnToTarget = _preSpawnBeats * beatDuration;
 
+        // Z축 이동 속도 계산: 스폰 지점에서 타겟 지점까지의 거리를 이동 시간으로 나눕니다.
         float zSpeed = (_zTravelTimeSpawnToTarget > 0) ? _totalZDistanceSpawnToTarget / _zTravelTimeSpawnToTarget : 0f;
+
+        // 타겟 지점에서 종료 지점까지 이동하는 데 걸리는 시간 계산: 추가 거리를 Z축 속도로 나눕니다.
         _zTravelTimeTargetToExit = (zSpeed > 0) ? _postTargetExitDistance / zSpeed : 0f;
 
         if (_zTravelTimeSpawnToTarget <= 0)
@@ -219,23 +241,45 @@ public class NoteMovement : MonoBehaviour
     private Vector3 GetXYPositionAlongPath(float segmentProgress)
     {
         // X/Y 위치는 targetPosition에 고정되므로, 이 메서드는 더 이상 복잡한 계산을 하지 않습니다.
-        // 필요하다면 _targetPosition.x, _targetPosition.y를 직접 반환해도 됩니다.
         // 현재 로직에서는 사실상 이 함수가 필요 없어지므로 Update에서 직접 접근하는 것이 더 효율적입니다.
         // 현재는 하위 호환성을 위해 유지하되, 리턴 값은 고정된 Z를 포함하지 않도록 주의합니다.
         return new Vector3(_targetPosition.x, _targetPosition.y, 0);
     }
 
-
     /// <summary>
-    /// 노트가 _noteRemovalTime에 도달했는지 확인하고 오브젝트 풀로 반환합니다.
+    /// 노트가 _noteRemovalTime에 도달했을 때 Miss 처리하고 오브젝트 풀로 반환합니다.
     /// </summary>
-    /// <param name="currentMusicTime">MusicSynchronizer에서 제공하는 현재 음악 시간.</param>
-    private void CheckForPoolReturn(float currentMusicTime)
+    private void TriggerMiss() // 기존 CheckForPoolReturn을 대체 및 통합 **변경**
     {
-        if (currentMusicTime >= _noteRemovalTime)
+        if (_isJudged) return; // 이미 판정되었다면 중복 처리 방지
+
+        _isJudged = true; // Miss 판정 완료
+
+        Debug.Log($"<color=red>Note Missed: {gameObject.name}</color> (Passed Removal Time without Judgment)"); // Miss 로그 강화
+
+        // 필요한 Miss 처리 로직 호출
+        if (InGameManager.Instance != null)
         {
-            NoteManager.Instance?.ReturnPooledNote(gameObject);
-            InGameManager.Instance.MissUpdate();
+            InGameManager.Instance.ResetCombo(); // 콤보 초기화
+            InGameManager.Instance.MissUpdate(); // Miss 횟수 업데이트 (UI 등)
+        }
+        else
+        {
+            Debug.LogWarning("NoteMovement: InGameManager.Instance is null when processing Miss.");
+        }
+
+        // 파티클 생성 (선택 사항)
+        // ParticlePoolManager.Instance.SpawnParticle("Miss", _cachedTransform.position);
+
+        // 노트 풀로 반환
+        if (NoteManager.Instance != null)
+        {
+            NoteManager.Instance.ReturnPooledNote(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("NoteMovement: NoteManager.Instance is null when returning pooled note.");
+            Destroy(gameObject); // 최후의 수단으로 오브젝트 파괴
         }
     }
 

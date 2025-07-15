@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-using Define; // Define 네임스페이스가 필요합니다 (예: InGameState enum).
+using Define;
+using TMPro; // Define 네임스페이스가 필요합니다 (예: InGameState enum).
 
 // 게임 점수, 콤보, 체력 등의 정보를 관리하는 매니저 클래스
 public class InGameManager : MonoBehaviour
@@ -41,6 +42,8 @@ public class InGameManager : MonoBehaviour
         }
     }
 
+   
+
     // 현재 콤보 수치
     public int Combo { get; private set; }
 
@@ -66,6 +69,15 @@ public class InGameManager : MonoBehaviour
 
     // 미스 수치가 변경 되었을 떄
     public event Action<int> OnMissChanged;
+
+    // 노래가 끝났을 때 발생하는 이벤트
+    public event Action<InGameState> OnSongEnded;
+
+    public TextMeshProUGUI debugText; // 디버그용 텍스트 UI (선택 사항)
+
+    public GameObject endGameCube;
+
+    
 
 
 
@@ -151,5 +163,11 @@ public class InGameManager : MonoBehaviour
         {
             Debug.LogWarning("InGameManager: 이미 게임이 시작된 상태입니다.");
         }
+    }
+
+    public void EndGame()
+    {
+        Instantiate(endGameCube, endGameCube.transform.position, Quaternion.identity); // 게임 종료 시 큐브 생성 (예시)
+        OnSongEnded?.Invoke(InGameState.Ended); // 구독자들에게 게임 종료 알림
     }
 }

@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
         {
             Initialize();
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Initialize()

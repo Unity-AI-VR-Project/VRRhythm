@@ -39,6 +39,7 @@ namespace Define
         Settings,
         Lobby,
         Chat,
+        Close,
         Exit,
         Count
     }

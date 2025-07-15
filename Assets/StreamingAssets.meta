@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/_Sounds/FX.meta
-guid: 39db33ff1ab87214399509b9335961c9
-========
-guid: 7e1f79dcbc1bdf848a59d2cf4bc65799
->>>>>>>> develop:Assets/StreamingAssets.meta
+guid: 7652650dae20d234abf5d795efe9636b
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

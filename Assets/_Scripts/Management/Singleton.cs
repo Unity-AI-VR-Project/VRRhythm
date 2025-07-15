@@ -14,6 +14,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
             {
                 lock (syncObject)
                 {
+                    instance = FindAnyObjectByType<T>();
                     if (instance == null)
                     {
                         GameObject obj = new GameObject();
@@ -35,9 +36,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
             {
                 instance = this as T;
             }
-            else
+            else if (instance != this) 
             {
-                Destroy(instance);
+                Debug.LogWarning($"Multiple instances of {typeof(T).Name} detected. Destroying duplicate: {gameObject.name}");
+                Destroy(gameObject);
             }
         }
     }
@@ -46,10 +48,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {
         lock (syncObject)
         {
-            if (instance != this)
-                return;
-
-            instance = null;
+            if (instance != null && instance == this)
+            {
+                instance = null;
+            }
         }
     }
 }

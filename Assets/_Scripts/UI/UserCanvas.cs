@@ -1,27 +1,26 @@
 using UnityEngine;
 using Define;
-using UnityEngine.SceneManagement;
+
 public class UserCanvas : MonoBehaviour
 {
     [SerializeField] private GameObject[] buttonObjects = new GameObject[(int)eButton.Count];
 
-    private void Awake()
+    private void OnEnable()
     {
-        SceneManager.sceneLoaded += SetButton;
-        SetButton(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        SetButton();
     }
 
-    private void SetButton(Scene scene, LoadSceneMode mode)
+    private void SetButton()
     {
         InitializeButtons();
         eButton[] buttons = { };
         switch (GameManager.Instance.sceneController.currentScene)
         {
             case eScenes.Title:
-                buttons = new[] { eButton.Settings, eButton.Exit };
+                buttons = new[] { eButton.Settings,eButton.Lobby, eButton.Close,eButton.Exit };
                 break;
             case eScenes.Lobby:
-                buttons = new[] { eButton.Chat, eButton.Settings, eButton.Exit };
+                buttons = new[] { eButton.Chat, eButton.Settings, eButton.Close,eButton.Exit };
                 break;
             case eScenes.InGame:
                 buttons = new[] { eButton.Continue, eButton.Restart, eButton.Settings, eButton.Lobby };
@@ -45,7 +44,6 @@ public class UserCanvas : MonoBehaviour
                 buttonObject.SetActive(true);
             }
         }
-        
     }
 
     private void InitializeButtons()

@@ -244,9 +244,11 @@ public class CanvasMover : MonoBehaviour
             Debug.LogWarning($"[CanvasMover] 오디오 재생에 실패했습니다. AudioSource 또는 Clips 배열을 확인하거나, 유효하지 않은 인덱스 ({index})입니다.");
             return;
         }
-
         audioSource.clip = clips[index];
         audioSource.Play();
+        GameManager.Instance.soundManager.PauseMusic();
+        GameManager.Instance.soundManager.PlayMusic(clips[index]);
+
         Debug.Log($"[CanvasMover] '{clips[index].name}' 음악을 재생합니다. 현재 곡 인덱스: {index}");
 
         // 음악이 변경되었음을 외부에 알림 (static 이벤트 발생)

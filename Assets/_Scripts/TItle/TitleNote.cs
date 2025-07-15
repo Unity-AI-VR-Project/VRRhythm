@@ -14,5 +14,12 @@ public class TitleNote : MonoBehaviour
     {
         transform.Translate(directionVector * speed * Time.deltaTime);
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Saber"))
+        {
+            // SFX & VFX
+            Destroy(gameObject);
+        }
+    }
 }

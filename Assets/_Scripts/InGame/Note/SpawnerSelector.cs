@@ -282,12 +282,12 @@ private Vector3 CalculateTargetPosition(NoteInfo currentNote)
     if (currentNote.NoteType == SaberNoteType.Left)
     {
         // 왼손 노트는 플레이 가능한 영역을 왼쪽 절반으로 제한
-        currentPlayableXMax = (PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 2f;
+        currentPlayableXMax = ((PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 3f) * 2;
     }
     else // Right (SaberNoteType.Right)
     {
         // 오른손 노트는 플레이 가능한 영역을 오른쪽 절반으로 제한
-        currentPlayableXMin = (PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 2f;
+        currentPlayableXMin = ((PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 3f) * 2;
     }
 
     // 인접 노트 로직: 이전 노트와의 시간 간격이 충분히 짧은 경우

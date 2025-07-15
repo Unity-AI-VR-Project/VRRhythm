@@ -4,10 +4,18 @@ using Define;
 public class ChatManager : ManagerBase
 {
     [SerializeField] GameObject[] chatPrefabs;
-
+    public ChatUI chatUI;
     protected override void Awake()
     {
         base.Awake();
+    }
+
+    private void OnEnable()
+    {
+        if (chatUI == null)
+        {
+            chatUI = FindAnyObjectByType<ChatUI>();
+        }
     }
 
     protected override void Initialize()
@@ -15,7 +23,7 @@ public class ChatManager : ManagerBase
         base.Initialize();
     }
 
-    public GameObject CreateChatObject(ChatLog chatLog)
+    public GameObject CreateChatObject(ChatLog chatLog,Transform parent)
     {
         int prefabType = 0;
         switch (chatLog.scene)
@@ -29,6 +37,11 @@ public class ChatManager : ManagerBase
                 prefabType = 1;
                 break;
         }
-        return Instantiate(chatPrefabs[prefabType]);
+        RectTransform obj = Instantiate(chatPrefabs[prefabType],parent).GetComponent<RectTransform>();
+
+        obj.anchoredPosition = Vector3.zero;
+        obj.localRotation = Quaternion.identity;
+        obj.localScale = Vector3.one;
+        return obj.gameObject;
     }
 }

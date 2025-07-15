@@ -51,9 +51,7 @@ namespace Define
         Paused,
         Ended,
     }
-    /// <summary>
-    /// ��Ʈ �浹 �� ������ �ʿ��� ��� ���� ������ ��� ����ü�Դϴ�.
-    /// </summary>
+
     public struct NoteHitContext
     {
         public GameObject HitNoteObject;
@@ -73,14 +71,12 @@ namespace Define
         public float CurrentMusicTime;
         public float TargetMusicTime;
     }
-    /// <summary>
-    /// ��Ʈ ���� �� ���Ǵ� ���� ���� ��Ҹ� ��Ÿ���ϴ�.
-    /// </summary>
+
     public struct CutScores
     {
-        public float swingAngleBeforeCut; // ��Ʈ�� ġ�� �� ���� ���� (��Ʈ ���̹� ���� 0~100)
-        public float swingAngleAfterCut;  // ��Ʈ�� ģ �� ���� ���� (��Ʈ ���̹� ���� 0~100)
-        public float cutAccuracy;         // ��Ʈ �߾��� �󸶳� ��Ȯ�� ������� (0~1 ����)
+        public float swingAngleBeforeCut;
+        public float swingAngleAfterCut;  
+        public float cutAccuracy;       
     }
     public struct ChatObjectData
     {
@@ -99,6 +95,12 @@ namespace Define
     {
         public eScenes scene;
         public ChatObjectData chatObjectData;
+
+        public ChatLog(eScenes scene, ChatObjectData data)
+        {
+            this.scene = scene;
+            chatObjectData = data;
+        }
     }
     public struct NoteData
     {
@@ -106,8 +108,8 @@ namespace Define
         public Vector3 SpawnPosition;
         public NoteDirection RequiredDirection;
         public SaberNoteType RequiredNoteType;
-        public Vector3 TargetPosition; // ��Ʈ�� ������� ���� �Ǵ� �÷��̾� ��ġ
-        public float TravelDuration; // ��Ʈ�� SpawnPosition���� TargetPosition���� �̵��ϴ� �� �ɸ��� �ð�
+        public Vector3 TargetPosition; 
+        public float TravelDuration; 
     }
 
     [Serializable]

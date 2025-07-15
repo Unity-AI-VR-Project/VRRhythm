@@ -5803,6 +5803,7 @@ GameObject:
   - component: {fileID: 2428350287371523098}
   - component: {fileID: 9136533735991477083}
   - component: {fileID: 5166621194240215253}
+  - component: {fileID: 2011215196412246833}
   m_Layer: 2
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -5953,6 +5954,52 @@ MonoBehaviour:
   maxEyeTextureScale: 1.26
   enableSuperResolution: 0
   useRecommendedAntiAliasingLevel: 0
+--- !u!114 &2011215196412246833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5004417165475540440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc079eeaee283e74e8879fa430054f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftTriggerAction:
+    m_Name: Left Trigger
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 62953d8a-f2f9-4ff4-a430-9377a7794a2e
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 9633f048-687a-40ea-8b2a-616e2edc6344
+      m_Path: <XRController>{LeftHand}/trigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Left Trigger
+      m_Flags: 0
+    m_Flags: 0
+  rightTriggerAction:
+    m_Name: Right Trigger
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 5f2d32d2-b29c-44a1-81af-6232e4b1ad90
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 06022250-498b-4107-8953-2a878499433e
+      m_Path: <XRController>{RightHand}/trigger
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Right Trigger
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &5026378890675837597
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using Unity.Sentis;
 using UnityEngine;
 using System;
 using System.Diagnostics;
+using Define;
 #pragma warning disable CS1998
 
 public class RunWhisper : MonoBehaviour
@@ -66,6 +67,7 @@ public class RunWhisper : MonoBehaviour
 
         UnityEngine.Debug.Log("스페이스바를 눌러 녹음을 시작하세요.");
         UnityEngine.Debug.Log("P 키를 눌러 모델 성능 테스트를 시작하세요.");
+        TestModelPerformancePublic();
     }
 
     void Update()
@@ -119,10 +121,9 @@ public class RunWhisper : MonoBehaviour
         string finalOutputString = await ProcessAudioClip(recordedClip);
 
         isProcessingAudio = false;
-        GameManager.Instance.aiManager.saController.Run(finalOutputString);
-        UnityEngine.Debug.Log("최종 변환 결과: " + finalOutputString);
-        UnityEngine.Debug.Log("스페이스바를 눌러 다시 녹음을 시작하세요.");
-        UnityEngine.Debug.Log("P 키를 눌러 모델 성능 테스트를 시작하세요.");
+        int sentiment = GameManager.Instance.aiManager.saController.Run(finalOutputString);
+        UnityEngine.Debug.Log("최종 변환 결과: " + finalOutputString +" "+ sentiment);
+        GameManager.Instance.chatManager.chatUI.AddChat(finalOutputString, sentiment);
     }
 
     async Awaitable<string> ProcessAudioClip(AudioClip clipToProcess)

@@ -1822,7 +1822,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88416d77fc67cc408de4189dbee91e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chatPrefabs: []
+  chatPrefabs:
+  - {fileID: 8849744867232608696, guid: 0c062dd8369f23549b31a49919f4d657, type: 3}
+  - {fileID: 3139659404611018871, guid: 99188d5968fe28845b0a1708e9aada3e, type: 3}
+  chatUI: {fileID: 0}
 --- !u!4 &1282502895324972198
 Transform:
   m_ObjectHideFlags: 0
@@ -2023,6 +2026,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicData:
     Music: []
+  musicRootDatas: []
+  selectedMusicNumber: 0
 --- !u!1 &5122838752433364693
 GameObject:
   m_ObjectHideFlags: 0

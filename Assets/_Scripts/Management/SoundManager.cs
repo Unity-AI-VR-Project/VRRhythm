@@ -13,7 +13,7 @@ public class SoundManager : ManagerBase
     #endregion
 
     #region Music Player Settings
-    [SerializeField] private AudioSource musicAudioSource;
+    [SerializeField] public AudioSource musicAudioSource;
     [SerializeField] private bool loopMusic = true;
     #endregion
 

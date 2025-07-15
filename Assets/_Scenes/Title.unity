@@ -2023,6 +2023,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicData:
     Music: []
+  musicRootDatas: []
+  selectedMusicNumber: 0
 --- !u!1 &5122838752433364693
 GameObject:
   m_ObjectHideFlags: 0

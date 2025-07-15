@@ -51,23 +51,20 @@ public struct SpawnInfoBundle
 
 public class SpawnerSelector : MonoBehaviour
 {
-    [Header("JSON Data & Spawner Setup")]
-    public TextAsset musicJsonFile;
-    public Transform mainSpawner;
+    public Transform mainSpawner; // 노트가 스폰될 시작 지점 Transform
 
-    [HideInInspector] public float NotePreSpawnBeats;
+    [HideInInspector] public float NotePreSpawnBeats; // MusicSynchronizer에서 설정될 노트 프리 스폰 시간 (비트 단위)
 
-    private RootData _currentSongData;
-    public List<NoteInfo> _allNotes;
-    private int _nextNoteIndex = 0;
+    private RootData _currentSongData; // 현재 플레이 중인 곡의 전체 노트 데이터
+    public List<NoteInfo> _allNotes; // 모든 노트 정보 (정렬 및 방향 할당 완료)
+    private int _nextNoteIndex = 0; // 다음에 스폰할 노트의 인덱스
 
+    // 이전 노트 스폰 정보 (인접 노트 계산에 사용)
     private string _lastSpawnedNoteBand = null;
     private float _lastSpawnedNoteTime = -1.0f;
-
-    // 마지막으로 계산된 목표 위치를 저장하여 다음 인접 노트 계산의 기준으로 사용
-    private Vector3 _lastCalculatedTargetPos = Vector3.zero;
-    private NoteDirection _lastAssignedDirection = NoteDirection.Up;
-    private SaberNoteType _lastAssignedNoteType = SaberNoteType.Right;
+    private Vector3 _lastCalculatedTargetPos = Vector3.zero; // 마지막으로 계산된 목표 위치
+    private NoteDirection _lastAssignedDirection = NoteDirection.Up; // 마지막으로 할당된 노트 방향
+    private SaberNoteType _lastAssignedNoteType = SaberNoteType.Right; // 마지막으로 할당된 노트 손 타입
 
     [Header("Playable Area Settings")]
     [Tooltip("노트가 나타날 플레이 가능 영역의 X 최소값")]
@@ -85,7 +82,7 @@ public class SpawnerSelector : MonoBehaviour
 
     [Header("Note Spawning Logic Settings")]
     [Tooltip("이전 노트와 현재 노트의 시간 차이가 이 값보다 작으면 인접 노트로 간주합니다. (단위: 초)")]
-    public float copyNoteDataSecOffset = 0.120f;
+    public float copyNoteDataSecOffset = 0.120f; // BPM 기반으로 Start()에서 재계산됨
     [Tooltip("인접 노트가 이전 노트로부터 이동할 거리 (단위: 유니티 단위)")]
     public float moveAmount = 0.3f;
     [Tooltip("인접 노트가 최소한 떨어져 있어야 하는 거리 (겹침 방지용, 노트 반지름의 2배 정도)")]
@@ -95,7 +92,7 @@ public class SpawnerSelector : MonoBehaviour
 
     void Awake()
     {
-        LoadMusicData();
+        LoadMusicData(); // Start()보다 먼저 호출되어야 합니다 (Initialize BPM 등에 사용될 수 있음)
         if (mainSpawner == null)
         {
             Debug.LogError("SpawnerSelector: mainSpawner가 할당되지 않았습니다. 스포너 Transform을 할당해주세요.", this);
@@ -108,38 +105,37 @@ public class SpawnerSelector : MonoBehaviour
         if (_currentSongData != null && _currentSongData.metadata != null && _currentSongData.metadata.tempo != 0)
         {
             // 0.5박자 시간 계산: (60 / BPM) * 0.5
-            _halfBeatDuration = (60f / _currentSongData.metadata.tempo) * 1.8f;
+            _halfBeatDuration = (60f / _currentSongData.metadata.tempo) * 0.5f;
 
-            // copyNoteDataSecOffset 계산 (이전과 동일)
-            copyNoteDataSecOffset = (_halfBeatDuration / 2) - 0.01f; // 0.25박자보다 약간 작게
-            if (copyNoteDataSecOffset < 0.05f) copyNoteDataSecOffset = 0.05f;
+            // copyNoteDataSecOffset 계산 (0.25박자 간격으로 설정)
+            copyNoteDataSecOffset = (60f / _currentSongData.metadata.tempo) * 0.25f;
+            if (copyNoteDataSecOffset < 0.05f) copyNoteDataSecOffset = 0.05f; // 최소값 보장
 
-            Debug.Log($"SpawnerSelector: 템포 {_currentSongData.metadata.tempo}, 0.5박자 시간: {_halfBeatDuration:F3}s, 인접 노트 시간 임계치: {copyNoteDataSecOffset:F3}s", this);
-
+            Debug.Log($"SpawnerSelector: 템포 {_currentSongData.metadata.tempo}, 0.5박자 시간: {_halfBeatDuration:F3}s, 인접 노트 시간 임계치 (0.25박자): {copyNoteDataSecOffset:F3}s", this);
         }
         else
         {
             Debug.LogWarning("SpawnerSelector: 템포 데이터가 없거나 0이어서 copyNoteDataSecOffset과 _halfBeatDuration을 기본값으로 설정합니다.", this);
-            copyNoteDataSecOffset = 0.125f; // 기본값 유지
-            _halfBeatDuration = 0.25f; // 기본 템포 120BPM 기준 0.5박자 (60/120 * 0.5 = 0.25)
+            copyNoteDataSecOffset = 0.125f; // 기본값 유지 (약 120BPM 기준 0.25박자)
+            _halfBeatDuration = 0.25f; // 기본 템포 120BPM 기준 0.5박자
         }
     }
 
+    /// <summary>
+    /// GameManager의 DataManager에서 선택된 음악의 RootData를 로드하고 노트를 정렬합니다.
+    /// </summary>
     private void LoadMusicData()
     {
-        if (musicJsonFile == null)
-        {
-            Debug.LogError("SpawnerSelector: 'musicJsonFile'이 할당되지 않았습니다! JSON 파일을 Unity 에디터에서 할당해주세요.", this);
-            return;
-        }
-
         try
         {
-            _currentSongData = JsonUtility.FromJson<RootData>(musicJsonFile.text);
+            // GameManager.Instance.dataManager가 초기화된 후에 호출되어야 합니다.
+            // 그리고 selectedMusicNumber가 올바른 인덱스를 가리키고 있는지 확인해야 합니다.
+            _currentSongData = GameManager.Instance.dataManager.musicRootDatas[GameManager.Instance.dataManager.selectedMusicNumber];
 
             if (_currentSongData == null || _currentSongData.metadata == null || _currentSongData.beats == null)
             {
-                Debug.LogError("SpawnerSelector: JSON 데이터를 파싱하는 데 실패했습니다. JSON 파일의 형식을 확인하세요.", this);
+                Debug.LogError("SpawnerSelector: JSON 데이터를 파싱하는 데 실패했습니다. JSON 파일의 형식을 확인하거나 DataManager 초기화 상태를 확인하세요.", this);
+                enabled = false; // 데이터 로드 실패 시 SpawnerSelector 비활성화
                 return;
             }
 
@@ -154,15 +150,17 @@ public class SpawnerSelector : MonoBehaviour
                     }
                 }
             }
+            // 노트들을 시간 순서대로 정렬합니다.
             _allNotes.Sort((n1, n2) => n1.time.CompareTo(n2.time));
 
-            AssignDirectionsToNotes();
+            AssignDirectionsToNotes(); // 방향 및 손 타입 할당 로직 호출
 
             Debug.Log($"SpawnerSelector: 음악 데이터 로드 성공: '{_currentSongData.metadata.band_group}' (BPM: {_currentSongData.metadata.tempo}) - 총 {_allNotes.Count}개 노트.", this);
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"SpawnerSelector: JSON 파일 로드/파싱 오류: {e.Message}. JSON 파일 내용을 확인하세요.", this);
+            Debug.LogError($"SpawnerSelector: JSON 파일 로드/파싱 오류: {e.Message}. DataManager의 JSON 파일 내용을 확인하세요.", this);
+            enabled = false; // 오류 발생 시 SpawnerSelector 비활성화
         }
     }
 
@@ -177,7 +175,8 @@ public class SpawnerSelector : MonoBehaviour
             NoteDirection.Up,
             NoteDirection.Down,
             NoteDirection.Left,
-            NoteDirection.Right
+            NoteDirection.Right,
+            //NoteDirection.Any // 'Any' 방향도 고려한다면 추가
         };
 
         SaberNoteType[] possibleHands = {
@@ -185,7 +184,7 @@ public class SpawnerSelector : MonoBehaviour
             SaberNoteType.Right
         };
 
-        float lastNoteTime = -1.0f;
+        float lastNoteTime = -1.0f; // 이전 노트의 시간
 
         for (int i = 0; i < _allNotes.Count; i++)
         {
@@ -194,9 +193,7 @@ public class SpawnerSelector : MonoBehaviour
             // 이전 노트로부터의 시간 간격 계산
             float timeSinceLastNote = (lastNoteTime != -1.0f) ? (currentNote.time - lastNoteTime) : float.MaxValue;
 
-            // _halfBeatDuration; // Start()에서 이미 계산되어 있음
-
-            // 첫 노트이거나, 이전 노트로부터 충분히 멀리 떨어진 경우 (0.5박자 이상)
+            // 첫 노트이거나, 이전 노트로부터 0.5박자 이상 멀리 떨어진 경우
             if (timeSinceLastNote > _halfBeatDuration || lastNoteTime == -1.0f)
             {
                 // 완전히 새로운 노트로 간주하고 랜덤 방향/손 할당
@@ -206,24 +203,26 @@ public class SpawnerSelector : MonoBehaviour
                 int randomHandIndex = Random.Range(0, possibleHands.Length);
                 currentNote.NoteType = possibleHands[randomHandIndex];
             }
-            // copyNoteDataSecOffset 보다 크지만 0.5박자 이하로 떨어진 경우
+            // copyNoteDataSecOffset (0.25박자) 보다 크지만 0.5박자 이하로 떨어진 경우
+            // 이 경우 주로 지그재그 패턴 또는 양손 번갈아 치기 패턴을 유도할 수 있습니다.
             else if (timeSinceLastNote > copyNoteDataSecOffset && timeSinceLastNote <= _halfBeatDuration)
             {
-                // 이전 노트와 다른 손 타입을 강제 할당
+                // 이전 노트와 다른 손 타입을 강제 할당 (양손 번갈아 치기 유도)
                 currentNote.NoteType = (_lastAssignedNoteType == SaberNoteType.Left) ? SaberNoteType.Right : SaberNoteType.Left;
-                // 방향은 여전히 랜덤하게 할당 (양손 번갈아 치는 상황을 고려)
+
+                // 방향은 여전히 랜덤하게 할당 (양손 번갈아 치는 상황에 다양한 방향 부여)
                 int randomDirectionIndex = Random.Range(0, possibleDirections.Length);
                 currentNote.requiredDirection = possibleDirections[randomDirectionIndex];
             }
-            // copyNoteDataSecOffset 이내로 가까운 인접 노트인 경우
+            // copyNoteDataSecOffset (0.25박자) 이내로 가까운 인접 노트인 경우
             else // timeSinceLastNote <= copyNoteDataSecOffset
             {
-                // 이전 노트의 방향과 손 타입을 그대로 따름
+                // 이전 노트의 방향과 손 타입을 그대로 따름 (동일 손으로 연속해서 치는 패턴 유도)
                 currentNote.requiredDirection = _lastAssignedDirection;
                 currentNote.NoteType = _lastAssignedNoteType;
             }
 
-            _allNotes[i] = currentNote; // 구조체이므로 변경사항을 리스트에 다시 할당
+            _allNotes[i] = currentNote; // NoteInfo는 struct이므로 변경사항을 리스트에 다시 할당해야 합니다.
 
             // 다음 노트를 위해 현재 노트의 정보 저장
             _lastAssignedDirection = currentNote.requiredDirection;
@@ -234,6 +233,7 @@ public class SpawnerSelector : MonoBehaviour
 
     /// <summary>
     /// 현재 시간에 스폰할 노트 정보를 반환하고, 다음 노트 인덱스를 업데이트합니다.
+    /// 이 메서드는 MusicSynchronizer의 Update에서 호출됩니다.
     /// </summary>
     /// <param name="currentTime">현재 게임 시간입니다.</param>
     /// <returns>스폰 정보 번들 또는 null을 반환합니다.</returns>
@@ -253,11 +253,14 @@ public class SpawnerSelector : MonoBehaviour
             return null;
         }
 
+        // NotePreSpawnBeats는 MusicSynchronizer에서 동적으로 설정됩니다.
         float preSpawnTime = NotePreSpawnBeats * (60f / tempo);
         float noteAbsoluteTime = nextNote.time;
 
+        // 현재 시간이 노트 스폰 시간(노트 등장 시간 - 프리 스폰 시간)보다 크거나 같으면 스폰
         if (currentTime >= noteAbsoluteTime - preSpawnTime)
         {
+            // 목표 위치 계산 및 노트 데이터에 저장
             nextNote.calculatedTargetPos = CalculateTargetPosition(nextNote);
             _allNotes[_nextNoteIndex] = nextNote; // struct이므로 변경사항 반영
 
@@ -275,8 +278,8 @@ public class SpawnerSelector : MonoBehaviour
                 CalculatedTargetPos = nextNote.calculatedTargetPos
             };
 
-            _nextNoteIndex++;
-            _lastSpawnedNoteBand = nextNote.band;
+            _nextNoteIndex++; // 다음 노트로 인덱스 증가
+            _lastSpawnedNoteBand = nextNote.band; // 마지막 스폰된 노트 정보 업데이트
             _lastSpawnedNoteTime = nextNote.time;
             _lastCalculatedTargetPos = nextNote.calculatedTargetPos; // 최종 계산된 위치를 업데이트
 
@@ -292,129 +295,129 @@ public class SpawnerSelector : MonoBehaviour
     /// </summary>
     private Vector3 CalculateTargetPosition(NoteInfo currentNote)
     {
-        // === 변경된 부분 시작 ===
         // 각 손에 대한 플레이 가능 X축 범위를 명확히 정의합니다.
-        // PLAYABLE_X_MIN과 PLAYABLE_X_MAX는 전체 플레이 가능 영역의 X축입니다.
-        // 중앙값을 기준으로 각 손의 영역을 나눕니다.
         float midX = (PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 2f;
-
         float targetXMin, targetXMax;
 
         if (currentNote.NoteType == SaberNoteType.Left)
         {
-            // 왼손 노트는 중앙선부터 왼쪽까지
             targetXMin = PLAYABLE_X_MIN;
             targetXMax = midX;
         }
         else // SaberNoteType.Right
         {
-            // 오른손 노트는 중앙선부터 오른쪽까지
             targetXMin = midX;
             targetXMax = PLAYABLE_X_MAX;
         }
-        // === 변경된 부분 끝 ===
-
 
         // 확장된 클램프 범위 계산 (PLAYABLE + outOfBoundsTolerance)
-        // 이 확장 범위도 이제 targetXMin/Max를 기반으로 합니다.
         float extendedXMin = targetXMin - outOfBoundsTolerance;
         float extendedXMax = targetXMax + outOfBoundsTolerance;
         float extendedYMin = PLAYABLE_Y_MIN - outOfBoundsTolerance;
         float extendedYMax = PLAYABLE_Y_MAX + outOfBoundsTolerance;
 
+        Vector3 finalTargetPos;
 
-        // 인접 노트 로직
+        // 인접 노트 로직 (copyNoteDataSecOffset 이내의 시간 간격)
         if (_lastSpawnedNoteTime != -1.0f && (currentNote.time - _lastSpawnedNoteTime <= copyNoteDataSecOffset))
         {
             Vector3 basePos = _lastCalculatedTargetPos; // 이전에 스폰된 노트의 목표 위치
-            Vector3 desiredPos = basePos; // 희망하는 이동 방향으로의 위치
+            Vector3 desiredMoveDirection = Vector3.zero; // 원하는 이동 방향 단위 벡터
 
             // 1. 주축 방향으로 moveAmount만큼 이동 시도
             switch (currentNote.requiredDirection)
             {
-                case NoteDirection.Up: desiredPos.y += moveAmount; break;
-                case NoteDirection.Down: desiredPos.y -= moveAmount; break;
-                case NoteDirection.Left: desiredPos.x -= moveAmount; break;
-                case NoteDirection.Right: desiredPos.x += moveAmount; break;
+                case NoteDirection.Up: desiredMoveDirection = Vector3.up; break;
+                case NoteDirection.Down: desiredMoveDirection = Vector3.down; break;
+                case NoteDirection.Left: desiredMoveDirection = Vector3.left; break;
+                case NoteDirection.Right: desiredMoveDirection = Vector3.right; break;
+                //case NoteDirection.Any: // 'Any' 방향의 경우, 이전 노트와 반대 방향으로 이동 (단순 예시)
+                //    // 이전 노트와의 X, Y 차이를 기반으로 역방향 계산
+                //    float deltaX = basePos.x - _lastCalculatedTargetPos.x;
+                //    float deltaY = basePos.y - _lastCalculatedTargetPos.y;
+                //    if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY)) // X축 변화가 더 크면 X축 반전
+                //        desiredMoveDirection = new Vector3(-Mathf.Sign(deltaX), 0, 0);
+                //    else // Y축 변화가 더 크면 Y축 반전
+                //        desiredMoveDirection = new Vector3(0, -Mathf.Sign(deltaY), 0);
+                //    break;
             }
 
-            // 2. 확장된 경계 내로 클램프
-            Vector3 clampedToExtendedBoundsPos = new Vector3(
-                Mathf.Clamp(desiredPos.x, extendedXMin, extendedXMax),
-                Mathf.Clamp(desiredPos.y, extendedYMin, extendedYMax),
+            // 초기 희망 위치 (basePos에서 원하는 방향으로 moveAmount만큼 이동)
+            Vector3 potentialPos = basePos + desiredMoveDirection * moveAmount;
+
+            // 2. 겹침 방지를 위한 추가 이동 로직 (Smart Placement 강화)
+            int overlapResolveAttempts = 5; // 겹침 해결 시도 횟수
+            float minOverlapDistanceThreshold = minNoteSeparationDistance - 0.01f; // 허용 최소 거리 (약간의 여유)
+
+            for (int i = 0; i < overlapResolveAttempts; i++)
+            {
+                // 현재 potentialPos를 확장된 영역 내로 클램프
+                Vector3 clampedPos = new Vector3(
+                    Mathf.Clamp(potentialPos.x, extendedXMin, extendedXMax),
+                    Mathf.Clamp(potentialPos.y, extendedYMin, extendedYMax),
+                    PLAYABLE_Z
+                );
+
+                // 이전 노트와의 거리를 확인
+                if (Vector3.Distance(clampedPos, basePos) >= minNoteSeparationDistance)
+                {
+                    // 충분히 떨어져 있으면 이 위치를 사용
+                    finalTargetPos = clampedPos;
+                    // Debug.Log($"SpawnerSelector: 인접 노트 위치 확정 (거리 확보). Result: {finalTargetPos}");
+                    return finalTargetPos;
+                }
+                else
+                {
+                    // 충분히 떨어져 있지 않으면, desiredMoveDirection 방향으로 남은 거리를 더 밀어냄
+                    float currentDistance = Vector3.Distance(clampedPos, basePos);
+                    float requiredMove = minNoteSeparationDistance - currentDistance + 0.01f; // 0.01f는 약간의 여유분
+                    potentialPos += desiredMoveDirection * requiredMove; // 원하는 방향으로 추가 이동
+
+                    Debug.LogWarning($"SpawnerSelector: 인접 노트 겹침 발생. Smart Placement 시도. Base: {basePos}, Potential: {potentialPos}, Clamped: {clampedPos}. 재시도 {i + 1}회.");
+                }
+            }
+
+            // 여러 번 시도했지만 겹침을 해결하지 못했다면, 강제로 밀어내거나 기본 위치로 폴백
+            Debug.LogWarning($"SpawnerSelector: {overlapResolveAttempts}회 시도 후에도 인접 노트 겹침 해결 실패. 최후의 수단 사용.");
+            // 최후의 수단: 단순히 minNoteSeparationDistance만큼 강제로 원하는 방향으로 이동시키고 클램프
+            Vector3 emergencyPos = basePos + desiredMoveDirection * minNoteSeparationDistance;
+            finalTargetPos = new Vector3(
+                Mathf.Clamp(emergencyPos.x, extendedXMin, extendedXMax),
+                Mathf.Clamp(emergencyPos.y, extendedYMin, extendedYMax),
                 PLAYABLE_Z
             );
-
-            // 3. 이전 노트와의 겹침 확인 (minNoteSeparationDistance 미확보 시)
-            if (Vector3.Distance(clampedToExtendedBoundsPos, basePos) < minNoteSeparationDistance)
-            {
-                Debug.LogWarning($"SpawnerSelector: 인접 노트 겹침 발생. Smart Placement (outOfBounds 허용) 시도. Base: {basePos}, Desired: {desiredPos}, ClampedExtended: {clampedToExtendedBoundsPos}");
-
-                Vector3 finalPos = basePos; // 시작은 이전 노트 위치에서
-
-                // 이전 노트와 최소 분리 거리를 강제로 확보하도록 조정
-                // 이때, 경계는 무시하고 오직 이전 노트와의 분리만 목표로 합니다.
-                // 이후 다시 확장된 경계 내로 클램프합니다.
-                switch (currentNote.requiredDirection)
-                {
-                    case NoteDirection.Up:
-                        finalPos.y = basePos.y + minNoteSeparationDistance;
-                        break;
-                    case NoteDirection.Down:
-                        finalPos.y = basePos.y - minNoteSeparationDistance;
-                        break;
-                    case NoteDirection.Left:
-                        finalPos.x = basePos.x - minNoteSeparationDistance;
-                        break;
-                    case NoteDirection.Right:
-                        finalPos.x = basePos.x + minNoteSeparationDistance;
-                        break;
-                }
-
-                // 최종적으로 계산된 위치를 확장된 영역 내에서 다시 클램프
-                finalPos.x = Mathf.Clamp(finalPos.x, extendedXMin, extendedXMax);
-                finalPos.y = Mathf.Clamp(finalPos.y, extendedYMin, extendedYMax);
-                finalPos.z = PLAYABLE_Z;
-
-                // Debug.Log($"Smart Placement Result (Extended): {finalPos}");
-                return finalPos;
-            }
-
-            // 겹치지 않으면 확장된 경계 내의 위치 반환
-            return clampedToExtendedBoundsPos;
+            return finalTargetPos;
         }
         else // 인접 노트가 아닐 경우 (시간 간격이 충분히 멀 때)
         {
-            Vector3 targetPos = Vector3.zero;
-            // 인접하지 않은 노트는 이전 노트와 일정 거리 이상 떨어지도록 시도
-            float minInitialSeparation = moveAmount * 2.5f;
+            // 이전 노트와 충분히 떨어져 있는 무작위 위치를 찾는 로직
+            int maxAttempts = 20; // 시도 횟수 증가
+            float minInitialSeparation = moveAmount * 2.5f; // 이전 노트와의 최소 초기 분리 거리
 
-            int maxAttempts = 10;
             for (int i = 0; i < maxAttempts; i++)
             {
-                targetPos = new Vector3(
-                    // 변경된 부분: currentPlayableXMin, currentPlayableXMax 대신 targetXMin, targetXMax 사용
-                    Random.Range(targetXMin, targetXMax),
+                Vector3 randomPos = new Vector3(
+                    Random.Range(targetXMin, targetXMax), // 해당 손의 X 범위 내에서 랜덤
                     Random.Range(PLAYABLE_Y_MIN, PLAYABLE_Y_MAX),
                     PLAYABLE_Z
                 );
 
-                if (_lastCalculatedTargetPos != Vector3.zero &&
-                    Vector3.Distance(targetPos, _lastCalculatedTargetPos) < minInitialSeparation)
+                // 이전 노트가 없는 경우 (첫 노트) 또는 충분히 떨어져 있는 경우
+                if (_lastCalculatedTargetPos == Vector3.zero ||
+                    Vector3.Distance(randomPos, _lastCalculatedTargetPos) >= minInitialSeparation)
                 {
-                    continue; // 겹치면 다시 시도
+                    return randomPos; // 겹치지 않으면 종료
                 }
-                else
-                {
-                    break; // 겹치지 않으면 종료
-                }
+                // Debug.Log($"SpawnerSelector: 비인접 노트 초기 겹침 발생. 재시도 {i + 1}회.");
             }
-            return targetPos;
+            // maxAttempts를 초과해도 유효한 위치를 찾지 못했다면, 해당 손의 기본 중앙 위치 반환
+            Debug.LogWarning("SpawnerSelector: 충분히 떨어진 랜덤 위치를 찾지 못했습니다. 해당 손의 기본 중앙 위치로 폴백합니다.");
+            return new Vector3((targetXMin + targetXMax) / 2f, (PLAYABLE_Y_MIN + PLAYABLE_Y_MAX) / 2f, PLAYABLE_Z);
         }
     }
 
     /// <summary>
-    /// 현재 곡의 템포를 반환합니다.
+    /// 현재 곡의 템포를 반환합니다. MusicSynchronizer에서 BPM 값을 가져갈 때 사용됩니다.
     /// </summary>
     public float GetTempo()
     {
@@ -422,7 +425,7 @@ public class SpawnerSelector : MonoBehaviour
         {
             return _currentSongData.metadata.tempo;
         }
-        return 120f; // 기본값
+        return 120f; // 데이터 로드 실패 시 기본값 (안전 장치)
     }
 
     /// <summary>
@@ -440,8 +443,7 @@ public class SpawnerSelector : MonoBehaviour
         Gizmos.DrawWireCube(center, size);
 
         // 확장된 허용 범위 시각화 (노란색)
-        // OnDrawGizmos에서는 실제 노트의 NoteType을 알 수 없으므로,
-        // 전체 PLAYABLE 영역을 기준으로 확장 범위를 그립니다.
+        // OnDrawGizmos에서는 실시간 NoteType을 알 수 없으므로, 전체 PLAYABLE 영역을 기준으로 확장 범위를 그립니다.
         Gizmos.color = Color.yellow;
         Vector3 extendedMinBoundsGlobal = new Vector3(PLAYABLE_X_MIN - outOfBoundsTolerance, PLAYABLE_Y_MIN - outOfBoundsTolerance, PLAYABLE_Z);
         Vector3 extendedMaxBoundsGlobal = new Vector3(PLAYABLE_X_MAX + outOfBoundsTolerance, PLAYABLE_Y_MAX + outOfBoundsTolerance, PLAYABLE_Z);
@@ -449,13 +451,12 @@ public class SpawnerSelector : MonoBehaviour
         Vector3 extendedSizeGlobal = extendedMaxBoundsGlobal - extendedMinBoundsGlobal;
         Gizmos.DrawWireCube(extendedCenterGlobal, extendedSizeGlobal);
 
-
-        // X축 손 영역 분할 시각화 (하늘색) - 중앙선
+        // X축 손 영역 분할 중앙선 시각화 (하늘색)
         Gizmos.color = Color.cyan;
         float centerX = (PLAYABLE_X_MIN + PLAYABLE_X_MAX) / 2f;
-        Vector3 leftHandLineStart = new Vector3(centerX, PLAYABLE_Y_MIN, PLAYABLE_Z);
-        Vector3 leftHandLineEnd = new Vector3(centerX, PLAYABLE_Y_MAX, PLAYABLE_Z);
-        Gizmos.DrawLine(leftHandLineStart, leftHandLineEnd);
+        Vector3 lineStart = new Vector3(centerX, PLAYABLE_Y_MIN, PLAYABLE_Z);
+        Vector3 lineEnd = new Vector3(centerX, PLAYABLE_Y_MAX, PLAYABLE_Z);
+        Gizmos.DrawLine(lineStart, lineEnd);
 
         // 마지막 계산된 타겟 위치 시각화 (빨간색 구)
         if (_lastCalculatedTargetPos != Vector3.zero)

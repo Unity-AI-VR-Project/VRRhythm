@@ -6,14 +6,26 @@
     },
     "beats": [
         {
-            "beat_index": 0,
-            "beat_time": 0.1858,
+            "beat_index": 12,
+            "beat_time": 7.2678,
             "notes": [
                 {
-                    "time": 0.1858,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": -8.07
+                    "time": 7.5581,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -16.34
+                }
+            ]
+        },
+        {
+            "beat_index": 14,
+            "beat_time": 8.4288,
+            "notes": [
+                {
+                    "time": 8.7191,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -12.62
                 }
             ]
         },
@@ -50,6 +62,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 0.5
+                },
+                {
+                    "time": 12.2485,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -5.75
                 }
             ]
         },
@@ -58,9 +76,9 @@
             "beat_time": 12.5388,
             "notes": [
                 {
-                    "time": 12.8406,
+                    "time": 12.7652,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 1.31
                 },
                 {
@@ -92,6 +110,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 5.3
+                },
+                {
+                    "time": 14.0132,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -1.66
                 }
             ]
         },
@@ -100,9 +124,9 @@
             "beat_time": 14.3035,
             "notes": [
                 {
-                    "time": 14.6054,
+                    "time": 14.5299,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 3.75
                 }
             ]
@@ -158,6 +182,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 5.95
+                },
+                {
+                    "time": 17.177,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 5.49
                 }
             ]
         },
@@ -176,6 +206,12 @@
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 0.77
+                },
+                {
+                    "time": 17.7604,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 3.4
                 }
             ]
         },
@@ -188,6 +224,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 12,
                     "strength": 8.1
+                },
+                {
+                    "time": 19.4467,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 14.07
                 }
             ]
         },
@@ -212,6 +254,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 15.96
+                },
+                {
+                    "time": 20.6309,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 13.17
                 }
             ]
         },
@@ -231,12 +279,6 @@
             "beat_index": 36,
             "beat_time": 21.3624,
             "notes": [
-                {
-                    "time": 21.6526,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -0.3
-                },
                 {
                     "time": 21.6526,
                     "band": "low",
@@ -260,6 +302,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 21.2
+                },
+                {
+                    "time": 22.2331,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.46
                 }
             ]
         },
@@ -284,6 +332,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 12,
                     "strength": 14.74
+                },
+                {
+                    "time": 24.1604,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 12.61
                 }
             ]
         },
@@ -303,12 +357,6 @@
             "beat_index": 42,
             "beat_time": 24.8918,
             "notes": [
-                {
-                    "time": 25.182,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.52
-                },
                 {
                     "time": 25.182,
                     "band": "low",
@@ -335,12 +383,6 @@
             "notes": [
                 {
                     "time": 26.3546,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -0.3
-                },
-                {
-                    "time": 26.3546,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 15.69
@@ -356,6 +398,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 17.88
+                },
+                {
+                    "time": 26.9468,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 13.53
                 }
             ]
         },
@@ -368,6 +416,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 22.68
+                },
+                {
+                    "time": 27.7653,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 11.59
                 }
             ]
         },
@@ -380,6 +434,24 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 12.03
+                }
+            ]
+        },
+        {
+            "beat_index": 48,
+            "beat_time": 28.4212,
+            "notes": [
+                {
+                    "time": 28.7115,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.26
+                },
+                {
+                    "time": 28.8566,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 12.58
                 }
             ]
         },
@@ -404,6 +476,24 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 14.84
+                },
+                {
+                    "time": 30.0408,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 13.86
+                }
+            ]
+        },
+        {
+            "beat_index": 51,
+            "beat_time": 30.1859,
+            "notes": [
+                {
+                    "time": 30.4762,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.13
                 }
             ]
         },
@@ -423,12 +513,6 @@
             "beat_index": 53,
             "beat_time": 31.3702,
             "notes": [
-                {
-                    "time": 31.6604,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.42
-                },
                 {
                     "time": 31.6604,
                     "band": "low",
@@ -470,6 +554,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 15.33
+                },
+                {
+                    "time": 33.0594,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 13.6
                 }
             ]
         },
@@ -482,6 +572,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 15.35
+                },
+                {
+                    "time": 33.5702,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 13.23
                 }
             ]
         },
@@ -533,12 +629,6 @@
             "notes": [
                 {
                     "time": 35.7703,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 0.21
-                },
-                {
-                    "time": 35.7703,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 15.36
@@ -551,15 +641,15 @@
             "notes": [
                 {
                     "time": 36.3508,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.83
-                },
-                {
-                    "time": 36.3508,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 23.18
+                },
+                {
+                    "time": 36.3508,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 13.07
                 }
             ]
         },
@@ -569,15 +659,27 @@
             "notes": [
                 {
                     "time": 36.9429,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.9
-                },
-                {
-                    "time": 36.9429,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 22.28
+                },
+                {
+                    "time": 37.0939,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 13.95
+                }
+            ]
+        },
+        {
+            "beat_index": 63,
+            "beat_time": 37.2448,
+            "notes": [
+                {
+                    "time": 37.5351,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.95
                 }
             ]
         },
@@ -586,10 +688,10 @@
             "beat_time": 37.8253,
             "notes": [
                 {
-                    "time": 38.1272,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.96
+                    "time": 38.2781,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 12.07
                 }
             ]
         },
@@ -599,12 +701,6 @@
             "notes": [
                 {
                     "time": 38.7193,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.71
-                },
-                {
-                    "time": 38.7193,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 11.01
@@ -612,15 +708,21 @@
             ]
         },
         {
+            "beat_index": 66,
+            "beat_time": 39.0095,
+            "notes": [
+                {
+                    "time": 39.4449,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 10.94
+                }
+            ]
+        },
+        {
             "beat_index": 68,
             "beat_time": 40.1937,
             "notes": [
-                {
-                    "time": 40.484,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.17
-                },
                 {
                     "time": 40.484,
                     "band": "mid",
@@ -633,12 +735,6 @@
             "beat_index": 69,
             "beat_time": 40.7742,
             "notes": [
-                {
-                    "time": 41.0645,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.42
-                },
                 {
                     "time": 41.0645,
                     "band": "mid",
@@ -660,38 +756,20 @@
             ]
         },
         {
-            "beat_index": 71,
-            "beat_time": 41.9585,
-            "notes": [
-                {
-                    "time": 42.2487,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -4.84
-                }
-            ]
-        },
-        {
             "beat_index": 72,
             "beat_time": 42.539,
             "notes": [
                 {
                     "time": 42.8408,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": -3.2
-                }
-            ]
-        },
-        {
-            "beat_index": 73,
-            "beat_time": 43.1427,
-            "notes": [
+                    "strength": 11.67
+                },
                 {
-                    "time": 43.4329,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.19
+                    "time": 43.0672,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 25.06
                 }
             ]
         },
@@ -701,27 +779,9 @@
             "notes": [
                 {
                     "time": 44.0134,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.23
-                },
-                {
-                    "time": 44.0134,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 11.72
-                }
-            ]
-        },
-        {
-            "beat_index": 76,
-            "beat_time": 44.8842,
-            "notes": [
-                {
-                    "time": 45.186,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 0.17
                 }
             ]
         },
@@ -737,12 +797,6 @@
                 },
                 {
                     "time": 45.7781,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -0.98
-                },
-                {
-                    "time": 45.7781,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 11.47
@@ -750,15 +804,21 @@
             ]
         },
         {
+            "beat_index": 80,
+            "beat_time": 47.2526,
+            "notes": [
+                {
+                    "time": 47.688,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 11.6
+                }
+            ]
+        },
+        {
             "beat_index": 81,
             "beat_time": 47.8331,
             "notes": [
-                {
-                    "time": 48.1234,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.06
-                },
                 {
                     "time": 48.1234,
                     "band": "mid",
@@ -780,43 +840,19 @@
             ]
         },
         {
-            "beat_index": 85,
-            "beat_time": 50.2015,
-            "notes": [
-                {
-                    "time": 50.4918,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.81
-                }
-            ]
-        },
-        {
-            "beat_index": 87,
-            "beat_time": 51.3625,
-            "notes": [
-                {
-                    "time": 51.6528,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 1.48
-                }
-            ]
-        },
-        {
             "beat_index": 89,
             "beat_time": 52.4539,
             "notes": [
                 {
                     "time": 52.4539,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 0,
-                    "strength": 2.09
+                    "strength": 10.75
                 },
                 {
-                    "time": 52.4539,
+                    "time": 52.5264,
                     "band": "low",
-                    "relative_pos_in_beat": 0,
+                    "relative_pos_in_beat": 2,
                     "strength": 24.39
                 }
             ]
@@ -827,14 +863,14 @@
             "notes": [
                 {
                     "time": 53.0344,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 0,
-                    "strength": 3.54
+                    "strength": 11.05
                 },
                 {
-                    "time": 53.0344,
+                    "time": 53.1069,
                     "band": "low",
-                    "relative_pos_in_beat": 0,
+                    "relative_pos_in_beat": 2,
                     "strength": 25.12
                 }
             ]
@@ -844,16 +880,40 @@
             "beat_time": 53.6149,
             "notes": [
                 {
-                    "time": 53.6149,
-                    "band": "mid",
-                    "relative_pos_in_beat": 0,
-                    "strength": 11.29
+                    "time": 53.6787,
+                    "band": "low",
+                    "relative_pos_in_beat": 2,
+                    "strength": 23.08
                 },
                 {
                     "time": 53.7426,
-                    "band": "low",
+                    "band": "mid",
                     "relative_pos_in_beat": 4,
-                    "strength": 23.08
+                    "strength": 11.29
+                }
+            ]
+        },
+        {
+            "beat_index": 92,
+            "beat_time": 54.1257,
+            "notes": [
+                {
+                    "time": 54.5524,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 4.62
+                }
+            ]
+        },
+        {
+            "beat_index": 93,
+            "beat_time": 54.6133,
+            "notes": [
+                {
+                    "time": 54.7585,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 3.84
                 }
             ]
         },
@@ -861,12 +921,6 @@
             "beat_index": 94,
             "beat_time": 55.1938,
             "notes": [
-                {
-                    "time": 55.4841,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -7.67
-                },
                 {
                     "time": 55.4841,
                     "band": "low",
@@ -880,22 +934,16 @@
             "beat_time": 56.378,
             "notes": [
                 {
-                    "time": 56.6683,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.76
+                    "time": 56.5232,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 10.16
                 },
                 {
                     "time": 56.6683,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 31.27
-                },
-                {
-                    "time": 56.6683,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 10.16
                 }
             ]
         },
@@ -947,12 +995,6 @@
                 },
                 {
                     "time": 58.433,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.88
-                },
-                {
-                    "time": 58.433,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 13.68
@@ -968,6 +1010,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.6
+                },
+                {
+                    "time": 59.0135,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.52
                 }
             ]
         },
@@ -994,16 +1042,10 @@
             "beat_time": 59.8843,
             "notes": [
                 {
-                    "time": 59.8843,
+                    "time": 60.0352,
                     "band": "mid",
-                    "relative_pos_in_beat": 0,
+                    "relative_pos_in_beat": 4,
                     "strength": 10.89
-                },
-                {
-                    "time": 60.1861,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 1.83
                 },
                 {
                     "time": 60.1861,
@@ -1036,16 +1078,16 @@
             "beat_time": 61.0685,
             "notes": [
                 {
+                    "time": 61.2194,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.86
+                },
+                {
                     "time": 61.3703,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 28.72
-                },
-                {
-                    "time": 61.3703,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 12.86
                 }
             ]
         },
@@ -1054,9 +1096,9 @@
             "beat_time": 61.6722,
             "notes": [
                 {
-                    "time": 61.6722,
+                    "time": 61.8173,
                     "band": "mid",
-                    "relative_pos_in_beat": 0,
+                    "relative_pos_in_beat": 4,
                     "strength": 12.74
                 },
                 {
@@ -1090,6 +1132,12 @@
             "beat_time": 62.8332,
             "notes": [
                 {
+                    "time": 62.8332,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 19.32
+                },
+                {
                     "time": 63.1234,
                     "band": "low",
                     "relative_pos_in_beat": 8,
@@ -1107,12 +1155,6 @@
             "beat_index": 108,
             "beat_time": 63.4137,
             "notes": [
-                {
-                    "time": 63.7156,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.08
-                },
                 {
                     "time": 63.7156,
                     "band": "low",
@@ -1154,6 +1196,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 30.33
+                },
+                {
+                    "time": 64.8882,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.89
                 }
             ]
         },
@@ -1265,12 +1313,6 @@
             "notes": [
                 {
                     "time": 68.9981,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.09
-                },
-                {
-                    "time": 68.9981,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.07
@@ -1287,6 +1329,12 @@
             "beat_index": 118,
             "beat_time": 69.2883,
             "notes": [
+                {
+                    "time": 69.4393,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.19
+                },
                 {
                     "time": 69.5902,
                     "band": "low",
@@ -1318,12 +1366,6 @@
             "beat_time": 70.4726,
             "notes": [
                 {
-                    "time": 70.4726,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": 4.58
-                },
-                {
                     "time": 70.7744,
                     "band": "low",
                     "relative_pos_in_beat": 8,
@@ -1341,6 +1383,12 @@
             "beat_index": 121,
             "beat_time": 71.0763,
             "notes": [
+                {
+                    "time": 71.0763,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 11.24
+                },
                 {
                     "time": 71.3665,
                     "band": "low",
@@ -1409,15 +1457,15 @@
             "notes": [
                 {
                     "time": 73.4215,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": -6.37
-                },
-                {
-                    "time": 73.4215,
                     "band": "mid",
                     "relative_pos_in_beat": 0,
                     "strength": -1.2
+                },
+                {
+                    "time": 73.9498,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 10.61
                 }
             ]
         },
@@ -1426,9 +1474,9 @@
             "beat_time": 74.6057,
             "notes": [
                 {
-                    "time": 74.9076,
+                    "time": 74.8321,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 6.66
                 },
                 {
@@ -1625,12 +1673,6 @@
             "notes": [
                 {
                     "time": 81.3627,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.65
-                },
-                {
-                    "time": 81.3627,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.81
@@ -1684,10 +1726,10 @@
             "beat_time": 82.8256,
             "notes": [
                 {
-                    "time": 83.1274,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.75
+                    "time": 82.8256,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 18.69
                 },
                 {
                     "time": 83.1274,
@@ -1732,9 +1774,9 @@
                     "strength": 26.68
                 },
                 {
-                    "time": 84.3117,
+                    "time": 84.1607,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 10.91
                 }
             ]
@@ -1745,15 +1787,15 @@
             "notes": [
                 {
                     "time": 84.9038,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.14
-                },
-                {
-                    "time": 84.9038,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 28.22
+                },
+                {
+                    "time": 84.9038,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.48
                 }
             ]
         },
@@ -1895,12 +1937,6 @@
             "notes": [
                 {
                     "time": 90.1979,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.88
-                },
-                {
-                    "time": 90.1979,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.02
@@ -1985,12 +2021,6 @@
             "notes": [
                 {
                     "time": 93.1352,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.02
-                },
-                {
-                    "time": 93.1352,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 28.65
@@ -2014,9 +2044,9 @@
                     "strength": 26.7
                 },
                 {
-                    "time": 93.7273,
+                    "time": 93.5822,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 13.87
                 }
             ]
@@ -2034,6 +2064,18 @@
             ]
         },
         {
+            "beat_index": 165,
+            "beat_time": 96.9665,
+            "notes": [
+                {
+                    "time": 97.1175,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": -0.24
+                }
+            ]
+        },
+        {
             "beat_index": 178,
             "beat_time": 104.304,
             "notes": [
@@ -2046,13 +2088,25 @@
             ]
         },
         {
+            "beat_index": 181,
+            "beat_time": 106.0223,
+            "notes": [
+                {
+                    "time": 106.4403,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": -18.59
+                }
+            ]
+        },
+        {
             "beat_index": 182,
             "beat_time": 106.5796,
             "notes": [
                 {
-                    "time": 106.8582,
+                    "time": 106.9279,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 10,
                     "strength": 12.51
                 }
             ]
@@ -2074,9 +2128,9 @@
             "beat_time": 108.8087,
             "notes": [
                 {
-                    "time": 109.2267,
+                    "time": 109.2963,
                     "band": "low",
-                    "relative_pos_in_beat": 12,
+                    "relative_pos_in_beat": 14,
                     "strength": 12.68
                 }
             ]
@@ -2086,9 +2140,9 @@
             "beat_time": 110.527,
             "notes": [
                 {
-                    "time": 110.6721,
+                    "time": 110.7447,
                     "band": "low",
-                    "relative_pos_in_beat": 4,
+                    "relative_pos_in_beat": 6,
                     "strength": 8.66
                 }
             ]
@@ -2098,10 +2152,16 @@
             "beat_time": 111.1075,
             "notes": [
                 {
-                    "time": 111.1075,
+                    "time": 111.18,
                     "band": "low",
-                    "relative_pos_in_beat": 0,
+                    "relative_pos_in_beat": 2,
                     "strength": 5.91
+                },
+                {
+                    "time": 111.6154,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 12.27
                 }
             ]
         },
@@ -2110,9 +2170,9 @@
             "beat_time": 112.2685,
             "notes": [
                 {
-                    "time": 112.5587,
+                    "time": 112.4862,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 10.26
                 }
             ]
@@ -2134,9 +2194,9 @@
             "beat_time": 115.1942,
             "notes": [
                 {
-                    "time": 115.4961,
+                    "time": 115.4206,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 12.68
                 },
                 {
@@ -2148,14 +2208,38 @@
             ]
         },
         {
+            "beat_index": 198,
+            "beat_time": 115.7979,
+            "notes": [
+                {
+                    "time": 116.3059,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 12.28
+                }
+            ]
+        },
+        {
             "beat_index": 201,
             "beat_time": 117.5626,
             "notes": [
                 {
-                    "time": 117.8529,
+                    "time": 117.7803,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 7.11
+                }
+            ]
+        },
+        {
+            "beat_index": 202,
+            "beat_time": 118.1431,
+            "notes": [
+                {
+                    "time": 118.6511,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 10.39
                 }
             ]
         },
@@ -2164,9 +2248,9 @@
             "beat_time": 119.9078,
             "notes": [
                 {
-                    "time": 120.2097,
+                    "time": 120.1342,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 8.14
                 }
             ]
@@ -2176,10 +2260,16 @@
             "beat_time": 120.5116,
             "notes": [
                 {
-                    "time": 120.6567,
+                    "time": 120.5841,
                     "band": "low",
-                    "relative_pos_in_beat": 4,
+                    "relative_pos_in_beat": 2,
                     "strength": 4.08
+                },
+                {
+                    "time": 121.0195,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 10.56
                 }
             ]
         },
@@ -2189,15 +2279,15 @@
             "notes": [
                 {
                     "time": 122.5433,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -4.9
-                },
-                {
-                    "time": 122.5433,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 21.34
+                },
+                {
+                    "time": 122.5433,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.92
                 }
             ]
         },
@@ -2212,10 +2302,22 @@
                     "strength": 13.11
                 },
                 {
-                    "time": 123.1238,
+                    "time": 122.9787,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 14.11
+                }
+            ]
+        },
+        {
+            "beat_index": 211,
+            "beat_time": 123.4141,
+            "notes": [
+                {
+                    "time": 123.7043,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": 14.11
+                    "strength": 11.77
                 }
             ]
         },
@@ -2230,10 +2332,10 @@
                     "strength": 19.47
                 },
                 {
-                    "time": 124.2964,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -4.45
+                    "time": 124.1455,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.72
                 }
             ]
         },
@@ -2241,12 +2343,6 @@
             "beat_index": 213,
             "beat_time": 124.5983,
             "notes": [
-                {
-                    "time": 124.8885,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.03
-                },
                 {
                     "time": 124.8885,
                     "band": "low",
@@ -2285,12 +2381,6 @@
                 },
                 {
                     "time": 126.0611,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.77
-                },
-                {
-                    "time": 126.0611,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 13.23
@@ -2302,15 +2392,9 @@
             "beat_time": 126.363,
             "notes": [
                 {
-                    "time": 126.6532,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.72
-                },
-                {
-                    "time": 126.6532,
+                    "time": 126.5081,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 13.57
                 }
             ]
@@ -2328,15 +2412,21 @@
             ]
         },
         {
+            "beat_index": 218,
+            "beat_time": 127.524,
+            "notes": [
+                {
+                    "time": 127.6749,
+                    "band": "low",
+                    "relative_pos_in_beat": 4,
+                    "strength": 15.54
+                }
+            ]
+        },
+        {
             "beat_index": 219,
             "beat_time": 128.1277,
             "notes": [
-                {
-                    "time": 128.418,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.32
-                },
                 {
                     "time": 128.418,
                     "band": "mid",
@@ -2350,16 +2440,16 @@
             "beat_time": 128.7082,
             "notes": [
                 {
-                    "time": 129.0101,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -2.69
+                    "time": 128.8591,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 13.53
                 },
                 {
-                    "time": 129.0101,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 13.53
+                    "time": 129.2365,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 8.58
                 }
             ]
         },
@@ -2367,12 +2457,6 @@
             "beat_index": 221,
             "beat_time": 129.3119,
             "notes": [
-                {
-                    "time": 129.6022,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -0.41
-                },
                 {
                     "time": 129.6022,
                     "band": "low",
@@ -2396,12 +2480,6 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 10.28
-                },
-                {
-                    "time": 130.1827,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.68
                 }
             ]
         },
@@ -2411,21 +2489,9 @@
             "notes": [
                 {
                     "time": 130.7632,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": -3.91
-                }
-            ]
-        },
-        {
-            "beat_index": 224,
-            "beat_time": 131.0534,
-            "notes": [
-                {
-                    "time": 131.3553,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.14
+                    "strength": 12.87
                 }
             ]
         },
@@ -2446,15 +2512,9 @@
             "beat_time": 132.2376,
             "notes": [
                 {
-                    "time": 132.5395,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.04
-                },
-                {
-                    "time": 132.5395,
+                    "time": 132.3886,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 12.59
                 }
             ]
@@ -2463,12 +2523,6 @@
             "beat_index": 227,
             "beat_time": 132.8414,
             "notes": [
-                {
-                    "time": 133.1316,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -4.39
-                },
                 {
                     "time": 133.1316,
                     "band": "mid",
@@ -2482,15 +2536,9 @@
             "beat_time": 133.4219,
             "notes": [
                 {
-                    "time": 133.7121,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 0.19
-                },
-                {
-                    "time": 133.7121,
+                    "time": 133.567,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 12.93
                 }
             ]
@@ -2504,18 +2552,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 17.53
-                }
-            ]
-        },
-        {
-            "beat_index": 230,
-            "beat_time": 134.5829,
-            "notes": [
+                },
                 {
-                    "time": 134.8847,
-                    "band": "high",
+                    "time": 134.2926,
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": 2.45
+                    "strength": 12.91
                 }
             ]
         },
@@ -2536,10 +2578,10 @@
             "beat_time": 135.7671,
             "notes": [
                 {
-                    "time": 136.0689,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.19
+                    "time": 136.2953,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 17.05
                 }
             ]
         },
@@ -2560,10 +2602,22 @@
             "beat_time": 136.9513,
             "notes": [
                 {
-                    "time": 137.2415,
-                    "band": "high",
+                    "time": 137.0964,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.58
+                }
+            ]
+        },
+        {
+            "beat_index": 235,
+            "beat_time": 137.5318,
+            "notes": [
+                {
+                    "time": 137.822,
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": -1.07
+                    "strength": 10.58
                 }
             ]
         },
@@ -2573,9 +2627,15 @@
             "notes": [
                 {
                     "time": 138.4141,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": 2.23
+                    "strength": 13.86
+                },
+                {
+                    "time": 138.6405,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 13.48
                 }
             ]
         },
@@ -2603,9 +2663,9 @@
             "notes": [
                 {
                     "time": 139.5868,
-                    "band": "high",
+                    "band": "low",
                     "relative_pos_in_beat": 8,
-                    "strength": 2.26
+                    "strength": 14.1
                 }
             ]
         },
@@ -2615,27 +2675,9 @@
             "notes": [
                 {
                     "time": 140.1789,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -3.57
-                },
-                {
-                    "time": 140.1789,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 13.53
-                }
-            ]
-        },
-        {
-            "beat_index": 240,
-            "beat_time": 140.4807,
-            "notes": [
-                {
-                    "time": 140.771,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.73
                 }
             ]
         },
@@ -2662,6 +2704,12 @@
             "beat_time": 141.6649,
             "notes": [
                 {
+                    "time": 141.8101,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.05
+                },
+                {
                     "time": 141.9552,
                     "band": "low",
                     "relative_pos_in_beat": 8,
@@ -2678,6 +2726,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 25.77
+                },
+                {
+                    "time": 142.5357,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.83
                 }
             ]
         },
@@ -2697,12 +2751,6 @@
             "beat_index": 245,
             "beat_time": 143.4297,
             "notes": [
-                {
-                    "time": 143.7199,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -4.04
-                },
                 {
                     "time": 143.7199,
                     "band": "low",
@@ -2726,6 +2774,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 27.22
+                },
+                {
+                    "time": 144.3004,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.75
                 }
             ]
         },
@@ -2738,6 +2792,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 23.87
+                },
+                {
+                    "time": 144.8925,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.3
                 }
             ]
         },
@@ -2746,9 +2806,9 @@
             "beat_time": 145.1944,
             "notes": [
                 {
-                    "time": 145.1944,
+                    "time": 145.3395,
                     "band": "mid",
-                    "relative_pos_in_beat": 0,
+                    "relative_pos_in_beat": 4,
                     "strength": 12.19
                 },
                 {
@@ -2776,9 +2836,9 @@
             "beat_time": 146.3554,
             "notes": [
                 {
-                    "time": 146.6572,
+                    "time": 146.5063,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 11.71
                 }
             ]
@@ -2787,12 +2847,6 @@
             "beat_index": 251,
             "beat_time": 146.9591,
             "notes": [
-                {
-                    "time": 147.2493,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -4.71
-                },
                 {
                     "time": 147.2493,
                     "band": "low",
@@ -2816,6 +2870,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 26.17
+                },
+                {
+                    "time": 147.8415,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.35
                 }
             ]
         },
@@ -2823,12 +2883,6 @@
             "beat_index": 253,
             "beat_time": 148.1433,
             "notes": [
-                {
-                    "time": 148.4336,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -2.09
-                },
                 {
                     "time": 148.4336,
                     "band": "low",
@@ -2885,12 +2939,6 @@
             "notes": [
                 {
                     "time": 150.1867,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -2.43
-                },
-                {
-                    "time": 150.1867,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 24.72
@@ -2901,12 +2949,6 @@
             "beat_index": 257,
             "beat_time": 150.4885,
             "notes": [
-                {
-                    "time": 150.7788,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.92
-                },
                 {
                     "time": 150.7788,
                     "band": "low",
@@ -2926,22 +2968,16 @@
             "beat_time": 151.069,
             "notes": [
                 {
-                    "time": 151.3709,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.17
+                    "time": 151.22,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.7
                 },
                 {
                     "time": 151.3709,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 24.6
-                },
-                {
-                    "time": 151.3709,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 12.7
                 }
             ]
         },
@@ -2969,15 +3005,15 @@
             "notes": [
                 {
                     "time": 152.5435,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.1
-                },
-                {
-                    "time": 152.5435,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 23.75
+                },
+                {
+                    "time": 152.5435,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.77
                 }
             ]
         },
@@ -2985,12 +3021,6 @@
             "beat_index": 261,
             "beat_time": 152.8337,
             "notes": [
-                {
-                    "time": 153.1356,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.46
-                },
                 {
                     "time": 153.1356,
                     "band": "low",
@@ -3011,15 +3041,15 @@
             "notes": [
                 {
                     "time": 153.7277,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.48
-                },
-                {
-                    "time": 153.7277,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 23.92
+                },
+                {
+                    "time": 153.7277,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.79
                 }
             ]
         },
@@ -3027,12 +3057,6 @@
             "beat_index": 263,
             "beat_time": 154.018,
             "notes": [
-                {
-                    "time": 154.3082,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 1.75
-                },
                 {
                     "time": 154.3082,
                     "band": "low",
@@ -3053,12 +3077,6 @@
             "notes": [
                 {
                     "time": 154.9003,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.3
-                },
-                {
-                    "time": 154.9003,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 24.66
@@ -3077,15 +3095,15 @@
             "notes": [
                 {
                     "time": 155.4924,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.26
-                },
-                {
-                    "time": 155.4924,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 26.01
+                },
+                {
+                    "time": 155.4924,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.44
                 }
             ]
         },
@@ -3093,12 +3111,6 @@
             "beat_index": 266,
             "beat_time": 155.7827,
             "notes": [
-                {
-                    "time": 156.0729,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.48
-                },
                 {
                     "time": 156.0729,
                     "band": "low",
@@ -3113,15 +3125,15 @@
             "notes": [
                 {
                     "time": 156.6534,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 1.81
-                },
-                {
-                    "time": 156.6534,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 24.29
+                },
+                {
+                    "time": 156.6534,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.46
                 }
             ]
         },
@@ -3129,12 +3141,6 @@
             "beat_index": 268,
             "beat_time": 156.9437,
             "notes": [
-                {
-                    "time": 157.2455,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.1
-                },
                 {
                     "time": 157.2455,
                     "band": "low",
@@ -3154,10 +3160,10 @@
             "beat_time": 158.1279,
             "notes": [
                 {
-                    "time": 158.4298,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -8.56
+                    "time": 158.6561,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 11.07
                 }
             ]
         },
@@ -3177,12 +3183,6 @@
             "beat_index": 273,
             "beat_time": 159.8926,
             "notes": [
-                {
-                    "time": 160.1945,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.54
-                },
                 {
                     "time": 160.1945,
                     "band": "low",
@@ -3206,6 +3206,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 24.37
+                },
+                {
+                    "time": 160.6415,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 11.76
                 }
             ]
         },
@@ -3215,15 +3221,27 @@
             "notes": [
                 {
                     "time": 161.3787,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 7.9
-                },
-                {
-                    "time": 161.3787,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 11.5
+                },
+                {
+                    "time": 161.6051,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 21.78
+                }
+            ]
+        },
+        {
+            "beat_index": 276,
+            "beat_time": 161.6805,
+            "notes": [
+                {
+                    "time": 161.8257,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 10.63
                 }
             ]
         },
@@ -3231,12 +3249,6 @@
             "beat_index": 277,
             "beat_time": 162.261,
             "notes": [
-                {
-                    "time": 162.5513,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.75
-                },
                 {
                     "time": 162.5513,
                     "band": "low",
@@ -3260,6 +3272,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 25.12
+                },
+                {
+                    "time": 162.9867,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 11.51
                 }
             ]
         },
@@ -3269,9 +3287,21 @@
             "notes": [
                 {
                     "time": 163.7239,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": 7.37
+                    "strength": 10.51
+                }
+            ]
+        },
+        {
+            "beat_index": 280,
+            "beat_time": 164.0258,
+            "notes": [
+                {
+                    "time": 164.4611,
+                    "band": "mid",
+                    "relative_pos_in_beat": 12,
+                    "strength": 0.67
                 }
             ]
         },
@@ -3280,16 +3310,16 @@
             "beat_time": 164.6063,
             "notes": [
                 {
+                    "time": 164.7514,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 11.44
+                },
+                {
                     "time": 164.8965,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 27.68
-                },
-                {
-                    "time": 164.8965,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 11.44
                 }
             ]
         },
@@ -3304,9 +3334,9 @@
                     "strength": 26.62
                 },
                 {
-                    "time": 165.477,
+                    "time": 165.3319,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 13.3
                 }
             ]
@@ -3323,12 +3353,6 @@
                 },
                 {
                     "time": 166.0691,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 7.74
-                },
-                {
-                    "time": 166.0691,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 10.08
@@ -3340,22 +3364,16 @@
             "beat_time": 166.371,
             "notes": [
                 {
-                    "time": 166.6612,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 1.73
+                    "time": 166.5161,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 8.68
                 },
                 {
                     "time": 166.6612,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 25.37
-                },
-                {
-                    "time": 166.6612,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 8.68
                 }
             ]
         },
@@ -3365,15 +3383,15 @@
             "notes": [
                 {
                     "time": 167.2417,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.14
-                },
-                {
-                    "time": 167.2417,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 28.8
+                },
+                {
+                    "time": 167.2417,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.02
                 }
             ]
         },
@@ -3382,22 +3400,16 @@
             "beat_time": 167.532,
             "notes": [
                 {
-                    "time": 167.532,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": 1.63
-                },
-                {
-                    "time": 167.8338,
-                    "band": "low",
-                    "relative_pos_in_beat": 8,
-                    "strength": 24.03
-                },
-                {
-                    "time": 167.8338,
+                    "time": 167.6829,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 10.78
+                },
+                {
+                    "time": 167.7584,
+                    "band": "low",
+                    "relative_pos_in_beat": 6,
+                    "strength": 24.03
                 }
             ]
         },
@@ -3405,12 +3417,6 @@
             "beat_index": 287,
             "beat_time": 168.1357,
             "notes": [
-                {
-                    "time": 168.4259,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 8.0
-                },
                 {
                     "time": 168.4259,
                     "band": "low",
@@ -3479,12 +3485,6 @@
             "notes": [
                 {
                     "time": 170.7828,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 7.07
-                },
-                {
-                    "time": 170.7828,
                     "band": "mid",
                     "relative_pos_in_beat": 8,
                     "strength": 10.81
@@ -3500,12 +3500,6 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 27.96
-                },
-                {
-                    "time": 171.3749,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -1.5
                 }
             ]
         },
@@ -3513,12 +3507,6 @@
             "beat_index": 293,
             "beat_time": 171.6651,
             "notes": [
-                {
-                    "time": 171.9554,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.24
-                },
                 {
                     "time": 171.9554,
                     "band": "low",
@@ -3538,9 +3526,9 @@
                     "strength": 26.16
                 },
                 {
-                    "time": 172.5359,
+                    "time": 172.3907,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 11.7
                 }
             ]
@@ -3554,12 +3542,6 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 27.54
-                },
-                {
-                    "time": 173.128,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 7.16
                 },
                 {
                     "time": 173.128,
@@ -3586,16 +3568,16 @@
             "beat_time": 174.0103,
             "notes": [
                 {
-                    "time": 174.3122,
-                    "band": "low",
-                    "relative_pos_in_beat": 8,
-                    "strength": 28.69
+                    "time": 174.1613,
+                    "band": "mid",
+                    "relative_pos_in_beat": 4,
+                    "strength": 12.3
                 },
                 {
-                    "time": 174.3122,
-                    "band": "mid",
-                    "relative_pos_in_beat": 8,
-                    "strength": 12.3
+                    "time": 174.2367,
+                    "band": "low",
+                    "relative_pos_in_beat": 6,
+                    "strength": 28.69
                 }
             ]
         },
@@ -3618,27 +3600,9 @@
             ]
         },
         {
-            "beat_index": 299,
-            "beat_time": 175.1946,
-            "notes": [
-                {
-                    "time": 175.4964,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 6.56
-                }
-            ]
-        },
-        {
             "beat_index": 300,
             "beat_time": 175.7983,
             "notes": [
-                {
-                    "time": 175.7983,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": -1.79
-                },
                 {
                     "time": 175.7983,
                     "band": "mid",
@@ -3658,34 +3622,10 @@
             "beat_time": 176.3788,
             "notes": [
                 {
-                    "time": 176.669,
+                    "time": 176.5239,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 11.73
-                }
-            ]
-        },
-        {
-            "beat_index": 302,
-            "beat_time": 176.9593,
-            "notes": [
-                {
-                    "time": 177.2495,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": -9.07
-                }
-            ]
-        },
-        {
-            "beat_index": 303,
-            "beat_time": 177.5398,
-            "notes": [
-                {
-                    "time": 177.5398,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": -6.86
                 }
             ]
         },
@@ -3694,9 +3634,9 @@
             "beat_time": 178.1203,
             "notes": [
                 {
-                    "time": 178.4221,
+                    "time": 178.3467,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 4.39
                 },
                 {
@@ -3729,6 +3669,12 @@
             "beat_index": 306,
             "beat_time": 179.3045,
             "notes": [
+                {
+                    "time": 179.3045,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.72
+                },
                 {
                     "time": 179.6063,
                     "band": "low",
@@ -3851,12 +3797,6 @@
             "notes": [
                 {
                     "time": 183.7163,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.04
-                },
-                {
-                    "time": 183.7163,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 28.46
@@ -3908,12 +3848,6 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 30.32
-                },
-                {
-                    "time": 185.4926,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.41
                 },
                 {
                     "time": 185.4926,
@@ -3982,9 +3916,9 @@
                     "strength": 25.41
                 },
                 {
-                    "time": 187.8378,
+                    "time": 187.6927,
                     "band": "mid",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 4,
                     "strength": 10.7
                 }
             ]
@@ -3998,6 +3932,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 28.31
+                },
+                {
+                    "time": 188.4299,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.17
                 }
             ]
         },
@@ -4005,12 +3945,6 @@
             "beat_index": 322,
             "beat_time": 188.7318,
             "notes": [
-                {
-                    "time": 189.022,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.16
-                },
                 {
                     "time": 189.022,
                     "band": "low",
@@ -4115,12 +4049,6 @@
             "notes": [
                 {
                     "time": 192.5515,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.87
-                },
-                {
-                    "time": 192.5515,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 30.45
@@ -4172,6 +4100,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.88
+                },
+                {
+                    "time": 194.5339,
+                    "band": "low",
+                    "relative_pos_in_beat": 14,
+                    "strength": 18.94
                 }
             ]
         },
@@ -4224,13 +4158,25 @@
             ]
         },
         {
+            "beat_index": 335,
+            "beat_time": 196.3712,
+            "notes": [
+                {
+                    "time": 196.6614,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.21
+                }
+            ]
+        },
+        {
             "beat_index": 336,
             "beat_time": 196.9517,
             "notes": [
                 {
-                    "time": 197.2419,
+                    "time": 197.1693,
                     "band": "low",
-                    "relative_pos_in_beat": 8,
+                    "relative_pos_in_beat": 6,
                     "strength": 23.56
                 }
             ]
@@ -4253,12 +4199,6 @@
             "notes": [
                 {
                     "time": 198.4261,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.69
-                },
-                {
-                    "time": 198.4261,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 26.13
@@ -4275,12 +4215,6 @@
             "beat_index": 339,
             "beat_time": 198.7164,
             "notes": [
-                {
-                    "time": 199.0182,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.51
-                },
                 {
                     "time": 199.0182,
                     "band": "low",
@@ -4304,12 +4238,6 @@
                     "band": "low",
                     "relative_pos_in_beat": 4,
                     "strength": 29.59
-                },
-                {
-                    "time": 199.6103,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.04
                 },
                 {
                     "time": 199.6103,
@@ -4343,12 +4271,6 @@
             "notes": [
                 {
                     "time": 200.7713,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.62
-                },
-                {
-                    "time": 200.7713,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 31.32
@@ -4367,12 +4289,6 @@
             "notes": [
                 {
                     "time": 201.3634,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.27
-                },
-                {
-                    "time": 201.3634,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 31.52
@@ -4389,12 +4305,6 @@
             "beat_index": 344,
             "beat_time": 201.6653,
             "notes": [
-                {
-                    "time": 201.9556,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 6.05
-                },
                 {
                     "time": 201.9556,
                     "band": "low",
@@ -4418,6 +4328,12 @@
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 32.88
+                },
+                {
+                    "time": 202.5477,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.57
                 }
             ]
         },
@@ -4425,12 +4341,6 @@
             "beat_index": 346,
             "beat_time": 202.8495,
             "notes": [
-                {
-                    "time": 203.1398,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.7
-                },
                 {
                     "time": 203.1398,
                     "band": "low",
@@ -4451,12 +4361,6 @@
             "notes": [
                 {
                     "time": 203.7203,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.84
-                },
-                {
-                    "time": 203.7203,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.14
@@ -4473,12 +4377,6 @@
             "beat_index": 348,
             "beat_time": 204.0105,
             "notes": [
-                {
-                    "time": 204.3008,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.57
-                },
                 {
                     "time": 204.3008,
                     "band": "low",
@@ -4499,12 +4397,6 @@
             "notes": [
                 {
                     "time": 204.8929,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 2.78
-                },
-                {
-                    "time": 204.8929,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 30.8
@@ -4521,12 +4413,6 @@
             "beat_index": 350,
             "beat_time": 205.1947,
             "notes": [
-                {
-                    "time": 205.485,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 6.07
-                },
                 {
                     "time": 205.485,
                     "band": "low",
@@ -4547,12 +4433,6 @@
             "notes": [
                 {
                     "time": 206.0655,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.82
-                },
-                {
-                    "time": 206.0655,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 31.63
@@ -4570,16 +4450,16 @@
             "beat_time": 206.3557,
             "notes": [
                 {
-                    "time": 206.5009,
+                    "time": 206.5734,
                     "band": "low",
-                    "relative_pos_in_beat": 4,
+                    "relative_pos_in_beat": 6,
                     "strength": 20.96
                 },
                 {
                     "time": 206.646,
-                    "band": "high",
+                    "band": "mid",
                     "relative_pos_in_beat": 8,
-                    "strength": 4.84
+                    "strength": 8.27
                 }
             ]
         },
@@ -4606,10 +4486,10 @@
             "beat_time": 207.54,
             "notes": [
                 {
-                    "time": 207.8302,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 4.92
+                    "time": 207.54,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 8.83
                 },
                 {
                     "time": 207.8302,
@@ -4631,12 +4511,6 @@
             "notes": [
                 {
                     "time": 208.4223,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.14
-                },
-                {
-                    "time": 208.4223,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.87
@@ -4653,12 +4527,6 @@
             "beat_index": 356,
             "beat_time": 208.7242,
             "notes": [
-                {
-                    "time": 209.0144,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.64
-                },
                 {
                     "time": 209.0144,
                     "band": "low",
@@ -4697,12 +4565,6 @@
             "notes": [
                 {
                     "time": 210.1754,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.32
-                },
-                {
-                    "time": 210.1754,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.45
@@ -4719,12 +4581,6 @@
             "beat_index": 359,
             "beat_time": 210.4657,
             "notes": [
-                {
-                    "time": 210.4657,
-                    "band": "high",
-                    "relative_pos_in_beat": 0,
-                    "strength": 6.37
-                },
                 {
                     "time": 210.4657,
                     "band": "low",
@@ -4751,12 +4607,6 @@
             "notes": [
                 {
                     "time": 211.3596,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.6
-                },
-                {
-                    "time": 211.3596,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 31.14
@@ -4775,15 +4625,15 @@
             "notes": [
                 {
                     "time": 211.9517,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.94
-                },
-                {
-                    "time": 211.9517,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 32.32
+                },
+                {
+                    "time": 211.9517,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.82
                 }
             ]
         },
@@ -4791,12 +4641,6 @@
             "beat_index": 362,
             "beat_time": 212.2536,
             "notes": [
-                {
-                    "time": 212.5439,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.42
-                },
                 {
                     "time": 212.5439,
                     "band": "low",
@@ -4835,9 +4679,9 @@
             "notes": [
                 {
                     "time": 213.7281,
-                    "band": "high",
+                    "band": "low",
                     "relative_pos_in_beat": 8,
-                    "strength": 5.11
+                    "strength": 29.44
                 },
                 {
                     "time": 213.7281,
@@ -4871,12 +4715,6 @@
             "notes": [
                 {
                     "time": 214.8891,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 5.57
-                },
-                {
-                    "time": 214.8891,
                     "band": "low",
                     "relative_pos_in_beat": 8,
                     "strength": 29.0
@@ -4893,12 +4731,6 @@
             "beat_index": 367,
             "beat_time": 215.1793,
             "notes": [
-                {
-                    "time": 215.4812,
-                    "band": "high",
-                    "relative_pos_in_beat": 8,
-                    "strength": 3.73
-                },
                 {
                     "time": 215.4812,
                     "band": "low",

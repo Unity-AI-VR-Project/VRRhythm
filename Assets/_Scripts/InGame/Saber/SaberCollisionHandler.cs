@@ -11,7 +11,7 @@ public class SaberCollisionHandler : MonoBehaviour
     /// <summary>
     /// 스크립트 인스턴스가 로드될 때 호출되며, 필요한 컴포넌트 참조를 설정하고 유효성을 검사합니다.
     /// </summary>
-    void Start()
+    void OnEnable()
     {
         if (_saber == null)
         {

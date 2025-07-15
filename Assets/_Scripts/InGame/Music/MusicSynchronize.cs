@@ -40,6 +40,7 @@ public class MusicSynchronizer : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        audioSource.clip = GameManager.Instance.soundManager.musicAudioSource.clip; // GameManager에서 음악 클립을 가져옵니다.
 
         if (spawnerSelector == null)
         {

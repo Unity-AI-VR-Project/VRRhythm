@@ -19,7 +19,14 @@ public abstract class UIManagerBase : ManagerBase
 
     protected virtual void InitializeUI()
     {
-
+        if (GameManager.Instance.currentUIManager == null)
+        {
+            GameManager.Instance.currentUIManager = this;
+        }
+        else
+        {
+            Debug.LogWarning("UIManagerBase: Another UIManager is already registered. This may cause unexpected behavior.", this);
+        }
     }
 
     protected virtual void OnDestroy()

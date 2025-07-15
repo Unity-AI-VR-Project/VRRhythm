@@ -90,8 +90,7 @@ public class NoteSpawnerTime : MonoBehaviour
                 spawnInfo.Value.Tempo,
                 spawnInfo.Value.CalculatedTargetPos
             );
-            // 디버그 로그를 통해 노트 스폰이 실제로 일어나는지 확인합니다.
-            Debug.Log($"노트 스폰됨: JSON시간={spawnInfo.Value.NoteData.time:F2}s, DSP기준현재시간={timeChecker.currentTimeDSP:F2}s, 스포너={spawnInfo.Value.SpawnerTransform.name}, 타겟Pos={spawnInfo.Value.CalculatedTargetPos}");
+            
         }
     }
 
@@ -124,7 +123,7 @@ public class NoteSpawnerTime : MonoBehaviour
             case NoteDirection.Right: targetZRotation = 90f; break;
             case NoteDirection.Down: targetZRotation = 180f; break;
             case NoteDirection.Left: targetZRotation = -90f; break;
-            case NoteDirection.Any: targetZRotation = 0f; break; // "Any" 방향에 대한 기본값 설정
+            //case NoteDirection.Any: targetZRotation = 0f; break; // "Any" 방향에 대한 기본값 설정
             default:
                 Debug.LogWarning($"NoteSpawnerTime: 알 수 없는 NoteDirection 값 ({noteInfo.requiredDirection})입니다. 기본 회전값 (0도)을 사용합니다.", spawnedNote);
                 break;

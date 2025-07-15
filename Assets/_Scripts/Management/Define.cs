@@ -20,8 +20,8 @@ namespace Define
         Up,
         Down,
         Left,
-        Right,
-        Any
+        Right
+      
     }
     public enum JudgementType
     {

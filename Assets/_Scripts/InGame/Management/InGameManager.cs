@@ -27,13 +27,27 @@ public class InGameManager : MonoBehaviour
     private static InGameManager m_instance;
 
     // 현재 점수
-    public int Score { get; private set; }
+    private int m_score;
+    public int Score
+    {
+        get
+        {
+            return m_score;
+        }
+        private set
+        {
+            m_score = value;
+            Debug.Log($"점수 업데이트: {m_score}"); // 점수 변경 시 로그 출력
+        }
+    }
 
     // 현재 콤보 수치
     public int Combo { get; private set; }
 
     // 최고 콤보 기록
     public int MaxCombo { get; private set; }
+
+    public int Miss { get; private set; }
 
     // 플레이어 체력
     public float PlayerHealth { get; private set; } // 프로퍼티 이름 변경 (public 필드와의 혼동 방지)
@@ -49,6 +63,11 @@ public class InGameManager : MonoBehaviour
 
     // 콤보 수치가 변경되었을 때 발생하는 이벤트
     public event Action<int> OnComboChanged;
+
+    // 미스 수치가 변경 되었을 떄
+    public event Action<int> OnMissChanged;
+
+
 
     // 오브젝트가 활성화될 때 호출
     private void Awake()
@@ -67,8 +86,9 @@ public class InGameManager : MonoBehaviour
         // 초기 체력 설정
         PlayerHealth = 100;
         Score = 0;
-        Combo = 0;
-        MaxCombo = 0;
+        Combo = 1;
+        MaxCombo = 8;
+        Miss = 0;
         IsStarted = false; // 초기에는 게임이 시작되지 않은 상태
     }
 
@@ -99,14 +119,8 @@ public class InGameManager : MonoBehaviour
     // 플레이어가 피해를 입었을 때 호출
     public void TakeDamage(int damage)
     {
-        PlayerHealth -= damage;
-        // 체력이 0 이하가 되면 게임 오버 처리 등 추가 가능
-        if (PlayerHealth <= 0)
-        {
-            PlayerHealth = 0;
-            Debug.Log("플레이어 체력 0! 게임 오버!");
-            // TODO: 게임 오버 로직 호출
-        }
+        
+        
     }
 
     // 게임 종료 시 최대 콤보에 따른 보너스 점수 적용
@@ -116,6 +130,12 @@ public class InGameManager : MonoBehaviour
         int bonus = MaxCombo * 10;
         AddScore(bonus);
         Debug.Log($"Max Combo Bonus Applied: {bonus}");
+    }
+
+    public void MissUpdate()
+    {
+        Miss++;
+        OnMissChanged?.Invoke(Miss);
     }
 
     // 게임 시작을 알리는 메서드 (외부에서 호출)

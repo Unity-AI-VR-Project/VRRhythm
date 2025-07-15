@@ -84,10 +84,10 @@ public class NoteJudger
     /// </summary>
     private bool CheckDirection(Vector3 saberSwingDirection, NoteDirection requiredDirection, Vector3 noteForward)
     {
-        if (requiredDirection == NoteDirection.Any)
-        {
-            return true; // Any 방향은 항상 맞음
-        }
+        //if (requiredDirection == NoteDirection.Any)
+        //{
+        //    return true; // Any 방향은 항상 맞음
+        //}
 
         // 노트를 기준으로 상대적인 방향 벡터를 계산 (노트의 forward를 기준으로)
         // NoteMovement에서 노트가 항상 Z축으로 스폰되므로 noteForward는 보통 Vector3.forward 또는 Vector3.back일 것.
@@ -108,7 +108,7 @@ public class NoteJudger
 
         float angle = Vector3.Angle(saberSwingDirection.normalized, targetDirection.normalized);
 
-        return angle < 45f; // 45도 이내면 올바른 방향으로 간주 (조정 가능)
+        return angle < 150f; // 45도 이내면 올바른 방향으로 간주 (조정 가능)
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ public class NoteJudger
             case NoteDirection.Down: return Vector3.down;
             case NoteDirection.Left: return Vector3.left;
             case NoteDirection.Right: return Vector3.right;
-            case NoteDirection.Any: return Vector3.zero;
+            //case NoteDirection.Any: return Vector3.zero;
             default: return Vector3.zero;
         }
     }
@@ -315,6 +315,7 @@ public class NoteJudger
     {
         int score = 0;
         bool comboIncreased = false;
+        
 
         if (InGameManager.Instance == null || ParticlePoolManager.Instance == null)
         {
@@ -322,6 +323,7 @@ public class NoteJudger
             return;
         }
 
+         Debug.Log($"NoteJudger: 판정 결과 - {result}, 스윙 각도: {swingAngleBeforeCut}, 정확도: {cutAccuracy}");
         // 판정 타입에 따른 점수 및 게임 상태 업데이트
         if (result == JudgementType.Perfect || result == JudgementType.Excellent || result == JudgementType.Good)
         {
@@ -355,10 +357,12 @@ public class NoteJudger
             InGameManager.Instance.ResetCombo();
             InGameManager.Instance.TakeDamage(20); // Miss 시 데미지 (더 큼)
             score = 0;
+            InGameManager.Instance.MissUpdate();
+           
         }
 
-        Debug.Log($"[{context.HitNoteObject.name}] 판정 결과: {result}, 점수: {score}, 콤보 증가: {comboIncreased}");
-        Debug.Log($"[오차 : {context.CurrentMusicTime - context.TargetMusicTime:F3}] 현재 : {context.CurrentMusicTime:F3}, 타겟 : {context.TargetMusicTime:F3}");
+       
+        
 
         ParticlePoolManager.Instance.SpawnParticle(result.ToString(), context.HitNoteObject.transform.position);
     }

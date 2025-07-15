@@ -58,7 +58,7 @@ public class MusicDisplay : MonoBehaviour
 
     public void SelectMusic()
     {
-
+        GameManager.Instance.sceneController.LoadScene(Define.eScenes.InGame);
     }
 
     public void PreviousMusic()

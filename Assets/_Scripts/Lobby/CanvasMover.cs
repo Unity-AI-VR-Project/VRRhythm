@@ -246,8 +246,6 @@ public class CanvasMover : MonoBehaviour
         }
         audioSource.clip = clips[index];
         audioSource.Play();
-        GameManager.Instance.soundManager.PauseMusic();
-        GameManager.Instance.soundManager.PlayMusic(clips[index]);
 
         Debug.Log($"[CanvasMover] '{clips[index].name}' 음악을 재생합니다. 현재 곡 인덱스: {index}");
 

@@ -1,14 +1,11 @@
-// NoteManager.cs
-
 using UnityEngine;
 using UnityEngine.Pool;
-using Define;
 
 public class NoteManager : MonoBehaviour
 {
     public static NoteManager Instance { get; private set; }
 
-    private NoteJudger activeNoteJudger;
+    [SerializeField] private NoteJudger activeNoteJudger;
 
     [Header("Judgement Timing Windows")]
     [SerializeField] private float autoMissTimingWindow = 0.3f;

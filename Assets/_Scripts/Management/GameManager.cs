@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Define;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -21,6 +22,14 @@ public class GameManager : Singleton<GameManager>
             Initialize();
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            sceneController.LoadScene((eScenes)(sceneController.currentScene + 1));
+        }
     }
 
     private void Initialize()

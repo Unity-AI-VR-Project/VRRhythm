@@ -53,6 +53,10 @@ public class GameManager : Singleton<GameManager>
         {
             //aiManager = FindComponent<AIManager>(typeof(AIManager), transform);
         }
+        if (currentUIManager == null)
+        {
+            currentUIManager = FindComponent<UIManagerBase>(typeof(UIManagerBase), transform);
+        }
     }
 
     public T FindComponent<T>(Type component,Transform parent)

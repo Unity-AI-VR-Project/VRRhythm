@@ -30,7 +30,19 @@ public class InGameManager : MonoBehaviour
     private static InGameManager m_instance;
 
     // 현재 점수
-    public int Score { get; private set; }
+    private int m_score;
+    public int Score
+    {
+        get
+        {
+            return m_score;
+        }
+        private set
+        {
+            m_score = value;
+            Debug.Log($"점수 업데이트: {m_score}"); // 점수 변경 시 로그 출력
+        }
+    }
 
     // 현재 콤보 수치
     public int Combo { get; private set; }
@@ -110,14 +122,8 @@ public class InGameManager : MonoBehaviour
     // 플레이어가 피해를 입었을 때 호출
     public void TakeDamage(int damage)
     {
-        PlayerHealth -= damage;
-        // 체력이 0 이하가 되면 게임 오버 처리 등 추가 가능
-        if (PlayerHealth <= 0)
-        {
-            PlayerHealth = 0;
-            Debug.Log("플레이어 체력 0! 게임 오버!");
-            // TODO: 게임 오버 로직 호출
-        }
+        
+        
     }
 
     // 게임 종료 시 최대 콤보에 따른 보너스 점수 적용

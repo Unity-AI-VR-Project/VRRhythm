@@ -108,7 +108,7 @@ public class NoteJudger
 
         float angle = Vector3.Angle(saberSwingDirection.normalized, targetDirection.normalized);
 
-        return angle < 45f; // 45도 이내면 올바른 방향으로 간주 (조정 가능)
+        return angle < 150f; // 45도 이내면 올바른 방향으로 간주 (조정 가능)
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ public class NoteJudger
     {
         int score = 0;
         bool comboIncreased = false;
-        int miss = 0;
+        
 
         if (InGameManager.Instance == null || ParticlePoolManager.Instance == null)
         {
@@ -323,6 +323,7 @@ public class NoteJudger
             return;
         }
 
+         Debug.Log($"NoteJudger: 판정 결과 - {result}, 스윙 각도: {swingAngleBeforeCut}, 정확도: {cutAccuracy}");
         // 판정 타입에 따른 점수 및 게임 상태 업데이트
         if (result == JudgementType.Perfect || result == JudgementType.Excellent || result == JudgementType.Good)
         {
@@ -360,8 +361,8 @@ public class NoteJudger
            
         }
 
-        Debug.Log($"[{context.HitNoteObject.name}] 판정 결과: {result}, 점수: {score}, 콤보 증가: {comboIncreased}");
-        Debug.Log($"[오차 : {context.CurrentMusicTime - context.TargetMusicTime:F3}] 현재 : {context.CurrentMusicTime:F3}, 타겟 : {context.TargetMusicTime:F3}");
+       
+        
 
         ParticlePoolManager.Instance.SpawnParticle(result.ToString(), context.HitNoteObject.transform.position);
     }

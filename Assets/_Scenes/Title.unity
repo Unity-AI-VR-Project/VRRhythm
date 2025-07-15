@@ -941,6 +941,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6289231498213487086, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1428337978}
+    - target: {fileID: 6289231498213487086, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
     - target: {fileID: 6293621912950982207, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1436,6 +1444,11 @@ VisualEffect:
       m_Array: []
     m_Bool:
       m_Array: []
+--- !u!1 &1428337978 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1968732025375913191, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+  m_PrefabInstance: {fileID: 859577669}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1718702531
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,6 +2222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5312fc0894c62dc44af24491ba7a8244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicData:
+    Music: []
 --- !u!1 &5122838752433364693
 GameObject:
   m_ObjectHideFlags: 0

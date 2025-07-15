@@ -1,6 +1,5 @@
 using Define;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MusicDisplay : MonoBehaviour
@@ -23,7 +22,6 @@ public class MusicDisplay : MonoBehaviour
 
     private void Initialize()
     {
-        
         foreach (Transform child in displayGroup.transform)
         {
             Destroy(child.gameObject);
@@ -38,6 +36,7 @@ public class MusicDisplay : MonoBehaviour
             AudioClip clip = Resources.Load<AudioClip>($"Music/Sound/{i}");
             musicClips[i] = clip;
         }
+        GameManager.Instance.soundManager.PlayMusic(musicClips[currentMusicNumber]);
     }
 
     private void Update()

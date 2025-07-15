@@ -3730,7 +3730,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6293621912950982207}
+      - m_Target: {fileID: 1968732025375913191}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -5804,12 +5804,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   profile: {fileID: 0}
   profileSync: 0
-  target: {fileID: 5931800917065606818}
+  target: {fileID: 7972273953962599888}
   _active: 1
   ignoreVisibility: 0
   executeInEditMode: 0
-  ignoreFrames: 1
-  duration: 0.35
+  ignoreFrames: 0
+  duration: 0.5
   continuous: 0
   smooth: 0
   checkWorldPosition: 0
@@ -5817,9 +5817,9 @@ MonoBehaviour:
   worldPositionRelativeOption: 0
   worldPositionRelativeTransform: {fileID: 0}
   checkScreenPosition: 1
-  minPixelDistance: 0
+  minPixelDistance: 10
   stepsBufferSize: 1023
-  maxStepsPerFrame: 50
+  maxStepsPerFrame: 12
   checkTime: 0
   timeInterval: 1
   checkCollisions: 0
@@ -5835,8 +5835,8 @@ MonoBehaviour:
   subMeshMask: -1
   colorOverTime:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    key1: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -5860,13 +5860,13 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_ColorSpace: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  colorRamp: 1
-  colorRampTexture: {fileID: 2800000, guid: 097de20e6b9f5e9459927087bbcaa279, type: 3}
-  colorRampStart: {fileID: 7439629834168881755}
-  colorRampEnd: {fileID: 2197039560724574281}
+  colorRamp: 0
+  colorRampTexture: {fileID: 0}
+  colorRampStart: {fileID: 0}
+  colorRampEnd: {fileID: 0}
   fadeOut: 1
   colorSequence: 0
   color: {r: 1, g: 1, b: 1, a: 1}
@@ -10471,8 +10471,8 @@ MonoBehaviour:
   _active: 1
   ignoreVisibility: 0
   executeInEditMode: 0
-  ignoreFrames: 1
-  duration: 0.35
+  ignoreFrames: 0
+  duration: 0.5
   continuous: 0
   smooth: 0
   checkWorldPosition: 0
@@ -10480,9 +10480,9 @@ MonoBehaviour:
   worldPositionRelativeOption: 0
   worldPositionRelativeTransform: {fileID: 0}
   checkScreenPosition: 1
-  minPixelDistance: 0
+  minPixelDistance: 10
   stepsBufferSize: 1023
-  maxStepsPerFrame: 50
+  maxStepsPerFrame: 12
   checkTime: 0
   timeInterval: 1
   checkCollisions: 0
@@ -10498,8 +10498,8 @@ MonoBehaviour:
   subMeshMask: -1
   colorOverTime:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+    key1: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -10523,13 +10523,13 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_ColorSpace: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  colorRamp: 1
-  colorRampTexture: {fileID: 2800000, guid: 097de20e6b9f5e9459927087bbcaa279, type: 3}
-  colorRampStart: {fileID: 157601143054394689}
-  colorRampEnd: {fileID: 633215740859418601}
+  colorRamp: 0
+  colorRampTexture: {fileID: 0}
+  colorRampStart: {fileID: 0}
+  colorRampEnd: {fileID: 0}
   fadeOut: 1
   colorSequence: 0
   color: {r: 1, g: 1, b: 1, a: 1}

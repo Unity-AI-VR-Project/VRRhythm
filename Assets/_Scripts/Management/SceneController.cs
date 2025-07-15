@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Define;
 using UnityEngine;
@@ -19,6 +20,10 @@ public class SceneController : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+    }
+
+    private void Start()
+    {
         currentScene = (eScenes)SceneManager.GetActiveScene().buildIndex;
     }
 
@@ -36,10 +41,10 @@ public class SceneController : MonoBehaviour
     public IEnumerator LoadSceneAsyncCoroutine(string sceneName)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
+        currentScene = (eScenes)Enum.Parse(typeof(eScenes), sceneName);
     }
 }

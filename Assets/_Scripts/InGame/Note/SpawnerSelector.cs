@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Define; // Define 네임스페이스가 프로젝트에 정의되어 있어야 합니다.
 using Random = UnityEngine.Random;
 
-[System.Serializable]
+[Serializable]
 public class RootData
 {
     public Metadata metadata;
     public List<BeatData> beats;
 }
 
-[System.Serializable]
+[Serializable]
 public class Metadata
 {
     public float tempo;
@@ -19,7 +19,7 @@ public class Metadata
     public string band_group;
 }
 
-[System.Serializable]
+[Serializable]
 public class BeatData
 {
     public int beat_index;
@@ -27,7 +27,7 @@ public class BeatData
     public List<NoteInfo> notes;
 }
 
-[System.Serializable]
+[Serializable]
 public class NoteInfo
 {
     public float time;

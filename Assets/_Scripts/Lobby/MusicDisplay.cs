@@ -74,7 +74,7 @@ public class MusicDisplay : MonoBehaviour
     {
         if (isMoving || (Time.time < lastMoveCompleteTime + displayMoveDuration + 0.01f))
         {
-            Debug.Log("ÇöÀç ÀÌµ¿ ÁßÀÌ°Å³ª ³Ê¹« ÂªÀº °£°ÝÀ¸·Î ½ÇÇà ¿äÃ»µÊ. ¹«½ÃÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½Ì°Å³ï¿½ ï¿½Ê¹ï¿½ Âªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
             return false;
         }
 
@@ -97,7 +97,7 @@ public class MusicDisplay : MonoBehaviour
             yield return null;
         }
 
-        // ¸ñÇ¥ À§Ä¡¿¡ Á¤È®È÷ µµ´ÞÇÏµµ·Ï ¸¶Áö¸·À¸·Î ¼³Á¤
+        // ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         displayGroup.anchoredPosition = targetPosition;
         isMoving = false;
         lastMoveCompleteTime = Time.time;

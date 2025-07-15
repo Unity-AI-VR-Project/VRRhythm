@@ -230,11 +230,13 @@ MonoBehaviour:
       m_Calls: []
   m_text: "- \uC804\uBC29\uC758 \uBE14\uB7ED\uC744 \uD0C0\uACA9\uD574 \uBCF4\uC138\uC694!\n-
     <sprite=344> \uBC84\uD2BC\uC744 \uB20C\uB7EC \uC67C\uC190\uC5D0 \uBA54\uB274\uCC3D\uC744
-    \uD45C\uC2DC\uD574\uBCF4\uC138\uC694!\n- <sprite=344> \uBC84\uD2BC\uC744 \uB20C\uB7EC
-    \uB85C\uBE44\uB85C \uC774\uB3D9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n"
+    \uD45C\uC2DC\uD574\uBCF4\uC138\uC694!\n- \uC88C\uC6B0 \uD2B8\uB9AC\uAC70\uB97C
+    \uB3D9\uC2DC\uC5D0 \uB2F9\uACA8 \uC74C\uC131 \uCC44\uD305\uC744 \uC0AC\uC6A9\uD574\uBCF4\uC138\uC694!\n-
+    <sprite=344> \uBC84\uD2BC\uC744 \uB20C\uB7EC \uB85C\uBE44\uB85C \uC774\uB3D9\uD560
+    \uC218 \uC788\uC2B5\uB2C8\uB2E4.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c43d016aae725046b596d9375047e04, type: 2}
-  m_sharedMaterial: {fileID: -4267946556895044961, guid: 9c43d016aae725046b596d9375047e04, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d42f1acdcda0c7a45b198e2614c7bd02, type: 2}
   m_fontSharedMaterials:
   - {fileID: -4267946556895044961, guid: 9c43d016aae725046b596d9375047e04, type: 2}
   m_fontMaterial: {fileID: 0}
@@ -1532,7 +1534,7 @@ MonoBehaviour:
   m_text: VR Rhythm
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c43d016aae725046b596d9375047e04, type: 2}
-  m_sharedMaterial: {fileID: -4267946556895044961, guid: 9c43d016aae725046b596d9375047e04, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 4d16b4076e8a0194a893339e03b6b209, type: 2}
   m_fontSharedMaterials:
   - {fileID: -4267946556895044961, guid: 9c43d016aae725046b596d9375047e04, type: 2}
   m_fontMaterial: {fileID: 0}
@@ -1822,7 +1824,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88416d77fc67cc408de4189dbee91e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chatPrefabs: []
+  chatPrefabs:
+  - {fileID: 8849744867232608696, guid: 0c062dd8369f23549b31a49919f4d657, type: 3}
+  - {fileID: 3139659404611018871, guid: 99188d5968fe28845b0a1708e9aada3e, type: 3}
+  chatUI: {fileID: 0}
 --- !u!4 &1282502895324972198
 Transform:
   m_ObjectHideFlags: 0

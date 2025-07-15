@@ -339,8 +339,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: <sprite=6>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9c43d016aae725046b596d9375047e04, type: 2}
-  m_sharedMaterial: {fileID: -4267946556895044961, guid: 9c43d016aae725046b596d9375047e04, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -356,7 +356,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: 562d426a4164d6342be0eca9db83c7d1, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901

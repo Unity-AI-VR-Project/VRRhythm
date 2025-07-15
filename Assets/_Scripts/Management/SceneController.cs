@@ -40,6 +40,7 @@ public class SceneController : MonoBehaviour
 
     public IEnumerator LoadSceneAsyncCoroutine(string sceneName)
     {
+        GameManager.Instance.soundManager.PauseMusic();
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         while (!asyncLoad.isDone)
         {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Sentis;
-using UnityEngine;
 
 public class SentimentInference : IDisposable
 {
@@ -9,9 +8,9 @@ public class SentimentInference : IDisposable
     private Model saModel;
     private Worker saWorker;
 
-    public SentimentInference(Model saModel, TextAsset vocabAsset)
+    public SentimentInference(Model saModel, string vocabFileName)
     {
-        InitializeTokenizer(vocabAsset);
+        InitializeTokenizer(vocabFileName);
         InitializeSAModel(saModel);
     }
 
@@ -32,9 +31,9 @@ public class SentimentInference : IDisposable
         return result;
     }
 
-    private void InitializeTokenizer(TextAsset vocabAsset)
+    private void InitializeTokenizer(string vocabFileName)
     {
-        tokenizer = new WordPieceTokenizer(vocabAsset.text, doLowerCase: false, stripAccents: false, cleanText: true);
+        tokenizer = new WordPieceTokenizer(vocabFileName, doLowerCase: false, stripAccents: false, cleanText: true);
     }
 
     private void InitializeSAModel(Model saModel)

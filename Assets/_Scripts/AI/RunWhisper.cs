@@ -23,6 +23,8 @@ public class RunWhisper : MonoBehaviour
 
     public bool IsProcessingAudio => isProcessingAudio;
 
+    public TMPro.TextMeshProUGUI temp;
+
     void Awake()
     {
         audioProcessor = GetComponent<AudioProcessor>();
@@ -162,6 +164,7 @@ public class RunWhisper : MonoBehaviour
 
         isProcessingAudio = true;
         UnityEngine.Debug.Log("모델 성능 테스트 시작...");
+        temp.text = "모델 성능 테스트 시작...";
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -188,7 +191,7 @@ public class RunWhisper : MonoBehaviour
         UnityEngine.Debug.Log($"모델 성능 테스트 완료!");
         UnityEngine.Debug.Log($"총 처리 시간: {stopwatch.ElapsedMilliseconds} ms");
         UnityEngine.Debug.Log($"변환된 텍스트 (테스트): {testOutputString}");
-
+        temp.text = $"모델 성능 테스트 완료!\n총 처리 시간: {stopwatch.ElapsedMilliseconds} ms\n변환된 텍스트 (테스트): {testOutputString}";
         isProcessingAudio = false;
         UnityEngine.Debug.Log("스페이스바를 눌러 다시 녹음을 시작하세요.");
         UnityEngine.Debug.Log("P 키를 눌러 모델 성능 테스트를 시작하세요.");

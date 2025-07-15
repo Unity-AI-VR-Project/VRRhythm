@@ -7,7 +7,7 @@ public class SAController : MonoBehaviour
     [SerializeField]
     private ModelAsset saModelAsset;
     [SerializeField]
-    private TextAsset vocabAsset;
+    private string vocabFileName;
 
     private SentimentInference sentimentInference;
 
@@ -30,13 +30,13 @@ public class SAController : MonoBehaviour
                 Debug.LogError("SA Model Asset이 할당되지 않았습니다. Resources/SA/ 경로에 있는지 확인해주세요.");
                 return;
             }
-            if (vocabAsset == null)
+            if (vocabFileName == null)
             {
                 Debug.LogError("Vocab Asset이 할당되지 않았습니다. Resources/SA/ 경로에 있는지 확인해주세요.");
                 return;
             }
 
-            sentimentInference = new SentimentInference(ModelLoader.Load(saModelAsset), vocabAsset);
+            sentimentInference = new SentimentInference(ModelLoader.Load(saModelAsset), vocabFileName);
             Debug.Log("Sentiment Inference 모델이 성공적으로 초기화되었습니다.");
             isInitialized = true;
         }

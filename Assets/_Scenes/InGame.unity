@@ -8771,6 +8771,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7256459995521165553, guid: caea91f2cbdb3894fbaf9ed3951b29fb, type: 3}
+      propertyPath: noteCutClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
+    - target: {fileID: 7256459995521165553, guid: caea91f2cbdb3894fbaf9ed3951b29fb, type: 3}
       propertyPath: goodTimingWindow
       value: 0.25
       objectReference: {fileID: 0}

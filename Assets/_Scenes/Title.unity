@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 259b822d9643aeb408b0d3c025418d2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleNote: {fileID: 8777602596187823816, guid: 5484d5ece55094b459bef1a12faa8edd, type: 3}
+  titleNote: {fileID: 2072202686351675591, guid: 21857cec59f1a4c45b2eb8ad44e2c1d8, type: 3}
   noteSpawnDelay: 7.5
   bpm: 128
   targetBeatDivision: 4

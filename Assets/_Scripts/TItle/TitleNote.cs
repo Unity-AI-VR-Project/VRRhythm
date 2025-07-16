@@ -4,6 +4,7 @@ public class TitleNote : MonoBehaviour
 {
     public float speed;
     public Vector3 directionVector;
+    public AudioClip noteCutClip;
 
     void Start()
     {
@@ -18,10 +19,9 @@ public class TitleNote : MonoBehaviour
     {
         if (other.CompareTag("Saber"))
         {
-            // SFX & VFX
-            Debug.Log("Saber Collision ");
+            GameManager.Instance.soundManager.PlaySFX(noteCutClip);
             Destroy(transform.GetChild(0).gameObject);
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 }

@@ -6,7 +6,6 @@ public class SaberCollisionHandler : MonoBehaviour
     [SerializeField] private Saber _saber;
     [SerializeField] private AudioClip _hitSoundClip; // 노트 충돌 시 재생할 효과음 클립
 
-    private AudioSource _audioSource; // 효과음을 재생할 AudioSource 컴포넌트
     private NoteJudger _noteJudgerInstance;
     private MusicSynchronizer _musicTimeChecker;
 
@@ -26,17 +25,6 @@ public class SaberCollisionHandler : MonoBehaviour
             Debug.LogError("SaberCollisionHandler: Saber 컴포넌트를 찾을 수 없습니다. 이 스크립트는 Saber 컴포넌트와 함께 사용되어야 합니다.", this);
             enabled = false;
             return; // 에러 발생 시 더 이상 진행하지 않음
-        }
-
-        // AudioSource 컴포넌트 참조 확인 및 설정
-        _audioSource = GetComponent<AudioSource>();
-        if (_audioSource == null)
-        {
-            // AudioSource가 없으면 추가
-            _audioSource = gameObject.AddComponent<AudioSource>();
-            // 기본 설정 (Play On Awake, Loop 비활성화)
-            _audioSource.playOnAwake = false;
-            _audioSource.loop = false;
         }
 
         // 현재 씬이 InGame이 아닐 경우 조기 리턴
@@ -120,13 +108,7 @@ public class SaberCollisionHandler : MonoBehaviour
                     return;
                 }
             }
-
-            // 노트 충돌 시 효과음 재생
-            if (_audioSource != null && _hitSoundClip != null)
-            {
-                _audioSource.PlayOneShot(_hitSoundClip);
-            }
-
+            GameManager.Instance.soundManager.PlaySFX(_hitSoundClip);
             _noteJudgerInstance.JudgeAndProcessNote(other.gameObject, _saber, other, _musicTimeChecker);
         }
 
@@ -134,7 +116,6 @@ public class SaberCollisionHandler : MonoBehaviour
         if (other.TryGetComponent<ObjectButton>(out ObjectButton objectButton))
         {
             objectButton.OnButtonClick();
-            _audioSource.PlayOneShot(_hitSoundClip);
             Destroy(objectButton.gameObject); // 트리거 오브젝트 제거
         }
     }

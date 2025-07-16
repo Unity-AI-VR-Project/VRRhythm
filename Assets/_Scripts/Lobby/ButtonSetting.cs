@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ButtonSetting : MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class ButtonSetting : MonoBehaviour
     [Tooltip("오브젝트의 이동 속도입니다.")]
     [Range(0.1f, 10.0f)] // 속도 조절을 위한 슬라이더
     public float moveSpeed = 1.0f;
+
+    private void Start()
+    {
+        Transform player = FindAnyObjectByType<XRController>().transform;
+        targetPosition.y = player.position.y+.5f;
+    }
 
     private void Update()
     {

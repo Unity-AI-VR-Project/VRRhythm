@@ -73,14 +73,29 @@ public class SaberCollisionHandler : MonoBehaviour
 
             if (_noteJudgerInstance == null)
             {
-                Debug.LogError("SaberCollisionHandler: NoteJudger 인스턴스가 할당되지 않았습니다. 판정 처리를 건너뜁니다.");
-                NoteManager.Instance?.ReturnPooledNote(other.gameObject);
-                return;
+                _noteJudgerInstance = NoteManager.Instance.GetNoteJudger();
+                if (_noteJudgerInstance == null)
+                {
+                    Debug.LogError("SaberCollisionHandler: NoteJudger 인스턴스가 할당되지 않았습니다. 판정 처리를 건너뜁니다.");
+                    NoteManager.Instance?.ReturnPooledNote(other.gameObject);
+                    return;
+                }
+            }
+
+            if (_musicTimeChecker == null)
+            {
+                _musicTimeChecker = NoteManager.Instance.musicTimeChecker;
+                if(_musicTimeChecker == null)
+                {
+                    Debug.LogError("SaberCollisionHandler: musicTimeChecker 인스턴스가 할당되지 않았습니다. 판정 처리를 건너뜁니다.");
+                    NoteManager.Instance?.ReturnPooledNote(other.gameObject);
+                    return;
+                }
             }
 
             _noteJudgerInstance.JudgeAndProcessNote(other.gameObject, _saber, other, _musicTimeChecker);
         }
-        if(other.TryGetComponent<ObjectButton>(out ObjectButton objectButton))
+        if (other.TryGetComponent<ObjectButton>(out ObjectButton objectButton))
         {
             objectButton.OnButtonClick();
             Destroy(objectButton.gameObject); // 트리거 오브젝트 제거

@@ -139,7 +139,7 @@ public class InGameManager : MonoBehaviour
     public void ApplyComboBonus()
     {
         // 예: 최대 콤보 수 x 10 만큼 보너스 점수 추가
-        int bonus = MaxCombo * 10;
+        int bonus = (int)(MaxCombo*1.7f);
         AddScore(bonus);
         Debug.Log($"Max Combo Bonus Applied: {bonus}");
     }

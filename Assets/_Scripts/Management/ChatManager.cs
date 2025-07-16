@@ -26,7 +26,7 @@ public class ChatManager : ManagerBase
     public GameObject CreateChatObject(ChatLog chatLog,Transform parent)
     {
         int prefabType = 0;
-        switch (chatLog.scene)
+        switch (GameManager.Instance.sceneController.currentScene)
         {
             case eScenes.Title: // 타이틀에서는 채팅창 사용 X
                 return null;

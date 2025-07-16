@@ -40,12 +40,12 @@ public class SceneController : MonoBehaviour
 
     public IEnumerator LoadSceneAsyncCoroutine(string sceneName)
     {
+        currentScene = (eScenes)Enum.Parse(typeof(eScenes), sceneName);
         GameManager.Instance.soundManager.PauseMusic();
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
-        currentScene = (eScenes)Enum.Parse(typeof(eScenes), sceneName);
     }
 }

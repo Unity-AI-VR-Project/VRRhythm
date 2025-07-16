@@ -827,6 +827,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Origin (XR Rig)
       objectReference: {fileID: 0}
+    - target: {fileID: 7586793736211116275, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586793736211116275, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586793736211116275, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5810390565824157639}
+    - target: {fileID: 7586793736211116275, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GameQuit
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586793736211116275, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7586793736211116275, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2164,5 +2188,5 @@ SceneRoots:
   - {fileID: 1723488804}
   - {fileID: 1718702534}
   - {fileID: 859577669}
-  - {fileID: 668416450}
   - {fileID: 1369803369}
+  - {fileID: 668416450}

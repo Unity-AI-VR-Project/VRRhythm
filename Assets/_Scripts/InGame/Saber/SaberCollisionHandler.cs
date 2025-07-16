@@ -1,10 +1,12 @@
 using UnityEngine;
-using Define;
+using Define; // Define 네임스페이스가 없다면 제거하거나 적절히 수정해주세요.
 
 public class SaberCollisionHandler : MonoBehaviour
 {
     [SerializeField] private Saber _saber;
+    [SerializeField] private AudioClip _hitSoundClip; // 노트 충돌 시 재생할 효과음 클립
 
+    private AudioSource _audioSource; // 효과음을 재생할 AudioSource 컴포넌트
     private NoteJudger _noteJudgerInstance;
     private MusicSynchronizer _musicTimeChecker;
 
@@ -13,6 +15,7 @@ public class SaberCollisionHandler : MonoBehaviour
     /// </summary>
     void Start()
     {
+        // Saber 컴포넌트 참조 확인 및 설정
         if (_saber == null)
         {
             _saber = GetComponent<Saber>();
@@ -22,12 +25,27 @@ public class SaberCollisionHandler : MonoBehaviour
         {
             Debug.LogError("SaberCollisionHandler: Saber 컴포넌트를 찾을 수 없습니다. 이 스크립트는 Saber 컴포넌트와 함께 사용되어야 합니다.", this);
             enabled = false;
+            return; // 에러 발생 시 더 이상 진행하지 않음
         }
+
+        // AudioSource 컴포넌트 참조 확인 및 설정
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource == null)
+        {
+            // AudioSource가 없으면 추가
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            // 기본 설정 (Play On Awake, Loop 비활성화)
+            _audioSource.playOnAwake = false;
+            _audioSource.loop = false;
+        }
+
+        // 현재 씬이 InGame이 아닐 경우 조기 리턴
         if (GameManager.Instance.sceneController.currentScene != eScenes.InGame)
         {
             return;
         }
 
+        // NoteManager 관련 참조 설정
         if (NoteManager.Instance != null)
         {
             _noteJudgerInstance = NoteManager.Instance.GetNoteJudger();
@@ -37,12 +55,21 @@ public class SaberCollisionHandler : MonoBehaviour
         {
             Debug.LogError("SaberCollisionHandler: NoteManager.Instance가 초기화되지 않았습니다. NoteJudger를 가져올 수 없습니다.", this);
             enabled = false;
+            return;
         }
 
+        // MusicTimeChecker 참조 확인
         if (_musicTimeChecker == null)
         {
             Debug.LogError("SaberCollisionHandler: MusicTimeChecker 참조를 가져올 수 없습니다. 판정 처리를 할 수 없습니다.", this);
             enabled = false;
+            return;
+        }
+
+        // 효과음 클립이 할당되지 않았다면 경고
+        if (_hitSoundClip == null)
+        {
+            Debug.LogWarning("SaberCollisionHandler: 노트 충돌 효과음 클립이 할당되지 않았습니다. 효과음이 재생되지 않습니다.", this);
         }
     }
 
@@ -71,9 +98,10 @@ public class SaberCollisionHandler : MonoBehaviour
                 return;
             }
 
+            // NoteJudger 및 MusicTimeChecker 참조가 Start에서 제대로 초기화되었는지 다시 확인 (안전 장치)
             if (_noteJudgerInstance == null)
             {
-                _noteJudgerInstance = NoteManager.Instance.GetNoteJudger();
+                _noteJudgerInstance = NoteManager.Instance?.GetNoteJudger();
                 if (_noteJudgerInstance == null)
                 {
                     Debug.LogError("SaberCollisionHandler: NoteJudger 인스턴스가 할당되지 않았습니다. 판정 처리를 건너뜁니다.");
@@ -84,20 +112,29 @@ public class SaberCollisionHandler : MonoBehaviour
 
             if (_musicTimeChecker == null)
             {
-                _musicTimeChecker = NoteManager.Instance.musicTimeChecker;
-                if(_musicTimeChecker == null)
+                _musicTimeChecker = NoteManager.Instance?.musicTimeChecker;
+                if (_musicTimeChecker == null)
                 {
-                    Debug.LogError("SaberCollisionHandler: musicTimeChecker 인스턴스가 할당되지 않았습니다. 판정 처리를 건너뜁니다.");
+                    Debug.LogError("SaberCollisionHandler: musicTimeChecker 인스턴스가 할당되지 않았습니다. 판정 처리를 건너킵니다.");
                     NoteManager.Instance?.ReturnPooledNote(other.gameObject);
                     return;
                 }
             }
 
+            // 노트 충돌 시 효과음 재생
+            if (_audioSource != null && _hitSoundClip != null)
+            {
+                _audioSource.PlayOneShot(_hitSoundClip);
+            }
+
             _noteJudgerInstance.JudgeAndProcessNote(other.gameObject, _saber, other, _musicTimeChecker);
         }
+
+        // 버튼 오브젝트 처리
         if (other.TryGetComponent<ObjectButton>(out ObjectButton objectButton))
         {
             objectButton.OnButtonClick();
+            _audioSource.PlayOneShot(_hitSoundClip);
             Destroy(objectButton.gameObject); // 트리거 오브젝트 제거
         }
     }

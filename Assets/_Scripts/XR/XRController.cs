@@ -26,6 +26,8 @@ public class XRController : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.sceneController.currentScene == eScenes.Title)
+            return;
         if (currentLeftTriggerValue > 0.8f && currentRightTriggerValue > 0.8f && !isBothTriggersPressed)
         {
             isBothTriggersPressed = true;

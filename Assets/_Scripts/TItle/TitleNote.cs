@@ -19,7 +19,9 @@ public class TitleNote : MonoBehaviour
         if (other.CompareTag("Saber"))
         {
             // SFX & VFX
-            Destroy(gameObject);
+            Debug.Log("Saber Collision ");
+            Destroy(transform.GetChild(0).gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

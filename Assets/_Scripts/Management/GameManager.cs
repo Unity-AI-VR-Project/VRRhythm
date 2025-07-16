@@ -100,4 +100,9 @@ public class GameManager : Singleton<GameManager>
             currentUIManager = null;
         }
     }
+
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
 }

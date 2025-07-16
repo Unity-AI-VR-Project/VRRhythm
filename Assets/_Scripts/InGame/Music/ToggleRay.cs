@@ -28,6 +28,8 @@ public class ToggleRay : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.sceneController.currentScene == Define.eScenes.InGame)
+            return;
         if (!rightController.isValid)
             return;
 

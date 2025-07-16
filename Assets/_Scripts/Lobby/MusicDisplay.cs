@@ -13,11 +13,11 @@ public class MusicDisplay : MonoBehaviour
     private bool isMoving = false;
     private float lastMoveCompleteTime = -Mathf.Infinity;
     private AudioClip[] musicClips;
-
+    [SerializeField] private AudioClip buttonClickClip;
     void Start()
     {
         Initialize();
-        maxMusicNumber = displayGroup.childCount-1;
+        
     }
 
     private void Initialize()
@@ -36,6 +36,7 @@ public class MusicDisplay : MonoBehaviour
             AudioClip clip = Resources.Load<AudioClip>($"Music/Sound/{i}");
             musicClips[i] = clip;
         }
+        maxMusicNumber = data.Music.Length-1;
         GameManager.Instance.soundManager.PlayMusic(musicClips[currentMusicNumber]);
     }
 
@@ -49,6 +50,7 @@ public class MusicDisplay : MonoBehaviour
 
     public void NextMusic()
     {
+        Debug.Log($"current :{currentMusicNumber}\t{maxMusicNumber}");
         if (currentMusicNumber >= maxMusicNumber)
             return;
         if (TryMoveMusic(Vector2.left))
@@ -57,8 +59,9 @@ public class MusicDisplay : MonoBehaviour
 
     public void SelectMusic()
     {
+        GameManager.Instance.soundManager.PlaySFX(buttonClickClip);
         GameManager.Instance.dataManager.selectedMusicNumber = currentMusicNumber;
-        GameManager.Instance.sceneController.LoadScene(eScenes.InGame);
+        GameManager.Instance.sceneController.LoadScene(eScenes.InGame); 
     }
 
     public void PreviousMusic()
@@ -73,7 +76,6 @@ public class MusicDisplay : MonoBehaviour
     {
         if (isMoving || (Time.time < lastMoveCompleteTime + displayMoveDuration + 0.01f))
         {
-            Debug.Log("���� �̵� ���̰ų� �ʹ� ª�� �������� ���� ��û��. �����մϴ�.");
             return false;
         }
 
@@ -85,6 +87,7 @@ public class MusicDisplay : MonoBehaviour
     private IEnumerator DisplayMove(Vector2 direction)
     {
         GameManager.Instance.soundManager.PauseMusic();
+        GameManager.Instance.soundManager.PlaySFX(buttonClickClip);
         Vector2 currentPosition = displayGroup.anchoredPosition;
         Vector2 targetPosition = currentPosition + (direction * displayMoveDistance);
         float elapsedTime = 0f;
@@ -96,7 +99,6 @@ public class MusicDisplay : MonoBehaviour
             yield return null;
         }
 
-        // ��ǥ ��ġ�� ��Ȯ�� �����ϵ��� ���������� ����
         displayGroup.anchoredPosition = targetPosition;
         isMoving = false;
         lastMoveCompleteTime = Time.time;

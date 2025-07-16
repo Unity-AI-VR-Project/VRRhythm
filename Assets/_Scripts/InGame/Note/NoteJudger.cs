@@ -48,7 +48,7 @@ public class NoteJudger
         Debug.Log($"Time Diff: {timeDifference} (AutoMiss: {_autoMissTimingWindow}, Perfect: {_perfectTimingWindow}, Excellent: {_excellentTimingWindow}, Good: {_goodTimingWindow})");
         Debug.Log($"Is Note Type Correct: {isNoteTypeCorrect} (Required: {requiredNoteType}, Saber: {saberType})");
         Debug.Log($"Is Direction Correct: {isDirectionCorrect} (Required: {requiredDirection}, Swing: {saberSwingDirection.normalized})");
-        InGameManager.Instance.debugText.text = $"Is Direction Correct: {isDirectionCorrect} (Required: {requiredDirection}, Swing: {saberSwingDirection.normalized})";
+        //InGameManager.Instance.debugText.text = $"Is Direction Correct: {isDirectionCorrect} (Required: {requiredDirection}, Swing: {saberSwingDirection.normalized})";
 
 
         // 1. 노트 타입이 틀리면 BadCut
@@ -314,7 +314,7 @@ public class NoteJudger
             Debug.LogError("NoteJudger: InGameManager.Instance 또는 ParticlePoolManager.Instance가 초기화되지 않았습니다. 점수/파티클 처리를 건너뜜.");
             return;
         }
-        InGameManager.Instance.debugText.text += $"{result}";
+        //InGameManager.Instance.debugText.text += $"{result}";
         Debug.Log($"NoteJudger: 판정 결과 - {result}, 노트타입 {context.RequiredNoteType}, 세이버타입{context.Saber.saberNoteType}"); // 스윙 각도, 정확도 로그 제거
 
         // 판정 타입에 따른 점수 및 게임 상태 업데이트
@@ -333,7 +333,7 @@ public class NoteJudger
                 default: timingMultiplier = 0.6f; break; // 예상치 못한 경우 (방어 코드)
             }
 
-            score = Mathf.RoundToInt(score * timingMultiplier); // 타이밍에 따른 최종 점수 조정
+            score = Mathf.RoundToInt(score * timingMultiplier)/10; // 타이밍에 따른 최종 점수 조정
 
             InGameManager.Instance.AddScore(score);
             InGameManager.Instance.AddCombo();

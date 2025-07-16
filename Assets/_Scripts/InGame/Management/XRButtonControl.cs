@@ -46,6 +46,8 @@ public class XRButtonControl : MonoBehaviour
 
     private void ToggleCanvas()
     {
+        if (GameManager.Instance.sceneController.currentScene == Define.eScenes.InGame)
+            return;
         if (UserCanvas != null)
         {
             UserCanvas.SetActive(!UserCanvas.activeSelf);

@@ -13,6 +13,11 @@ public class ChatUI : MonoBehaviour
         GameManager.Instance.chatManager.chatUI = this;
     }
 
+    private void Start()
+    {
+        LoadChat();
+    }
+
     private void OnEnable()
     {
         LoadChat();
@@ -46,7 +51,7 @@ public class ChatUI : MonoBehaviour
         displayTMP.text = "";
     }
 
-    private void LoadChat()
+    public void LoadChat()
     {
         initializeChat();
         eScenes current = GameManager.Instance.sceneController.currentScene;

@@ -22,6 +22,8 @@ public class NoteManager : MonoBehaviour
 
     private IObjectPool<GameObject> notePool;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip noteCutClip;
     /// <summary>
     /// NoteManager의 인스턴스를 초기화하고 NoteJudger를 설정하며 노트 풀을 초기화합니다.
     /// </summary>

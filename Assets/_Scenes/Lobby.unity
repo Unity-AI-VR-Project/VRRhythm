@@ -661,6 +661,7 @@ MonoBehaviour:
   currentMusicNumber: 1
   displayMoveDistance: 32
   displayMoveDuration: 0.4
+  buttonClickClip: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
 --- !u!1 &277549501
 GameObject:
   m_ObjectHideFlags: 0
@@ -2544,7 +2545,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 621db82d9f417b74e92d975f885496ec, type: 2}
+  - {fileID: 2100000, guid: e71c6571c61124749863b16a476e2635, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

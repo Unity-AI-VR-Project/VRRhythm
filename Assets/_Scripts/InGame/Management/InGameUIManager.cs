@@ -12,14 +12,17 @@ public class InGameUIManager : UIManagerBase
     public Image timerImage;             // 타이머 이미지 (프로그래스 바 형태)
     public Image comboImage;             // 콤보 이미지 (이전 코드에 있었으므로 유지)
     public TextMeshProUGUI timeText;     // 남은 시간 텍스트
-                                         // MusicSynchronizer에서 음악 시간을 가져오므로 AudioSource 직접 참조는 제거하거나 MusicSynchronizer 참조로 변경
-                                         // public AudioSource audioSource; // 직접 참조 대신 MusicSynchronizer를 통해 접근 권장
+
+    // MusicSynchronizer에서 음악 시간을 가져오므로 AudioSource 직접 참조는 제거하거나 MusicSynchronizer 참조로 변경
+    public ChatUI chatUI;
+    // public AudioSource audioSource; // 직접 참조 대신 MusicSynchronizer를 통해 접근 권장
     public GameObject endCanvas;         // 게임 종료 캔버스 (게임 오버 시 활성화)
     public TextMeshProUGUI endScoreText; // 게임 종료 시 점수 텍스트
     public TextMeshProUGUI endComboText; // 게임 종료 시 최고 콤보 텍스트
     public TextMeshProUGUI endMissText;  // 게임 종료 시 미스 수치 텍스트
 
-
+    public GameObject Chat;
+    public GameObject GameInfo;
     public TextMeshProUGUI missText;
 
     // MusicSynchronizer 참조 추가 (음악 시간 동기화용)
@@ -35,8 +38,9 @@ public class InGameUIManager : UIManagerBase
     // currentTime은 musicSynchronizer.currentMusicTime을 사용하므로 별도 변수 필요 없음
     // private float currentTime; 
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         // MusicSynchronizer 참조를 동적으로 찾습니다.
         if (musicSynchronizer == null)
         {
@@ -48,6 +52,16 @@ public class InGameUIManager : UIManagerBase
                 return;
             }
         }
+    }
+    protected override void Initialize()
+    {
+        base.Initialize();
+    }
+
+    protected override void InitializeUI()
+    {
+        base.InitializeUI();
+        chatUI.LoadChat();
     }
 
     void Start()

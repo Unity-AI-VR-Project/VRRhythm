@@ -27,6 +27,7 @@ public class TitleNoteSpawner : MonoBehaviour
     public void NoteCreate()
     {
         TitleNote note = Instantiate(titleNote, transform.position,Quaternion.identity).GetComponent<TitleNote>();
+        note.transform.parent = transform;
         note.speed = noteSpeed;
         note.directionVector = noteDirection;
         Destroy(note.gameObject, noteLifeTime*1.5f);

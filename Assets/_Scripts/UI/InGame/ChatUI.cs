@@ -1,11 +1,13 @@
 using Define;
 using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class ChatUI : MonoBehaviour
 {
     [SerializeField] private Transform chatParent;
-
+    [SerializeField] TextMeshProUGUI displayTMP;
     private void Awake()
     {
         GameManager.Instance.chatManager.chatUI = this;
@@ -31,6 +33,17 @@ public class ChatUI : MonoBehaviour
         GameManager.Instance.dataManager.chatLogs.Add(log);
         GameObject chat = GameManager.Instance.chatManager.CreateChatObject(log,chatParent);
         chat.GetComponent<ChatObject>().SetChatObject(log.chatObjectData);
+        if (displayTMP != null)
+        {
+            displayTMP.text = $"<sprite={sentiment}>";
+            StartCoroutine("DisplayEmojiTimer");
+        }
+    }
+
+    private IEnumerator DisplayEmojiTimer()
+    {
+        yield return new WaitForSeconds(0.7f);
+        displayTMP.text = "";
     }
 
     private void LoadChat()

@@ -2513,7 +2513,7 @@ MonoBehaviour:
   m_InteractionManager: {fileID: 0}
   m_InteractionLayers:
     m_Bits: 4294967295
-  m_Handedness: 0
+  m_Handedness: 2
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
   m_DisableVisualsWhenBlockedInGroup: 1
@@ -5634,6 +5634,9 @@ GameObject:
   - component: {fileID: 7471331579465829130}
   - component: {fileID: 6828098316868598538}
   - component: {fileID: 6897386480793999590}
+  - component: {fileID: 930633301033482212}
+  - component: {fileID: 3037398434620543871}
+  - component: {fileID: 957839524856480910}
   m_Layer: 0
   m_Name: Blade
   m_TagString: Saber
@@ -5730,7 +5733,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 0.9
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -5773,7 +5776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8247f8ba4422b8149b33ac1c8f306942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionHistoryLength: 1
+  positionHistoryLength: 10
   minSwingDistance: 0.05
   saberNoteType: 1
 --- !u!114 &6897386480793999590
@@ -5789,6 +5792,294 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _saber: {fileID: 6828098316868598538}
+  _hitSoundClip: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
+--- !u!82 &930633301033482212
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4991995547435381379}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: ac39e2bd23f2ef3488935521a009b567, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!167 &3037398434620543871
+AudioReverbZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4991995547435381379}
+  m_Enabled: 1
+  m_MinDistance: 10
+  m_MaxDistance: 15
+  m_ReverbPreset: 9
+  m_Room: -1000
+  m_RoomHF: 0
+  m_DecayTime: 2.91
+  m_DecayHFRatio: 1.3
+  m_Reflections: -602
+  m_ReflectionsDelay: 0.015
+  m_Reverb: -302
+  m_ReverbDelay: 0.022
+  m_HFReference: 5000
+  m_Diffusion: 100
+  m_Density: 100
+  m_LFReference: 250
+  m_RoomLF: 0
+--- !u!114 &957839524856480910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4991995547435381379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47f233e4c5d6f4aa6a1618016c2233f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 0}
+  profileSync: 0
+  target: {fileID: 7972273953962599888}
+  _active: 1
+  ignoreVisibility: 0
+  executeInEditMode: 0
+  ignoreFrames: 1
+  duration: 0.35
+  continuous: 0
+  smooth: 0
+  checkWorldPosition: 0
+  minDistance: 0.1
+  worldPositionRelativeOption: 0
+  worldPositionRelativeTransform: {fileID: 0}
+  checkScreenPosition: 1
+  minPixelDistance: 0
+  stepsBufferSize: 1023
+  maxStepsPerFrame: 50
+  checkTime: 0
+  timeInterval: 0.2
+  checkCollisions: 0
+  orientToSurface: 1
+  ground: 0
+  surfaceOffset: 0.05
+  collisionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  mask: {fileID: 0}
+  drawBehind: 1
+  cullMode: 2
+  subMeshMask: -1
+  colorOverTime:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  colorRamp: 1
+  colorRampTexture: {fileID: 2800000, guid: c5c30a13cf7c4b74186f1c0bec0175e4, type: 3}
+  colorRampStart: {fileID: 7439629834168881755}
+  colorRampEnd: {fileID: 2197039560724574281}
+  fadeOut: 1
+  colorSequence: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
+  colorCycleDuration: 3
+  colorCycleLoop: 1
+  pingPongSpeed: 1
+  colorStartPalette:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 0, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 0, b: 1, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 32768
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  cam: {fileID: 923984034704116133}
+  effect: 0
+  customMaterial: {fileID: 0}
+  texture: {fileID: 2800000, guid: c5c30a13cf7c4b74186f1c0bec0175e4, type: 3}
+  scale: {x: 1, y: 1, z: 1}
+  scaleStartRandomMin: {x: 1, y: 1, z: 1}
+  scaleStartRandomMax: {x: 1, y: 1, z: 1}
+  scaleOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreTransformScale: 0
+  scaleUniform: 0
+  parent: {fileID: 0}
+  localPositionRandomMin: {x: 0, y: 0, z: 0}
+  localPositionRandomMax: {x: 0, y: 0, z: 0}
+  laserBandWidth: 0.1
+  laserIntensity: 20
+  laserFlash: 0.1
+  trailTint: {r: 0, g: 0, b: 0.1, a: 1}
+  cameraDistanceFade: 0
+  cameraDistanceFadeNear: 0
+  cameraDistanceFadeFar: 1000
+  animationStates: 
+  animator: {fileID: 0}
+  lookTarget: {fileID: 0}
+  lookToCamera: 1
+  textureCutOff: 0.5
+  normalThreshold: 0.1
+  useLastAnimationState: 0
+  maxBatches: 15
+  meshPoolSize: 256
+  interpolate: 0
 --- !u!1 &5004417165475540440
 GameObject:
   m_ObjectHideFlags: 0
@@ -10134,6 +10425,9 @@ GameObject:
   - component: {fileID: 6583498567702939768}
   - component: {fileID: 6462524397133561118}
   - component: {fileID: 1749855676111838994}
+  - component: {fileID: 496741633377417727}
+  - component: {fileID: 1195823964148293295}
+  - component: {fileID: 1432705988321060235}
   m_Layer: 0
   m_Name: Blade
   m_TagString: Saber
@@ -10230,7 +10524,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 0.9
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -10289,6 +10583,294 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _saber: {fileID: 6462524397133561118}
+  _hitSoundClip: {fileID: 8300000, guid: f923f722badc7c74ca3ec4463b562b83, type: 3}
+--- !u!82 &496741633377417727
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770171958126293489}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: ac39e2bd23f2ef3488935521a009b567, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!167 &1195823964148293295
+AudioReverbZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770171958126293489}
+  m_Enabled: 1
+  m_MinDistance: 10
+  m_MaxDistance: 15
+  m_ReverbPreset: 9
+  m_Room: -1000
+  m_RoomHF: 0
+  m_DecayTime: 2.91
+  m_DecayHFRatio: 1.3
+  m_Reflections: -602
+  m_ReflectionsDelay: 0.015
+  m_Reverb: -302
+  m_ReverbDelay: 0.022
+  m_HFReference: 5000
+  m_Diffusion: 100
+  m_Density: 100
+  m_LFReference: 250
+  m_RoomLF: 0
+--- !u!114 &1432705988321060235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8770171958126293489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47f233e4c5d6f4aa6a1618016c2233f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 0}
+  profileSync: 0
+  target: {fileID: 5931800917065606818}
+  _active: 1
+  ignoreVisibility: 0
+  executeInEditMode: 0
+  ignoreFrames: 1
+  duration: 0.35
+  continuous: 0
+  smooth: 0
+  checkWorldPosition: 0
+  minDistance: 0.1
+  worldPositionRelativeOption: 0
+  worldPositionRelativeTransform: {fileID: 0}
+  checkScreenPosition: 1
+  minPixelDistance: 0
+  stepsBufferSize: 1023
+  maxStepsPerFrame: 50
+  checkTime: 0
+  timeInterval: 0.2
+  checkCollisions: 0
+  orientToSurface: 1
+  ground: 0
+  surfaceOffset: 0.05
+  collisionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  mask: {fileID: 0}
+  drawBehind: 1
+  cullMode: 2
+  subMeshMask: -1
+  colorOverTime:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  colorRamp: 1
+  colorRampTexture: {fileID: 2800000, guid: 717bc4230406db74cb43abd5833cc631, type: 3}
+  colorRampStart: {fileID: 157601143054394689}
+  colorRampEnd: {fileID: 633215740859418601}
+  fadeOut: 1
+  colorSequence: 0
+  color: {r: 1, g: 1, b: 1, a: 1}
+  colorCycleDuration: 3
+  colorCycleLoop: 1
+  pingPongSpeed: 1
+  colorStartPalette:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 0, g: 1, b: 0, a: 1}
+    key2: {r: 0, g: 0, b: 1, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 32768
+    ctime2: 65535
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
+  cam: {fileID: 923984034704116133}
+  effect: 0
+  customMaterial: {fileID: 0}
+  texture: {fileID: 2800000, guid: 717bc4230406db74cb43abd5833cc631, type: 3}
+  scale: {x: 1, y: 1, z: 1}
+  scaleStartRandomMin: {x: 1, y: 1, z: 1}
+  scaleStartRandomMax: {x: 1, y: 1, z: 1}
+  scaleOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreTransformScale: 0
+  scaleUniform: 0
+  parent: {fileID: 0}
+  localPositionRandomMin: {x: 0, y: 0, z: 0}
+  localPositionRandomMax: {x: 0, y: 0, z: 0}
+  laserBandWidth: 0.1
+  laserIntensity: 20
+  laserFlash: 0.1
+  trailTint: {r: 0, g: 0, b: 0.1, a: 1}
+  cameraDistanceFade: 0
+  cameraDistanceFadeNear: 0
+  cameraDistanceFadeFar: 1000
+  animationStates: 
+  animator: {fileID: 0}
+  lookTarget: {fileID: 0}
+  lookToCamera: 1
+  textureCutOff: 0.5
+  normalThreshold: 0.1
+  useLastAnimationState: 0
+  maxBatches: 15
+  meshPoolSize: 256
+  interpolate: 0
 --- !u!1 &8798125798532672834
 GameObject:
   m_ObjectHideFlags: 0

@@ -11771,7 +11771,7 @@ GameObject:
   - component: {fileID: 925049590}
   - component: {fileID: 925049589}
   m_Layer: 5
-  m_Name: Image
+  m_Name: displayTMP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11816,7 +11816,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <sprite=0>
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c43d016aae725046b596d9375047e04, type: 2}
   m_sharedMaterial: {fileID: -4267946556895044961, guid: 9c43d016aae725046b596d9375047e04, type: 2}
@@ -12747,6 +12747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatParent: {fileID: 467957943}
+  displayTMP: {fileID: 0}
 --- !u!1 &1038964491
 GameObject:
   m_ObjectHideFlags: 0
@@ -25602,6 +25603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Origin (XR Rig)
       objectReference: {fileID: 0}
+    - target: {fileID: 5970394662698884035, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
+      propertyPath: displayTMP
+      value: 
+      objectReference: {fileID: 925049589}
     - target: {fileID: 7346414526029049605, guid: 1a389ff4d95146e498f876a4acdefe5a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.03

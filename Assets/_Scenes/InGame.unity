@@ -1194,7 +1194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8983232623981550421, guid: 552f936367cc0ae43979d7fb3a8ccb0c, type: 3}
       propertyPath: outOfBoundsTolerance
-      value: 0.83
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8983232623981550421, guid: 552f936367cc0ae43979d7fb3a8ccb0c, type: 3}
       propertyPath: copyNoteDataSecOffset
@@ -7316,7 +7316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4232284736556732, guid: 17603c803b01ef24bb294ed5b6879a77, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.55
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4232284736556732, guid: 17603c803b01ef24bb294ed5b6879a77, type: 3}
       propertyPath: m_LocalRotation.w

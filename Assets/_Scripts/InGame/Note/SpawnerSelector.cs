@@ -105,10 +105,10 @@ public class SpawnerSelector : MonoBehaviour
         if (_currentSongData != null && _currentSongData.metadata != null && _currentSongData.metadata.tempo != 0)
         {
             // 0.5박자 시간 계산: (60 / BPM) * 0.5
-            _halfBeatDuration = (60f / _currentSongData.metadata.tempo) * 0.5f;
+            _halfBeatDuration = (60f / _currentSongData.metadata.tempo) * 2.5f + 0.05f ;
 
             // copyNoteDataSecOffset 계산 (0.25박자 간격으로 설정)
-            copyNoteDataSecOffset = (60f / _currentSongData.metadata.tempo) * 0.25f;
+            copyNoteDataSecOffset = (60f / _currentSongData.metadata.tempo) * 2 -0.05f;
             if (copyNoteDataSecOffset < 0.05f) copyNoteDataSecOffset = 0.05f; // 최소값 보장
 
             Debug.Log($"SpawnerSelector: 템포 {_currentSongData.metadata.tempo}, 0.5박자 시간: {_halfBeatDuration:F3}s, 인접 노트 시간 임계치 (0.25박자): {copyNoteDataSecOffset:F3}s", this);

@@ -13,5 +13,6 @@ public class ChatObject : MonoBehaviour
         timeStamp.text = $"[{data.timeStamp.Hour}:{data.timeStamp.Minute}]";
         chatContent.text = data.content;
         emoji.text = $"<sprite={data.emoji}>";
+        //emoji.text = $""{data.emoji}";
     }
 }

@@ -41,6 +41,7 @@ public class ChatUI : MonoBehaviour
         if (displayTMP != null)
         {
             displayTMP.text = $"<sprite={sentiment}>";
+
             StartCoroutine("DisplayEmojiTimer");
         }
     }

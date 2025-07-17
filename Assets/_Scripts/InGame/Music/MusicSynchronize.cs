@@ -111,22 +111,17 @@ public class MusicSynchronizer : MonoBehaviour
             // 실제 AudioSource의 재생 시간
             currentMusicTime = audioSource.time;
 
-            // Debug.Log($"Music Time: {currentMusicTime:F2}s, DSP Time for notes: {currentTimeDSP:F2}s");
+            InGameManager.Instance.debugText.text = $"Music Playing State : {audioSource.isPlaying}\nInGameManager : {InGameManager.Instance == null}";
 
             // --- 음악 재생이 끝났을 때 EndGame() 호출 추가 ---
             // 음악이 재생 중이 아니며, 재생 시간이 0보다 크다면 음악이 종료된 것으로 간주합니다.
             // audioSource.clip.length를 사용하여 음악의 총 길이와 비교하는 것이 더 정확할 수 있습니다.
-            if (!audioSource.isPlaying && currentMusicTime >= audioSource.clip.length - 0.1f) // 약간의 오차 허용
+            if (!audioSource.isPlaying) // 약간의 오차 허용
             {
-                if (InGameManager.Instance != null)
-                {
-                    Debug.Log("음악 재생이 종료되었습니다. EndGame()을 호출합니다.");
-                    InGameManager.Instance.EndGame();
-                }
-                else
-                {
-                    Debug.LogError("MusicSynchronizer: InGameManager.Instance가 초기화되지 않아 EndGame()을 호출할 수 없습니다.");
-                }
+                InGameManager.Instance.debugText.text = "음악 재생이 종료되었습니다. EndGame()을 호출합니다.";
+                Debug.Log("음악 재생이 종료되었습니다. EndGame()을 호출합니다.");
+                InGameManager.Instance.EndGame();
+
                 _isMusicScheduled = false; // 플래그 리셋하여 중복 호출 방지
             }
         }
@@ -154,6 +149,7 @@ public class MusicSynchronizer : MonoBehaviour
 
             _isMusicScheduled = true; // 음악이 성공적으로 스케줄링되었음을 표시
 
+            InGameManager.Instance.debugText.text = $"음악이 {totalDelay:F2}초 후에 재생될 예정입니다. (DSP Time 기준: {_musicScheduledDSPTime:F2})";
             Debug.Log($"음악이 {totalDelay:F2}초 후에 재생될 예정입니다. (DSP Time 기준: {_musicScheduledDSPTime:F2})");
         }
     }

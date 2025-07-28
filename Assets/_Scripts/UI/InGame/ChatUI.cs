@@ -41,13 +41,14 @@ public class ChatUI : MonoBehaviour
         if (displayTMP != null)
         {
             displayTMP.text = $"<sprite={sentiment}>";
+
             StartCoroutine("DisplayEmojiTimer");
         }
     }
 
     private IEnumerator DisplayEmojiTimer()
     {
-        yield return new WaitForSeconds(0.7f);
+        yield return new WaitForSeconds(2.5f);
         displayTMP.text = "";
     }
 

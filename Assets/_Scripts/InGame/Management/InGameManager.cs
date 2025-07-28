@@ -155,6 +155,7 @@ public class InGameManager : MonoBehaviour
     {
         if (!IsStarted) // 이미 시작되지 않았다면
         {
+            debugText.text = $"Game Start";
             IsStarted = true;
             OnStarted?.Invoke(InGameState.Playing); // 구독자들에게 게임 시작 알림
             Debug.Log("게임 시작 이벤트 발생!");
@@ -167,6 +168,7 @@ public class InGameManager : MonoBehaviour
 
     public void EndGame()
     {
+        debugText.text = $"Game End";
         Instantiate(endGameCube, endGameCube.transform.position, Quaternion.identity); // 게임 종료 시 큐브 생성 (예시)
         OnSongEnded?.Invoke(InGameState.Ended); // 구독자들에게 게임 종료 알림
     }

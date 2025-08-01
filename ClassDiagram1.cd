@@ -1,0 +1,424 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SAController" Collapsed="true">
+    <Position X="13" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgABAAIKAAAQgEBQAAAAAAAQAAAAAEAAAACAIAAEA=</HashCode>
+      <FileName>Assets\_Scripts\AI\SAController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WhisperController" Collapsed="true">
+    <Position X="18.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAFAAAAAAAAAAAAEAAAAAABAIAACAQACAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\AI\WhisperController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WordPieceTokenizer" Collapsed="true">
+    <Position X="7.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ChWAgIgAAABAAAAAAAAoAAAAAAAQLAICQIAAYGEAAAA=</HashCode>
+      <FileName>Assets\_Scripts\AI\WordPieceTokenizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BackgroundColorChange" Collapsed="true">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAQAAAAAAAAAEAAACAAQAAACAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\GameDirection\BackgroundColorChange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InGameManager" Collapsed="true">
+    <Position X="11.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAIAAAAAAEggACIAAAAAAQAAIAAAJQAAAgAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Management\InGameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ParticlePoolManager" Collapsed="true">
+    <Position X="11.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABIAAAAAAAAAAAAABAAAAAAAAAAAAAAIQBAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Management\ParticlePoolManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UiManager" Collapsed="true">
+    <Position X="13" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAiAAAQQAAAAEAAAACQAAMICABAAAAAAAAAE=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Management\UI Manager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UISilideIn" Collapsed="true">
+    <Position X="14.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAQAAAAAAAAAAAAAAAAAAAAABAQAACAQ=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Management\UISilideIn.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VolumManager" Collapsed="true">
+    <Position X="16.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAgAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Management\VolumManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="XRButtonControl" Collapsed="true">
+    <Position X="9.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QgQEAAAAAiAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Management\XRButtonControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioAnalyzer" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\AudioAnalyzer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioFrequencyBandDetector" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgACAiBAGIAAABAAAAAAoAAAERCABAABAACCAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\AudioFrequencyBandDetector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioReactiveParticles" Collapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAIAAAAAAAAIAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\AudioReactiveParticles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicSynchronizer" Collapsed="true">
+    <Position X="18.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAACAAAEAAAAAAIAAAAAAAEAAAAAgBAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\MusicSynchronize.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MusicTimeChecker" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAQAAAAAAAAAAAAAAAAAAEBAAAAAAAAIAAFA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\MusicTimeChecker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToggleRay" Collapsed="true">
+    <Position X="11.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQBAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\ToggleRay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Note" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAIAAAAAAAAABAAAAAAiAAAAgAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Note.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteCleanUp" Collapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteCleanUp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteJudger" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAACAAAIACACAAAAQAABAAAAIAQQAAAAAAAAAQ=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteJudger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteManager" Collapsed="true">
+    <Position X="16.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACKAAABYAABACAAAgAAIAACAgIAAEAAQAAAABBIBEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteMovement" Collapsed="true">
+    <Position X="18.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCkEoQwCIABAABiAAAACAAACQEgABAAAQIxBQAIUA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteMovement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteSpawner" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgAIABAiAAAAAAAAAAAgAAABAAAAEAAAABQQAACAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteSpawnerTime" Collapsed="true">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAEAAAAAAAgAAAAAAAAAAAAgAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteSpawnerTime.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cutter" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAAAAAAAAQQEAAAAQAAAACCBAAAABEQAAAAAQ=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Slice\Cutter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DrawCut" Collapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABCCAACAAACAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Slice\DrawCut.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GeneratedMesh" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAABAAEAABAAAAAQAQAAAAEIAgAAAAAgA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Slice\GeneratedMesh.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeshTriangle" Collapsed="true">
+    <Position X="13" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAEJAAAABQAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Slice\MeshTriangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MouseClickCut" Collapsed="true">
+    <Position X="16.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Slice\MouseClickCut.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RootData" Collapsed="true">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\SpawnerSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Metadata" Collapsed="true">
+    <Position X="14.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAQAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\SpawnerSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BeatData" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAIAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\SpawnerSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoteInfo" Collapsed="true">
+    <Position X="13" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACJACAAAAAAAAAAAAAAAAAAAAAgBAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\SpawnerSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpawnerSelector" Collapsed="true">
+    <Position X="9.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CASAAIARgABgABAAIAAAEAAADABgAgBAEAAAQFAoAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\SpawnerSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Saber" Collapsed="true">
+    <Position X="9.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgCBAAAAAAAABAAAAAQEgAAAAIAAAAEEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Saber\Saber.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SaberCollisionHandler" Collapsed="true">
+    <Position X="11.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAQCIAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Saber\SaberCollisionHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneLoaderOnSaberContact" Collapsed="true">
+    <Position X="16.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAQAAAAAAABQA=</HashCode>
+      <FileName>Assets\_Scripts\Lobby\SceneLoaderOnSaberContact.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SongSelect" Collapsed="true">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAEQACEAAQCAAIAAAAgCASAAEAAAwAABAQAAAgA=</HashCode>
+      <FileName>Assets\_Scripts\Lobby\SongSelect.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AIManager" Collapsed="true">
+    <Position X="0.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAQAAAAAAAAAAAAAAAAQAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\AIManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAiAAIAAAAAAQAAIACAAABAAAAAEAAEEAQAAAEAEEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ManagerBase" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAEAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\ManagerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneController" Collapsed="true">
+    <Position X="14.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAACIAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\SceneController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Singleton&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAACAAAAAAAAAABAAAAAQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\Singleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManager" Collapsed="true">
+    <Position X="3" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAKAQAAmBxAAAQAgQAABAEcEQAACAAKAACEiAEAAcEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIManagerBase" Collapsed="true">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAQAAAAAAAAAAAAIAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\_Scripts\Management\UIManagerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReactiveObject" Collapsed="true">
+    <Position X="13" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAiAAAAAEABIAAAAABAACAACJAAAAABAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\ReactiveObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rotate" Collapsed="true">
+    <Position X="16.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAQAQABAABAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Rotate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RotatingObjectHandler" Collapsed="true">
+    <Position X="18.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gASAAACAgChAAIgAAAAEAAAAAAAAAAAAAABAAAAAEAQ=</HashCode>
+      <FileName>Assets\_Scripts\RotatingObjectHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RotationManager" Collapsed="true">
+    <Position X="7.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAQACAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\RotationManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SFXPoolable" Collapsed="true">
+    <Position X="18.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAwAAAAEAAAgAAACAAgAAA=</HashCode>
+      <FileName>Assets\_Scripts\Sound\SFXPoolable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TravisGameAssets.HitImpactEffectsPreview" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAQICRBEASAAFaAAAACIACAgAgIIEAIAAAAgAEAggBA=</HashCode>
+      <FileName>Assets\Download\Travis Game Assets\Hit Impact Effects\Demo Scene\Scripts\HitImpactEffectsPreview.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="EnergyPoint" Collapsed="true">
+    <Position X="9.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Music\AudioFrequencyBandDetector.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SpawnInfoBundle" Collapsed="true">
+    <Position X="13" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACIAAAAAAIAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\SpawnerSelector.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Define.NoteHitContext" Collapsed="true">
+    <Position X="11.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIBAAAEAAAACACABEAAAASAAAAAIAAAAIAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Management\Define.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Define.CutScores" Collapsed="true">
+    <Position X="7.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Management\Define.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="HzChack" Collapsed="true">
+    <Position X="11.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAgAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\NoteSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Angle" Collapsed="true">
+    <Position X="7.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Assets\_Scripts\InGame\Note\Slice\MouseClickCut.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Define.eScenes" Collapsed="true">
+    <Position X="9.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAEAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Management\Define.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Define.SaberNoteType" Collapsed="true">
+    <Position X="16.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Management\Define.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Define.NoteDirection" Collapsed="true">
+    <Position X="14.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAI=</HashCode>
+      <FileName>Assets\_Scripts\Management\Define.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Define.JudgementType" Collapsed="true">
+    <Position X="13" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAABAAAAAAAAAAAAAAAIAAAIAAAAAgAAAAE=</HashCode>
+      <FileName>Assets\_Scripts\Management\Define.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

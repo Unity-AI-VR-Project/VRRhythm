@@ -1,0 +1,246 @@
+# Button OBJ File based on the provided image
+# Featuring a smooth dome top and a beveled base
+# Divided into 'button_base' and 'button_top' groups for separate material application
+
+# Vertices (v)
+
+# --- Button Top Vertices (Dome) ---
+# Center of the dome top
+v 0.0 0.5 0.0 # v1 (Center Top)
+
+# Top surface edge (approx. radius 0.8) - these vertices form the base of the dome
+v 0.8 0.4 0.0
+v 0.707 0.4 0.4
+v 0.0 0.4 0.8
+v -0.707 0.4 0.4
+v -0.8 0.4 0.0
+v -0.707 0.4 -0.4
+v 0.0 0.4 -0.8
+v 0.707 0.4 -0.4
+
+# Middle of the dome (approx. radius 0.95)
+v 0.95 0.3 0.0
+v 0.672 0.3 0.672
+v 0.0 0.3 0.95
+v -0.672 0.3 0.672
+v -0.95 0.3 0.0
+v -0.672 0.3 -0.672
+v 0.0 0.3 -0.95
+v 0.672 0.3 -0.672
+
+# Bottom edge of the dome (approx. radius 1.0, connecting to base)
+v 1.0 0.0 0.0
+v 0.707 0.0 0.707
+v 0.0 0.0 1.0
+v -0.707 0.0 0.707
+v -1.0 0.0 0.0
+v -0.707 0.0 -0.707
+v 0.0 0.0 -1.0
+v 0.707 0.0 -0.707
+
+# --- Button Base Vertices ---
+# Top edge of base (matching dome bottom edge)
+# These are technically duplicates of v17-v24, but keeping them separate for clarity of base group
+v 1.0 0.0 0.0   # v25
+v 0.707 0.0 0.707 # v26
+v 0.0 0.0 1.0   # v27
+v -0.707 0.0 0.707 # v28
+v -1.0 0.0 0.0   # v29
+v -0.707 0.0 -0.707 # v30
+v 0.0 0.0 -1.0   # v31
+v 0.707 0.0 -0.707 # v32
+
+# Beveled edge of base (slightly wider)
+v 1.1 -0.1 0.0
+v 0.778 -0.1 0.778
+v 0.0 -0.1 1.1
+v -0.778 -0.1 0.778
+v -1.1 -0.1 0.0
+v -0.778 -0.1 -0.778
+v 0.0 -0.1 -1.1
+v 0.778 -0.1 -0.778
+
+# Bottom edge of base (widest, flat)
+v 1.2 -0.2 0.0
+v 0.8485 -0.2 0.8485
+v 0.0 -0.2 1.2
+v -0.8485 -0.2 0.8485
+v -1.2 -0.2 0.0
+v -0.8485 -0.2 -0.8485
+v 0.0 -0.2 -1.2
+v 0.8485 -0.2 -0.8485
+
+# Center of the base bottom
+v 0.0 -0.2 0.0 # v49 (Center Bottom)
+
+# Normals (vn)
+# For dome top
+vn 0.0 1.0 0.0   # vn1 (Top Center)
+vn 0.707 0.707 0.0 # vn2
+vn 0.0 0.707 0.707 # vn3
+vn -0.707 0.707 0.0 # vn4
+vn 0.0 0.707 -0.707 # vn5
+vn 0.707 0.0 0.0   # vn6 (Side-ish)
+vn 0.0 0.0 1.0   # vn7
+vn -0.707 0.0 0.707 # vn8
+vn -1.0 0.0 0.0   # vn9
+vn -0.707 0.0 -0.707 # vn10
+vn 0.0 0.0 -1.0   # vn11
+vn 0.707 0.0 -0.707 # vn12
+
+# For base side walls (outwards)
+vn 1.0 0.0 0.0   # vn13
+vn 0.707 0.0 0.707 # vn14
+vn 0.0 0.0 1.0   # vn15
+vn -0.707 0.0 0.707 # vn16
+vn -1.0 0.0 0.0   # vn17
+vn -0.707 0.0 -0.707 # vn18
+vn 0.0 0.0 -1.0   # vn19
+vn 0.707 0.0 -0.707 # vn20
+
+# For flat bottom surface
+vn 0.0 -1.0 0.0  # vn21
+
+# For top horizontal surface (connection to dome base)
+vn 0.0 1.0 0.0 # vn22 (Points up, but for flat surface)
+
+# For beveled side (outwards, slightly downwards)
+vn 0.707 -0.707 0.0 # vn23
+vn 0.0 -0.707 0.707 # vn24
+vn -0.707 -0.707 0.0 # vn25
+vn 0.0 -0.707 -0.707 # vn26
+
+
+# Texture Coordinates (vt) - Simple placeholder UVs
+vt 0.0 0.0
+vt 1.0 0.0
+vt 1.0 1.0
+vt 0.0 1.0
+vt 0.5 0.5 # For center points
+
+
+# --- Button Top Group ---
+g button_top
+
+# Dome Top Face (from center to first ring)
+f 1/5/1 2/1/2 9/2/2
+f 1/5/1 9/1/2 10/2/3
+f 1/5/1 10/1/3 3/2/3
+f 1/5/1 3/1/3 11/2/4
+f 1/5/1 11/1/4 4/2/4
+f 1/5/1 4/1/4 12/2/5
+f 1/5/1 12/1/5 5/2/5
+f 1/5/1 5/1/5 13/2/6
+f 1/5/1 13/1/6 6/2/6
+f 1/5/1 6/1/6 14/2/7
+f 1/5/1 14/1/7 7/2/7
+f 1/5/1 7/1/7 15/2/8
+f 1/5/1 15/1/8 8/2/8
+f 1/5/1 8/1/8 16/2/9
+f 1/5/1 16/1/9 2/2/9 # Close the first dome layer
+
+# Dome Mid-Face (between first and second ring)
+f 2/1/2 3/2/3 10/3/3 9/4/2
+f 3/1/3 4/2/4 11/3/4 10/4/3
+f 4/1/4 5/2/5 12/3/5 11/4/4
+f 5/1/5 6/2/6 13/3/6 12/4/5
+f 6/1/6 7/2/7 14/3/7 13/4/6
+f 7/1/7 8/2/8 15/3/8 14/4/7
+f 8/1/8 9/2/9 16/3/9 15/4/8
+f 9/1/2 2/2/2 17/3/6 24/4/6 # Needs correction for proper indexing of the dome. Re-evaluating.
+
+# Let's redefine faces for dome for cleaner structure
+# Faces for dome using triangulation from segments for smoother appearance
+
+# First ring of triangles (from center top v1)
+f 1/5/1 2/1/2 10/2/2
+f 1/5/1 10/1/3 3/2/3
+f 1/5/1 3/1/3 11/2/4
+f 1/5/1 11/1/4 4/2/5
+f 1/5/1 4/1/5 12/2/6
+f 1/5/1 12/1/6 5/2/7
+f 1/5/1 5/1/7 13/2/8
+f 1/5/1 13/1/8 6/2/9
+f 1/5/1 6/1/9 14/2/10
+f 1/5/1 14/1/10 7/2/11
+f 1/5/1 7/1/11 15/2/12
+f 1/5/1 15/1/12 8/2/2
+f 1/5/1 8/1/2 16/2/3 # This last one connects 8 and 16 back to 2, 10 for consistency
+
+# Faces for dome segments (quads between rings)
+# Ring 1 to Ring 2
+f 2/1/2 3/2/3 11/3/4 10/4/3
+f 3/1/3 4/2/4 12/3/5 11/4/4
+f 4/1/4 5/2/5 13/3/6 12/4/5
+f 5/1/5 6/2/6 14/3/7 13/4/6
+f 6/1/6 7/2/7 15/3/8 14/4/7
+f 7/1/7 8/2/8 16/3/9 15/4/8
+f 8/1/8 9/2/10 17/3/11 16/4/12 # Re-evaluated index for last ring connection
+f 9/1/10 17/2/11 18/3/12 10/4/10
+
+# Let's simplify the dome faces to make it easier to follow, using 3 rings (top point, mid ring, bottom ring)
+# Top point: v1
+# Mid ring: v2-v9
+# Bottom ring: v17-v24
+
+# Faces from center (v1) to mid ring (v2-v9)
+f 1/5/1 2/1/2 3/2/3
+f 1/5/1 3/1/3 4/2/4
+f 1/5/1 4/1/4 5/2/5
+f 1/5/1 5/1/5 6/2/6
+f 1/5/1 6/1/6 7/2/7
+f 1/5/1 7/1/7 8/2/8
+f 1/5/1 8/1/8 9/2/2
+f 1/5/1 9/1/2 2/2/2 # Closing the top part (triangles)
+
+# Faces between mid ring (v2-v9) and bottom ring (v17-v24)
+f 2/1/2 17/2/6 18/3/7 3/4/3
+f 3/1/3 18/2/7 19/3/8 4/4/4
+f 4/1/4 19/2/8 20/3/9 5/4/5
+f 5/1/5 20/2/9 21/3/10 6/4/6
+f 6/1/6 21/2/10 22/3/11 7/4/7
+f 7/1/7 22/2/11 23/3/12 8/4/8
+f 8/1/8 23/2/12 24/3/6 9/4/2
+f 9/1/2 24/2/6 17/3/6 2/4/2 # Closing the dome side (quads)
+
+
+# --- Button Base Group ---
+g button_base
+
+# Top surface of the base (flat ring, connects to bottom of dome)
+# This uses the duplicate vertices v25-v32 for button_base's top edge
+f 25/1/22 26/2/22 34/3/22 33/4/22 # Bevel top for clarity
+f 26/1/22 27/2/22 35/3/22 34/4/22
+f 27/1/22 28/2/22 36/3/22 35/4/22
+f 28/1/22 29/2/22 37/3/22 36/4/22
+f 29/1/22 30/2/22 38/3/22 37/4/22
+f 30/1/22 31/2/22 39/3/22 38/4/22
+f 31/1/22 32/2/22 40/3/22 39/4/22
+f 32/1/22 25/2/22 33/3/22 40/4/22
+
+# Beveled side wall (from v25-v32 to v33-v40)
+f 33/1/23 41/2/13 42/3/14 34/4/24 # This should be quad between levels
+f 34/1/24 42/2/14 43/3/15 35/4/25
+f 35/1/25 43/2/15 44/3/16 36/4/26
+f 36/1/26 44/2/16 45/3/17 37/4/23
+f 37/1/23 45/2/17 46/3/18 38/4/24
+f 38/1/24 46/2/18 47/3/19 39/4/25
+f 39/1/25 47/2/19 48/3/20 40/4/26
+f 40/1/26 48/2/20 41/3/13 33/4/23 # Closing the bevel
+
+# Bottom side wall (from v41-v48 to v49-center bottom)
+# This will form the vertical part of the base below the bevel
+f 41/1/13 49/2/21 48/3/21 42/4/14 # This is tricky. Let's simplify to a flat bottom.
+# Re-evaluating bottom part of the base to make it easier for flat surface.
+
+# Let's simplify the bottom of the base.
+# It will be a flat circle connecting the bottom ring of the base (v41-v48) to the center (v49).
+# Bottom face of base
+f 49/5/21 41/1/21 48/2/21
+f 49/5/21 48/1/21 47/2/21
+f 49/5/21 47/1/21 46/2/21
+f 49/5/21 46/1/21 45/2/21
+f 49/5/21 45/1/21 44/2/21
+f 49/5/21 44/1/21 43/2/21
+f 49/5/21 43/1/21 42/2/21
+f 49/5/21 42/1/21 41/2/21 # Closing the bottom face

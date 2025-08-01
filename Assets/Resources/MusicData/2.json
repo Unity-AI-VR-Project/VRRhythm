@@ -1,0 +1,3621 @@
+{
+    "metadata": {
+        "tempo": 129.2,
+        "time_resolution_unit": "1/16",
+        "band_group": "all_bands_combined"
+    },
+    "beats": [
+        {
+            "beat_index": 2,
+            "beat_time": 1.5093,
+            "notes": [
+                {
+                    "time": 1.7415,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": -8.89
+                }
+            ]
+        },
+        {
+            "beat_index": 6,
+            "beat_time": 3.3669,
+            "notes": [
+                {
+                    "time": 3.5991,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.14
+                }
+            ]
+        },
+        {
+            "beat_index": 7,
+            "beat_time": 3.8313,
+            "notes": [
+                {
+                    "time": 4.0635,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -2.26
+                }
+            ]
+        },
+        {
+            "beat_index": 11,
+            "beat_time": 5.7121,
+            "notes": [
+                {
+                    "time": 5.9559,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -4.09
+                }
+            ]
+        },
+        {
+            "beat_index": 14,
+            "beat_time": 7.1285,
+            "notes": [
+                {
+                    "time": 7.3607,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.25
+                }
+            ]
+        },
+        {
+            "beat_index": 15,
+            "beat_time": 7.5929,
+            "notes": [
+                {
+                    "time": 7.8251,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -1.94
+                }
+            ]
+        },
+        {
+            "beat_index": 16,
+            "beat_time": 8.0573,
+            "notes": [
+                {
+                    "time": 8.2895,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.33
+                }
+            ]
+        },
+        {
+            "beat_index": 17,
+            "beat_time": 8.5217,
+            "notes": [
+                {
+                    "time": 8.7539,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 13.8
+                }
+            ]
+        },
+        {
+            "beat_index": 22,
+            "beat_time": 10.8669,
+            "notes": [
+                {
+                    "time": 11.0991,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.15
+                }
+            ]
+        },
+        {
+            "beat_index": 23,
+            "beat_time": 11.3313,
+            "notes": [
+                {
+                    "time": 11.5635,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 4.23
+                }
+            ]
+        },
+        {
+            "beat_index": 28,
+            "beat_time": 13.6766,
+            "notes": [
+                {
+                    "time": 14.0423,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 11.54
+                }
+            ]
+        },
+        {
+            "beat_index": 29,
+            "beat_time": 14.1642,
+            "notes": [
+                {
+                    "time": 14.3964,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.61
+                }
+            ]
+        },
+        {
+            "beat_index": 30,
+            "beat_time": 14.6286,
+            "notes": [
+                {
+                    "time": 14.8724,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.22
+                }
+            ]
+        },
+        {
+            "beat_index": 31,
+            "beat_time": 15.1162,
+            "notes": [
+                {
+                    "time": 15.1162,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 5.15
+                }
+            ]
+        },
+        {
+            "beat_index": 32,
+            "beat_time": 15.5806,
+            "notes": [
+                {
+                    "time": 15.8128,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 1.89
+                }
+            ]
+        },
+        {
+            "beat_index": 33,
+            "beat_time": 16.045,
+            "notes": [
+                {
+                    "time": 16.045,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": -5.78
+                }
+            ]
+        },
+        {
+            "beat_index": 37,
+            "beat_time": 17.8794,
+            "notes": [
+                {
+                    "time": 17.8794,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 12.49
+                }
+            ]
+        },
+        {
+            "beat_index": 38,
+            "beat_time": 18.367,
+            "notes": [
+                {
+                    "time": 18.367,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 5.15
+                },
+                {
+                    "time": 18.5876,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.65
+                }
+            ]
+        },
+        {
+            "beat_index": 39,
+            "beat_time": 18.8082,
+            "notes": [
+                {
+                    "time": 19.0288,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.98
+                }
+            ]
+        },
+        {
+            "beat_index": 45,
+            "beat_time": 21.5946,
+            "notes": [
+                {
+                    "time": 21.5946,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.07
+                }
+            ]
+        },
+        {
+            "beat_index": 46,
+            "beat_time": 22.0822,
+            "notes": [
+                {
+                    "time": 22.0822,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 6.23
+                }
+            ]
+        },
+        {
+            "beat_index": 47,
+            "beat_time": 22.5698,
+            "notes": [
+                {
+                    "time": 22.802,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.59
+                }
+            ]
+        },
+        {
+            "beat_index": 48,
+            "beat_time": 23.0342,
+            "notes": [
+                {
+                    "time": 23.278,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.36
+                }
+            ]
+        },
+        {
+            "beat_index": 49,
+            "beat_time": 23.5218,
+            "notes": [
+                {
+                    "time": 23.754,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.03
+                }
+            ]
+        },
+        {
+            "beat_index": 50,
+            "beat_time": 23.9862,
+            "notes": [
+                {
+                    "time": 24.2184,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.36
+                }
+            ]
+        },
+        {
+            "beat_index": 54,
+            "beat_time": 25.867,
+            "notes": [
+                {
+                    "time": 26.0992,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.1
+                }
+            ]
+        },
+        {
+            "beat_index": 57,
+            "beat_time": 27.2602,
+            "notes": [
+                {
+                    "time": 27.4924,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.43
+                }
+            ]
+        },
+        {
+            "beat_index": 61,
+            "beat_time": 29.141,
+            "notes": [
+                {
+                    "time": 29.3732,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.85
+                }
+            ]
+        },
+        {
+            "beat_index": 62,
+            "beat_time": 29.6054,
+            "notes": [
+                {
+                    "time": 29.8376,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.7
+                }
+            ]
+        },
+        {
+            "beat_index": 63,
+            "beat_time": 30.0698,
+            "notes": [
+                {
+                    "time": 30.302,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.48
+                }
+            ]
+        },
+        {
+            "beat_index": 64,
+            "beat_time": 30.5342,
+            "notes": [
+                {
+                    "time": 30.7548,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.81
+                }
+            ]
+        },
+        {
+            "beat_index": 66,
+            "beat_time": 31.463,
+            "notes": [
+                {
+                    "time": 31.7068,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": -0.71
+                }
+            ]
+        },
+        {
+            "beat_index": 67,
+            "beat_time": 31.9507,
+            "notes": [
+                {
+                    "time": 32.1829,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": -0.22
+                }
+            ]
+        },
+        {
+            "beat_index": 68,
+            "beat_time": 32.4151,
+            "notes": [
+                {
+                    "time": 32.6473,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 24.98
+                }
+            ]
+        },
+        {
+            "beat_index": 70,
+            "beat_time": 33.3439,
+            "notes": [
+                {
+                    "time": 33.6922,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 21.95
+                }
+            ]
+        },
+        {
+            "beat_index": 71,
+            "beat_time": 33.8083,
+            "notes": [
+                {
+                    "time": 34.0521,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.16
+                }
+            ]
+        },
+        {
+            "beat_index": 72,
+            "beat_time": 34.2959,
+            "notes": [
+                {
+                    "time": 34.5281,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 26.9
+                }
+            ]
+        },
+        {
+            "beat_index": 74,
+            "beat_time": 35.2247,
+            "notes": [
+                {
+                    "time": 35.6426,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.61
+                }
+            ]
+        },
+        {
+            "beat_index": 75,
+            "beat_time": 35.782,
+            "notes": [
+                {
+                    "time": 36.0258,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.33
+                },
+                {
+                    "time": 36.1477,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.58
+                }
+            ]
+        },
+        {
+            "beat_index": 76,
+            "beat_time": 36.2696,
+            "notes": [
+                {
+                    "time": 36.2696,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 11.49
+                },
+                {
+                    "time": 36.6179,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.23
+                }
+            ]
+        },
+        {
+            "beat_index": 77,
+            "beat_time": 36.734,
+            "notes": [
+                {
+                    "time": 36.734,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.36
+                },
+                {
+                    "time": 37.0823,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.71
+                }
+            ]
+        },
+        {
+            "beat_index": 78,
+            "beat_time": 37.1984,
+            "notes": [
+                {
+                    "time": 37.1984,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.73
+                },
+                {
+                    "time": 37.4306,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.73
+                },
+                {
+                    "time": 37.5467,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.3
+                }
+            ]
+        },
+        {
+            "beat_index": 79,
+            "beat_time": 37.6628,
+            "notes": [
+                {
+                    "time": 37.6628,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.55
+                },
+                {
+                    "time": 37.9066,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.57
+                },
+                {
+                    "time": 38.0285,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.08
+                }
+            ]
+        },
+        {
+            "beat_index": 80,
+            "beat_time": 38.1504,
+            "notes": [
+                {
+                    "time": 38.1504,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.66
+                },
+                {
+                    "time": 38.4987,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 29.7
+                }
+            ]
+        },
+        {
+            "beat_index": 81,
+            "beat_time": 38.6148,
+            "notes": [
+                {
+                    "time": 38.6148,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.93
+                },
+                {
+                    "time": 38.9631,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 25.38
+                }
+            ]
+        },
+        {
+            "beat_index": 82,
+            "beat_time": 39.0792,
+            "notes": [
+                {
+                    "time": 39.2998,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.86
+                }
+            ]
+        },
+        {
+            "beat_index": 83,
+            "beat_time": 39.5204,
+            "notes": [
+                {
+                    "time": 39.5204,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 14.36
+                },
+                {
+                    "time": 39.7177,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.27
+                }
+            ]
+        },
+        {
+            "beat_index": 84,
+            "beat_time": 39.9151,
+            "notes": [
+                {
+                    "time": 40.1473,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.22
+                }
+            ]
+        },
+        {
+            "beat_index": 85,
+            "beat_time": 40.3795,
+            "notes": [
+                {
+                    "time": 40.6117,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.78
+                }
+            ]
+        },
+        {
+            "beat_index": 87,
+            "beat_time": 41.3083,
+            "notes": [
+                {
+                    "time": 41.5521,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.77
+                }
+            ]
+        },
+        {
+            "beat_index": 88,
+            "beat_time": 41.7959,
+            "notes": [
+                {
+                    "time": 42.0281,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.72
+                }
+            ]
+        },
+        {
+            "beat_index": 89,
+            "beat_time": 42.2603,
+            "notes": [
+                {
+                    "time": 42.4925,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.45
+                }
+            ]
+        },
+        {
+            "beat_index": 90,
+            "beat_time": 42.7247,
+            "notes": [
+                {
+                    "time": 43.1427,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.44
+                }
+            ]
+        },
+        {
+            "beat_index": 91,
+            "beat_time": 43.282,
+            "notes": [
+                {
+                    "time": 43.282,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 0.74
+                },
+                {
+                    "time": 43.5258,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.48
+                },
+                {
+                    "time": 43.6477,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.8
+                }
+            ]
+        },
+        {
+            "beat_index": 92,
+            "beat_time": 43.7696,
+            "notes": [
+                {
+                    "time": 44.1179,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.79
+                }
+            ]
+        },
+        {
+            "beat_index": 93,
+            "beat_time": 44.234,
+            "notes": [
+                {
+                    "time": 44.4662,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 16.65
+                },
+                {
+                    "time": 44.5823,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.01
+                }
+            ]
+        },
+        {
+            "beat_index": 94,
+            "beat_time": 44.6984,
+            "notes": [
+                {
+                    "time": 44.9306,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.68
+                },
+                {
+                    "time": 45.0467,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.69
+                }
+            ]
+        },
+        {
+            "beat_index": 95,
+            "beat_time": 45.1628,
+            "notes": [
+                {
+                    "time": 45.3834,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 23.25
+                }
+            ]
+        },
+        {
+            "beat_index": 96,
+            "beat_time": 45.604,
+            "notes": [
+                {
+                    "time": 45.813,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.73
+                }
+            ]
+        },
+        {
+            "beat_index": 97,
+            "beat_time": 46.022,
+            "notes": [
+                {
+                    "time": 46.2425,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 19.15
+                }
+            ]
+        },
+        {
+            "beat_index": 98,
+            "beat_time": 46.4631,
+            "notes": [
+                {
+                    "time": 46.7069,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 22.55
+                }
+            ]
+        },
+        {
+            "beat_index": 100,
+            "beat_time": 47.4151,
+            "notes": [
+                {
+                    "time": 47.5312,
+                    "band": "low",
+                    "relative_pos_in_beat": 4,
+                    "strength": 21.29
+                },
+                {
+                    "time": 47.6473,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.35
+                }
+            ]
+        },
+        {
+            "beat_index": 101,
+            "beat_time": 47.8795,
+            "notes": [
+                {
+                    "time": 48.1117,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.3
+                }
+            ]
+        },
+        {
+            "beat_index": 102,
+            "beat_time": 48.3439,
+            "notes": [
+                {
+                    "time": 48.5761,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.77
+                }
+            ]
+        },
+        {
+            "beat_index": 103,
+            "beat_time": 48.8083,
+            "notes": [
+                {
+                    "time": 49.0522,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.63
+                }
+            ]
+        },
+        {
+            "beat_index": 104,
+            "beat_time": 49.296,
+            "notes": [
+                {
+                    "time": 49.5282,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.5
+                }
+            ]
+        },
+        {
+            "beat_index": 105,
+            "beat_time": 49.7604,
+            "notes": [
+                {
+                    "time": 49.9926,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.96
+                }
+            ]
+        },
+        {
+            "beat_index": 106,
+            "beat_time": 50.2248,
+            "notes": [
+                {
+                    "time": 50.6427,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.2
+                }
+            ]
+        },
+        {
+            "beat_index": 107,
+            "beat_time": 50.782,
+            "notes": [
+                {
+                    "time": 51.0259,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.07
+                },
+                {
+                    "time": 51.1478,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.99
+                }
+            ]
+        },
+        {
+            "beat_index": 108,
+            "beat_time": 51.2697,
+            "notes": [
+                {
+                    "time": 51.2697,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.45
+                },
+                {
+                    "time": 51.618,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.4
+                }
+            ]
+        },
+        {
+            "beat_index": 109,
+            "beat_time": 51.7341,
+            "notes": [
+                {
+                    "time": 51.7341,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.61
+                },
+                {
+                    "time": 52.0824,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.29
+                }
+            ]
+        },
+        {
+            "beat_index": 110,
+            "beat_time": 52.1985,
+            "notes": [
+                {
+                    "time": 52.1985,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.33
+                },
+                {
+                    "time": 52.4307,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.97
+                },
+                {
+                    "time": 52.5468,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.02
+                }
+            ]
+        },
+        {
+            "beat_index": 111,
+            "beat_time": 52.6629,
+            "notes": [
+                {
+                    "time": 52.6629,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.25
+                }
+            ]
+        },
+        {
+            "beat_index": 112,
+            "beat_time": 53.0576,
+            "notes": [
+                {
+                    "time": 53.2782,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.56
+                }
+            ]
+        },
+        {
+            "beat_index": 113,
+            "beat_time": 53.4988,
+            "notes": [
+                {
+                    "time": 53.7426,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.27
+                }
+            ]
+        },
+        {
+            "beat_index": 114,
+            "beat_time": 53.9864,
+            "notes": [
+                {
+                    "time": 54.2186,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.05
+                }
+            ]
+        },
+        {
+            "beat_index": 115,
+            "beat_time": 54.4508,
+            "notes": [
+                {
+                    "time": 54.683,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.41
+                }
+            ]
+        },
+        {
+            "beat_index": 116,
+            "beat_time": 54.9152,
+            "notes": [
+                {
+                    "time": 55.1474,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.53
+                }
+            ]
+        },
+        {
+            "beat_index": 117,
+            "beat_time": 55.3796,
+            "notes": [
+                {
+                    "time": 55.6118,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.55
+                }
+            ]
+        },
+        {
+            "beat_index": 118,
+            "beat_time": 55.844,
+            "notes": [
+                {
+                    "time": 56.0762,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.85
+                }
+            ]
+        },
+        {
+            "beat_index": 119,
+            "beat_time": 56.3084,
+            "notes": [
+                {
+                    "time": 56.5522,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.64
+                }
+            ]
+        },
+        {
+            "beat_index": 120,
+            "beat_time": 56.796,
+            "notes": [
+                {
+                    "time": 57.0282,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.65
+                }
+            ]
+        },
+        {
+            "beat_index": 121,
+            "beat_time": 57.2604,
+            "notes": [
+                {
+                    "time": 57.4926,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.38
+                }
+            ]
+        },
+        {
+            "beat_index": 122,
+            "beat_time": 57.7248,
+            "notes": [
+                {
+                    "time": 58.1428,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 29.12
+                }
+            ]
+        },
+        {
+            "beat_index": 123,
+            "beat_time": 58.2821,
+            "notes": [
+                {
+                    "time": 58.2821,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 4.48
+                },
+                {
+                    "time": 58.5259,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.72
+                },
+                {
+                    "time": 58.6478,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.28
+                }
+            ]
+        },
+        {
+            "beat_index": 124,
+            "beat_time": 58.7697,
+            "notes": [
+                {
+                    "time": 59.118,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.89
+                }
+            ]
+        },
+        {
+            "beat_index": 125,
+            "beat_time": 59.2341,
+            "notes": [
+                {
+                    "time": 59.4895,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 16.99
+                },
+                {
+                    "time": 59.6172,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.94
+                }
+            ]
+        },
+        {
+            "beat_index": 126,
+            "beat_time": 59.7449,
+            "notes": [
+                {
+                    "time": 59.9655,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.2
+                },
+                {
+                    "time": 60.0758,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.53
+                }
+            ]
+        },
+        {
+            "beat_index": 127,
+            "beat_time": 60.1861,
+            "notes": [
+                {
+                    "time": 60.3196,
+                    "band": "low",
+                    "relative_pos_in_beat": 4,
+                    "strength": 24.3
+                }
+            ]
+        },
+        {
+            "beat_index": 128,
+            "beat_time": 60.7202,
+            "notes": [
+                {
+                    "time": 60.9756,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.66
+                }
+            ]
+        },
+        {
+            "beat_index": 129,
+            "beat_time": 61.231,
+            "notes": [
+                {
+                    "time": 61.4632,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 25.49
+                }
+            ]
+        },
+        {
+            "beat_index": 130,
+            "beat_time": 61.6954,
+            "notes": [
+                {
+                    "time": 61.8928,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 28.42
+                }
+            ]
+        },
+        {
+            "beat_index": 131,
+            "beat_time": 62.0902,
+            "notes": [
+                {
+                    "time": 62.3224,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.84
+                },
+                {
+                    "time": 62.4385,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.69
+                }
+            ]
+        },
+        {
+            "beat_index": 132,
+            "beat_time": 62.5546,
+            "notes": [
+                {
+                    "time": 62.5546,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.77
+                },
+                {
+                    "time": 62.9029,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.28
+                }
+            ]
+        },
+        {
+            "beat_index": 133,
+            "beat_time": 63.019,
+            "notes": [
+                {
+                    "time": 63.019,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 8.87
+                },
+                {
+                    "time": 63.2512,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.45
+                },
+                {
+                    "time": 63.3673,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.24
+                }
+            ]
+        },
+        {
+            "beat_index": 134,
+            "beat_time": 63.4834,
+            "notes": [
+                {
+                    "time": 63.4834,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.04
+                },
+                {
+                    "time": 63.7272,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 29.0
+                }
+            ]
+        },
+        {
+            "beat_index": 135,
+            "beat_time": 63.971,
+            "notes": [
+                {
+                    "time": 63.971,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 11.74
+                },
+                {
+                    "time": 64.2032,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.81
+                },
+                {
+                    "time": 64.3193,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.78
+                }
+            ]
+        },
+        {
+            "beat_index": 136,
+            "beat_time": 64.4354,
+            "notes": [
+                {
+                    "time": 64.4354,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.67
+                },
+                {
+                    "time": 64.6676,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 27.71
+                }
+            ]
+        },
+        {
+            "beat_index": 137,
+            "beat_time": 64.8998,
+            "notes": [
+                {
+                    "time": 64.8998,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 8.81
+                },
+                {
+                    "time": 65.132,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.09
+                },
+                {
+                    "time": 65.2481,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 25.11
+                }
+            ]
+        },
+        {
+            "beat_index": 138,
+            "beat_time": 65.3642,
+            "notes": [
+                {
+                    "time": 65.5964,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.59
+                },
+                {
+                    "time": 65.7125,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.16
+                }
+            ]
+        },
+        {
+            "beat_index": 139,
+            "beat_time": 65.8286,
+            "notes": [
+                {
+                    "time": 66.0724,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 25.22
+                }
+            ]
+        },
+        {
+            "beat_index": 140,
+            "beat_time": 66.3162,
+            "notes": [
+                {
+                    "time": 66.3162,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.03
+                },
+                {
+                    "time": 66.6645,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.74
+                }
+            ]
+        },
+        {
+            "beat_index": 141,
+            "beat_time": 66.7806,
+            "notes": [
+                {
+                    "time": 66.7806,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.87
+                },
+                {
+                    "time": 67.0128,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.52
+                },
+                {
+                    "time": 67.1289,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.7
+                }
+            ]
+        },
+        {
+            "beat_index": 142,
+            "beat_time": 67.245,
+            "notes": [
+                {
+                    "time": 67.4772,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.86
+                },
+                {
+                    "time": 67.5933,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.04
+                }
+            ]
+        },
+        {
+            "beat_index": 143,
+            "beat_time": 67.7094,
+            "notes": [
+                {
+                    "time": 67.7094,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 11.0
+                },
+                {
+                    "time": 67.9532,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 25.38
+                }
+            ]
+        },
+        {
+            "beat_index": 144,
+            "beat_time": 68.197,
+            "notes": [
+                {
+                    "time": 68.5279,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 30.04
+                }
+            ]
+        },
+        {
+            "beat_index": 145,
+            "beat_time": 68.6382,
+            "notes": [
+                {
+                    "time": 68.6382,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 8.06
+                },
+                {
+                    "time": 68.8704,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.25
+                },
+                {
+                    "time": 68.9865,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 21.2
+                }
+            ]
+        },
+        {
+            "beat_index": 146,
+            "beat_time": 69.1026,
+            "notes": [
+                {
+                    "time": 69.4509,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.13
+                }
+            ]
+        },
+        {
+            "beat_index": 147,
+            "beat_time": 69.567,
+            "notes": [
+                {
+                    "time": 69.567,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 13.33
+                },
+                {
+                    "time": 69.8108,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.55
+                },
+                {
+                    "time": 69.9327,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.21
+                }
+            ]
+        },
+        {
+            "beat_index": 148,
+            "beat_time": 70.0546,
+            "notes": [
+                {
+                    "time": 70.4029,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.56
+                }
+            ]
+        },
+        {
+            "beat_index": 149,
+            "beat_time": 70.519,
+            "notes": [
+                {
+                    "time": 70.7512,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.15
+                },
+                {
+                    "time": 70.8673,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.34
+                }
+            ]
+        },
+        {
+            "beat_index": 150,
+            "beat_time": 70.9834,
+            "notes": [
+                {
+                    "time": 71.2156,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 12.48
+                },
+                {
+                    "time": 71.3317,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.45
+                }
+            ]
+        },
+        {
+            "beat_index": 151,
+            "beat_time": 71.4478,
+            "notes": [
+                {
+                    "time": 71.68,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.85
+                },
+                {
+                    "time": 71.7961,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.5
+                }
+            ]
+        },
+        {
+            "beat_index": 152,
+            "beat_time": 71.9122,
+            "notes": [
+                {
+                    "time": 71.9122,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 8.87
+                },
+                {
+                    "time": 72.156,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 28.03
+                }
+            ]
+        },
+        {
+            "beat_index": 153,
+            "beat_time": 72.3998,
+            "notes": [
+                {
+                    "time": 72.632,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.77
+                },
+                {
+                    "time": 72.7481,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.32
+                }
+            ]
+        },
+        {
+            "beat_index": 154,
+            "beat_time": 72.8642,
+            "notes": [
+                {
+                    "time": 73.2125,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.7
+                }
+            ]
+        },
+        {
+            "beat_index": 155,
+            "beat_time": 73.3286,
+            "notes": [
+                {
+                    "time": 73.5724,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 25.24
+                }
+            ]
+        },
+        {
+            "beat_index": 156,
+            "beat_time": 73.8162,
+            "notes": [
+                {
+                    "time": 74.0484,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.59
+                },
+                {
+                    "time": 74.1645,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.51
+                }
+            ]
+        },
+        {
+            "beat_index": 157,
+            "beat_time": 74.2806,
+            "notes": [
+                {
+                    "time": 74.5128,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.83
+                },
+                {
+                    "time": 74.6289,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.32
+                }
+            ]
+        },
+        {
+            "beat_index": 158,
+            "beat_time": 74.745,
+            "notes": [
+                {
+                    "time": 74.9656,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.39
+                },
+                {
+                    "time": 75.0759,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.79
+                }
+            ]
+        },
+        {
+            "beat_index": 159,
+            "beat_time": 75.1862,
+            "notes": [
+                {
+                    "time": 75.4068,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 22.55
+                }
+            ]
+        },
+        {
+            "beat_index": 160,
+            "beat_time": 75.6274,
+            "notes": [
+                {
+                    "time": 75.848,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.23
+                }
+            ]
+        },
+        {
+            "beat_index": 161,
+            "beat_time": 76.0686,
+            "notes": [
+                {
+                    "time": 76.382,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 9.12
+                }
+            ]
+        },
+        {
+            "beat_index": 163,
+            "beat_time": 76.9741,
+            "notes": [
+                {
+                    "time": 77.2063,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 3.87
+                }
+            ]
+        },
+        {
+            "beat_index": 171,
+            "beat_time": 80.6893,
+            "notes": [
+                {
+                    "time": 80.9215,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -4.45
+                }
+            ]
+        },
+        {
+            "beat_index": 177,
+            "beat_time": 83.5222,
+            "notes": [
+                {
+                    "time": 83.5222,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": -8.92
+                }
+            ]
+        },
+        {
+            "beat_index": 179,
+            "beat_time": 84.451,
+            "notes": [
+                {
+                    "time": 84.6832,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 1.33
+                }
+            ]
+        },
+        {
+            "beat_index": 183,
+            "beat_time": 86.3318,
+            "notes": [
+                {
+                    "time": 86.564,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": -1.81
+                }
+            ]
+        },
+        {
+            "beat_index": 187,
+            "beat_time": 88.1894,
+            "notes": [
+                {
+                    "time": 88.4216,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 2.33
+                }
+            ]
+        },
+        {
+            "beat_index": 205,
+            "beat_time": 96.6415,
+            "notes": [
+                {
+                    "time": 96.6415,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 0.13
+                }
+            ]
+        },
+        {
+            "beat_index": 211,
+            "beat_time": 99.4511,
+            "notes": [
+                {
+                    "time": 99.4511,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 5.18
+                }
+            ]
+        },
+        {
+            "beat_index": 213,
+            "beat_time": 100.3799,
+            "notes": [
+                {
+                    "time": 100.3799,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.26
+                }
+            ]
+        },
+        {
+            "beat_index": 215,
+            "beat_time": 101.3319,
+            "notes": [
+                {
+                    "time": 101.3319,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.87
+                }
+            ]
+        },
+        {
+            "beat_index": 218,
+            "beat_time": 102.7251,
+            "notes": [
+                {
+                    "time": 102.7251,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.0
+                }
+            ]
+        },
+        {
+            "beat_index": 220,
+            "beat_time": 103.6539,
+            "notes": [
+                {
+                    "time": 103.6539,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 26.31
+                }
+            ]
+        },
+        {
+            "beat_index": 221,
+            "beat_time": 104.1183,
+            "notes": [
+                {
+                    "time": 104.1183,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 26.71
+                },
+                {
+                    "time": 104.3505,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.51
+                }
+            ]
+        },
+        {
+            "beat_index": 222,
+            "beat_time": 104.5827,
+            "notes": [
+                {
+                    "time": 104.5827,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 26.33
+                },
+                {
+                    "time": 104.8265,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.68
+                }
+            ]
+        },
+        {
+            "beat_index": 223,
+            "beat_time": 105.0703,
+            "notes": [
+                {
+                    "time": 105.0703,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 4.64
+                }
+            ]
+        },
+        {
+            "beat_index": 224,
+            "beat_time": 105.5579,
+            "notes": [
+                {
+                    "time": 105.7901,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": -3.41
+                }
+            ]
+        },
+        {
+            "beat_index": 230,
+            "beat_time": 108.3675,
+            "notes": [
+                {
+                    "time": 108.5997,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.37
+                }
+            ]
+        },
+        {
+            "beat_index": 231,
+            "beat_time": 108.8319,
+            "notes": [
+                {
+                    "time": 109.0641,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.31
+                }
+            ]
+        },
+        {
+            "beat_index": 235,
+            "beat_time": 110.7127,
+            "notes": [
+                {
+                    "time": 110.9449,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.75
+                }
+            ]
+        },
+        {
+            "beat_index": 236,
+            "beat_time": 111.1771,
+            "notes": [
+                {
+                    "time": 111.4093,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.78
+                }
+            ]
+        },
+        {
+            "beat_index": 239,
+            "beat_time": 112.5703,
+            "notes": [
+                {
+                    "time": 112.8025,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.7
+                }
+            ]
+        },
+        {
+            "beat_index": 240,
+            "beat_time": 113.0347,
+            "notes": [
+                {
+                    "time": 113.2669,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.17
+                }
+            ]
+        },
+        {
+            "beat_index": 241,
+            "beat_time": 113.4991,
+            "notes": [
+                {
+                    "time": 113.7313,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.82
+                }
+            ]
+        },
+        {
+            "beat_index": 242,
+            "beat_time": 113.9635,
+            "notes": [
+                {
+                    "time": 114.2073,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.48
+                }
+            ]
+        },
+        {
+            "beat_index": 243,
+            "beat_time": 114.4512,
+            "notes": [
+                {
+                    "time": 114.4512,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.2
+                },
+                {
+                    "time": 114.6834,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": -3.18
+                }
+            ]
+        },
+        {
+            "beat_index": 244,
+            "beat_time": 114.9156,
+            "notes": [
+                {
+                    "time": 114.9156,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 13.94
+                }
+            ]
+        },
+        {
+            "beat_index": 246,
+            "beat_time": 115.8676,
+            "notes": [
+                {
+                    "time": 115.8676,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.06
+                },
+                {
+                    "time": 116.0998,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.97
+                }
+            ]
+        },
+        {
+            "beat_index": 248,
+            "beat_time": 116.7964,
+            "notes": [
+                {
+                    "time": 116.7964,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 2.24
+                },
+                {
+                    "time": 117.0286,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 13.83
+                }
+            ]
+        },
+        {
+            "beat_index": 252,
+            "beat_time": 118.6772,
+            "notes": [
+                {
+                    "time": 118.9094,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 4.36
+                }
+            ]
+        },
+        {
+            "beat_index": 253,
+            "beat_time": 119.1416,
+            "notes": [
+                {
+                    "time": 119.3738,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.08
+                }
+            ]
+        },
+        {
+            "beat_index": 254,
+            "beat_time": 119.606,
+            "notes": [
+                {
+                    "time": 119.8382,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.84
+                }
+            ]
+        },
+        {
+            "beat_index": 255,
+            "beat_time": 120.0704,
+            "notes": [
+                {
+                    "time": 120.3026,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.34
+                }
+            ]
+        },
+        {
+            "beat_index": 256,
+            "beat_time": 120.5348,
+            "notes": [
+                {
+                    "time": 120.5348,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 14.35
+                },
+                {
+                    "time": 120.7554,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.84
+                }
+            ]
+        },
+        {
+            "beat_index": 259,
+            "beat_time": 121.928,
+            "notes": [
+                {
+                    "time": 121.928,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 31.96
+                }
+            ]
+        },
+        {
+            "beat_index": 260,
+            "beat_time": 122.3924,
+            "notes": [
+                {
+                    "time": 122.3924,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 25.15
+                },
+                {
+                    "time": 122.6362,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.97
+                }
+            ]
+        },
+        {
+            "beat_index": 261,
+            "beat_time": 122.88,
+            "notes": [
+                {
+                    "time": 123.1122,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.71
+                }
+            ]
+        },
+        {
+            "beat_index": 263,
+            "beat_time": 123.8088,
+            "notes": [
+                {
+                    "time": 124.0526,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.25
+                }
+            ]
+        },
+        {
+            "beat_index": 264,
+            "beat_time": 124.2964,
+            "notes": [
+                {
+                    "time": 124.5286,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.81
+                }
+            ]
+        },
+        {
+            "beat_index": 265,
+            "beat_time": 124.7608,
+            "notes": [
+                {
+                    "time": 124.993,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.98
+                }
+            ]
+        },
+        {
+            "beat_index": 266,
+            "beat_time": 125.2252,
+            "notes": [
+                {
+                    "time": 125.5039,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.51
+                },
+                {
+                    "time": 125.6432,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.52
+                }
+            ]
+        },
+        {
+            "beat_index": 267,
+            "beat_time": 125.7825,
+            "notes": [
+                {
+                    "time": 125.7825,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 0.84
+                },
+                {
+                    "time": 126.0263,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.47
+                },
+                {
+                    "time": 126.1482,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.27
+                }
+            ]
+        },
+        {
+            "beat_index": 268,
+            "beat_time": 126.2701,
+            "notes": [
+                {
+                    "time": 126.6184,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.14
+                }
+            ]
+        },
+        {
+            "beat_index": 269,
+            "beat_time": 126.7345,
+            "notes": [
+                {
+                    "time": 127.1176,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.74
+                }
+            ]
+        },
+        {
+            "beat_index": 270,
+            "beat_time": 127.2454,
+            "notes": [
+                {
+                    "time": 127.2454,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.67
+                },
+                {
+                    "time": 127.5588,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.45
+                }
+            ]
+        },
+        {
+            "beat_index": 271,
+            "beat_time": 127.6633,
+            "notes": [
+                {
+                    "time": 127.9303,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.56
+                },
+                {
+                    "time": 128.0639,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.17
+                }
+            ]
+        },
+        {
+            "beat_index": 272,
+            "beat_time": 128.1974,
+            "notes": [
+                {
+                    "time": 128.1974,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.76
+                },
+                {
+                    "time": 128.5108,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 29.94
+                }
+            ]
+        },
+        {
+            "beat_index": 273,
+            "beat_time": 128.6153,
+            "notes": [
+                {
+                    "time": 128.8475,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 16.03
+                },
+                {
+                    "time": 128.9636,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 25.36
+                }
+            ]
+        },
+        {
+            "beat_index": 274,
+            "beat_time": 129.0797,
+            "notes": [
+                {
+                    "time": 129.3003,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.11
+                }
+            ]
+        },
+        {
+            "beat_index": 275,
+            "beat_time": 129.5209,
+            "notes": [
+                {
+                    "time": 129.7183,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.22
+                }
+            ]
+        },
+        {
+            "beat_index": 276,
+            "beat_time": 129.9156,
+            "notes": [
+                {
+                    "time": 130.1478,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.46
+                }
+            ]
+        },
+        {
+            "beat_index": 277,
+            "beat_time": 130.38,
+            "notes": [
+                {
+                    "time": 130.6122,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.08
+                }
+            ]
+        },
+        {
+            "beat_index": 278,
+            "beat_time": 130.8444,
+            "notes": [
+                {
+                    "time": 131.0766,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.94
+                }
+            ]
+        },
+        {
+            "beat_index": 279,
+            "beat_time": 131.3088,
+            "notes": [
+                {
+                    "time": 131.5527,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.25
+                }
+            ]
+        },
+        {
+            "beat_index": 280,
+            "beat_time": 131.7965,
+            "notes": [
+                {
+                    "time": 132.0287,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.07
+                }
+            ]
+        },
+        {
+            "beat_index": 281,
+            "beat_time": 132.2609,
+            "notes": [
+                {
+                    "time": 132.4931,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 5.18
+                }
+            ]
+        },
+        {
+            "beat_index": 282,
+            "beat_time": 132.7253,
+            "notes": [
+                {
+                    "time": 133.0039,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.24
+                },
+                {
+                    "time": 133.1432,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.82
+                }
+            ]
+        },
+        {
+            "beat_index": 283,
+            "beat_time": 133.2825,
+            "notes": [
+                {
+                    "time": 133.5263,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.56
+                },
+                {
+                    "time": 133.6483,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.99
+                }
+            ]
+        },
+        {
+            "beat_index": 284,
+            "beat_time": 133.7702,
+            "notes": [
+                {
+                    "time": 133.7702,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 11.19
+                },
+                {
+                    "time": 134.1185,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.0
+                }
+            ]
+        },
+        {
+            "beat_index": 285,
+            "beat_time": 134.2346,
+            "notes": [
+                {
+                    "time": 134.2346,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.33
+                },
+                {
+                    "time": 134.4668,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 16.54
+                },
+                {
+                    "time": 134.5829,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.65
+                }
+            ]
+        },
+        {
+            "beat_index": 286,
+            "beat_time": 134.699,
+            "notes": [
+                {
+                    "time": 134.9312,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.22
+                },
+                {
+                    "time": 135.0473,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.44
+                }
+            ]
+        },
+        {
+            "beat_index": 287,
+            "beat_time": 135.1634,
+            "notes": [
+                {
+                    "time": 135.1634,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.34
+                },
+                {
+                    "time": 135.3839,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 23.16
+                }
+            ]
+        },
+        {
+            "beat_index": 288,
+            "beat_time": 135.6045,
+            "notes": [
+                {
+                    "time": 135.8135,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 6.98
+                }
+            ]
+        },
+        {
+            "beat_index": 289,
+            "beat_time": 136.0225,
+            "notes": [
+                {
+                    "time": 136.2431,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 19.21
+                }
+            ]
+        },
+        {
+            "beat_index": 290,
+            "beat_time": 136.4637,
+            "notes": [
+                {
+                    "time": 136.4637,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 20.1
+                },
+                {
+                    "time": 136.6959,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 22.61
+                }
+            ]
+        },
+        {
+            "beat_index": 291,
+            "beat_time": 136.9281,
+            "notes": [
+                {
+                    "time": 136.9281,
+                    "band": "low",
+                    "relative_pos_in_beat": 0,
+                    "strength": 27.16
+                }
+            ]
+        },
+        {
+            "beat_index": 292,
+            "beat_time": 137.3925,
+            "notes": [
+                {
+                    "time": 137.3925,
+                    "band": "mid",
+                    "relative_pos_in_beat": 0,
+                    "strength": 18.05
+                },
+                {
+                    "time": 137.6363,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.11
+                }
+            ]
+        },
+        {
+            "beat_index": 293,
+            "beat_time": 137.8801,
+            "notes": [
+                {
+                    "time": 138.1123,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.43
+                }
+            ]
+        },
+        {
+            "beat_index": 294,
+            "beat_time": 138.3445,
+            "notes": [
+                {
+                    "time": 138.5767,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.48
+                }
+            ]
+        },
+        {
+            "beat_index": 295,
+            "beat_time": 138.8089,
+            "notes": [
+                {
+                    "time": 139.0527,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.72
+                },
+                {
+                    "time": 139.1746,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 25.47
+                }
+            ]
+        },
+        {
+            "beat_index": 296,
+            "beat_time": 139.2965,
+            "notes": [
+                {
+                    "time": 139.5287,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.62
+                }
+            ]
+        },
+        {
+            "beat_index": 297,
+            "beat_time": 139.7609,
+            "notes": [
+                {
+                    "time": 139.9931,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.0
+                }
+            ]
+        },
+        {
+            "beat_index": 298,
+            "beat_time": 140.2253,
+            "notes": [
+                {
+                    "time": 140.6433,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.58
+                }
+            ]
+        },
+        {
+            "beat_index": 299,
+            "beat_time": 140.7826,
+            "notes": [
+                {
+                    "time": 140.7826,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.8
+                },
+                {
+                    "time": 141.0264,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.05
+                },
+                {
+                    "time": 141.1483,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.12
+                }
+            ]
+        },
+        {
+            "beat_index": 300,
+            "beat_time": 141.2702,
+            "notes": [
+                {
+                    "time": 141.6185,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.31
+                }
+            ]
+        },
+        {
+            "beat_index": 301,
+            "beat_time": 141.7346,
+            "notes": [
+                {
+                    "time": 142.0829,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.37
+                }
+            ]
+        },
+        {
+            "beat_index": 302,
+            "beat_time": 142.199,
+            "notes": [
+                {
+                    "time": 142.4312,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.73
+                },
+                {
+                    "time": 142.5473,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.02
+                }
+            ]
+        },
+        {
+            "beat_index": 304,
+            "beat_time": 143.0581,
+            "notes": [
+                {
+                    "time": 143.2787,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.55
+                }
+            ]
+        },
+        {
+            "beat_index": 305,
+            "beat_time": 143.4993,
+            "notes": [
+                {
+                    "time": 143.7431,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.58
+                }
+            ]
+        },
+        {
+            "beat_index": 306,
+            "beat_time": 143.9869,
+            "notes": [
+                {
+                    "time": 144.2191,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.29
+                }
+            ]
+        },
+        {
+            "beat_index": 307,
+            "beat_time": 144.4513,
+            "notes": [
+                {
+                    "time": 144.6835,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.37
+                }
+            ]
+        },
+        {
+            "beat_index": 308,
+            "beat_time": 144.9157,
+            "notes": [
+                {
+                    "time": 145.1479,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.89
+                }
+            ]
+        },
+        {
+            "beat_index": 309,
+            "beat_time": 145.3801,
+            "notes": [
+                {
+                    "time": 145.6123,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 8.72
+                }
+            ]
+        },
+        {
+            "beat_index": 310,
+            "beat_time": 145.8445,
+            "notes": [
+                {
+                    "time": 146.0767,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.7
+                }
+            ]
+        },
+        {
+            "beat_index": 311,
+            "beat_time": 146.3089,
+            "notes": [
+                {
+                    "time": 146.5527,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 10.75
+                }
+            ]
+        },
+        {
+            "beat_index": 312,
+            "beat_time": 146.7966,
+            "notes": [
+                {
+                    "time": 147.0288,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 15.13
+                }
+            ]
+        },
+        {
+            "beat_index": 313,
+            "beat_time": 147.261,
+            "notes": [
+                {
+                    "time": 147.4932,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 11.05
+                }
+            ]
+        },
+        {
+            "beat_index": 314,
+            "beat_time": 147.7254,
+            "notes": [
+                {
+                    "time": 148.1433,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.31
+                }
+            ]
+        },
+        {
+            "beat_index": 315,
+            "beat_time": 148.2826,
+            "notes": [
+                {
+                    "time": 148.5264,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.37
+                },
+                {
+                    "time": 148.6483,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.27
+                }
+            ]
+        },
+        {
+            "beat_index": 316,
+            "beat_time": 148.7702,
+            "notes": [
+                {
+                    "time": 149.1185,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.0
+                }
+            ]
+        },
+        {
+            "beat_index": 317,
+            "beat_time": 149.2346,
+            "notes": [
+                {
+                    "time": 149.4901,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 16.8
+                },
+                {
+                    "time": 149.6178,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.63
+                }
+            ]
+        },
+        {
+            "beat_index": 318,
+            "beat_time": 149.7455,
+            "notes": [
+                {
+                    "time": 149.7455,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.25
+                },
+                {
+                    "time": 150.0764,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.37
+                }
+            ]
+        },
+        {
+            "beat_index": 319,
+            "beat_time": 150.1867,
+            "notes": [
+                {
+                    "time": 150.1867,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.67
+                },
+                {
+                    "time": 150.4537,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 23.23
+                }
+            ]
+        },
+        {
+            "beat_index": 320,
+            "beat_time": 150.7207,
+            "notes": [
+                {
+                    "time": 150.9761,
+                    "band": "high",
+                    "relative_pos_in_beat": 8,
+                    "strength": 7.69
+                }
+            ]
+        },
+        {
+            "beat_index": 321,
+            "beat_time": 151.2316,
+            "notes": [
+                {
+                    "time": 151.2316,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.43
+                },
+                {
+                    "time": 151.4638,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 25.37
+                }
+            ]
+        },
+        {
+            "beat_index": 322,
+            "beat_time": 151.696,
+            "notes": [
+                {
+                    "time": 151.8933,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 28.94
+                }
+            ]
+        },
+        {
+            "beat_index": 323,
+            "beat_time": 152.0907,
+            "notes": [
+                {
+                    "time": 152.3229,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.92
+                },
+                {
+                    "time": 152.439,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.25
+                }
+            ]
+        },
+        {
+            "beat_index": 324,
+            "beat_time": 152.5551,
+            "notes": [
+                {
+                    "time": 152.9034,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.98
+                }
+            ]
+        },
+        {
+            "beat_index": 325,
+            "beat_time": 153.0195,
+            "notes": [
+                {
+                    "time": 153.2517,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.97
+                },
+                {
+                    "time": 153.3678,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.35
+                }
+            ]
+        },
+        {
+            "beat_index": 326,
+            "beat_time": 153.4839,
+            "notes": [
+                {
+                    "time": 153.7277,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 29.18
+                }
+            ]
+        },
+        {
+            "beat_index": 327,
+            "beat_time": 153.9715,
+            "notes": [
+                {
+                    "time": 154.2037,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.26
+                }
+            ]
+        },
+        {
+            "beat_index": 328,
+            "beat_time": 154.4359,
+            "notes": [
+                {
+                    "time": 154.6681,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 27.56
+                }
+            ]
+        },
+        {
+            "beat_index": 329,
+            "beat_time": 154.9003,
+            "notes": [
+                {
+                    "time": 155.1325,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.66
+                },
+                {
+                    "time": 155.2486,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 25.92
+                }
+            ]
+        },
+        {
+            "beat_index": 330,
+            "beat_time": 155.3647,
+            "notes": [
+                {
+                    "time": 155.713,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.19
+                }
+            ]
+        },
+        {
+            "beat_index": 331,
+            "beat_time": 155.8291,
+            "notes": [
+                {
+                    "time": 156.0729,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 25.17
+                }
+            ]
+        },
+        {
+            "beat_index": 332,
+            "beat_time": 156.3167,
+            "notes": [
+                {
+                    "time": 156.665,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.19
+                }
+            ]
+        },
+        {
+            "beat_index": 333,
+            "beat_time": 156.7811,
+            "notes": [
+                {
+                    "time": 157.0133,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.38
+                },
+                {
+                    "time": 157.1294,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.41
+                }
+            ]
+        },
+        {
+            "beat_index": 334,
+            "beat_time": 157.2455,
+            "notes": [
+                {
+                    "time": 157.4777,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 13.98
+                },
+                {
+                    "time": 157.5938,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.45
+                }
+            ]
+        },
+        {
+            "beat_index": 335,
+            "beat_time": 157.7099,
+            "notes": [
+                {
+                    "time": 157.9421,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.28
+                },
+                {
+                    "time": 158.0582,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.28
+                }
+            ]
+        },
+        {
+            "beat_index": 336,
+            "beat_time": 158.1743,
+            "notes": [
+                {
+                    "time": 158.5226,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 29.65
+                }
+            ]
+        },
+        {
+            "beat_index": 337,
+            "beat_time": 158.6387,
+            "notes": [
+                {
+                    "time": 158.8709,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 16.62
+                },
+                {
+                    "time": 158.987,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 21.2
+                }
+            ]
+        },
+        {
+            "beat_index": 338,
+            "beat_time": 159.1031,
+            "notes": [
+                {
+                    "time": 159.4514,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.07
+                }
+            ]
+        },
+        {
+            "beat_index": 339,
+            "beat_time": 159.5675,
+            "notes": [
+                {
+                    "time": 159.8113,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.27
+                },
+                {
+                    "time": 159.9332,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 23.76
+                }
+            ]
+        },
+        {
+            "beat_index": 340,
+            "beat_time": 160.0551,
+            "notes": [
+                {
+                    "time": 160.4034,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.9
+                }
+            ]
+        },
+        {
+            "beat_index": 341,
+            "beat_time": 160.5195,
+            "notes": [
+                {
+                    "time": 160.7517,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.5
+                },
+                {
+                    "time": 160.8678,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 25.21
+                }
+            ]
+        },
+        {
+            "beat_index": 342,
+            "beat_time": 160.9839,
+            "notes": [
+                {
+                    "time": 161.2161,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 13.14
+                },
+                {
+                    "time": 161.3322,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.76
+                }
+            ]
+        },
+        {
+            "beat_index": 343,
+            "beat_time": 161.4483,
+            "notes": [
+                {
+                    "time": 161.6805,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.9
+                },
+                {
+                    "time": 161.7966,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 24.15
+                }
+            ]
+        },
+        {
+            "beat_index": 344,
+            "beat_time": 161.9127,
+            "notes": [
+                {
+                    "time": 162.1566,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 28.21
+                }
+            ]
+        },
+        {
+            "beat_index": 345,
+            "beat_time": 162.4004,
+            "notes": [
+                {
+                    "time": 162.6326,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 18.1
+                },
+                {
+                    "time": 162.7487,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.45
+                }
+            ]
+        },
+        {
+            "beat_index": 346,
+            "beat_time": 162.8648,
+            "notes": [
+                {
+                    "time": 162.8648,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.67
+                },
+                {
+                    "time": 163.2131,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.59
+                }
+            ]
+        },
+        {
+            "beat_index": 347,
+            "beat_time": 163.3292,
+            "notes": [
+                {
+                    "time": 163.3292,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.57
+                },
+                {
+                    "time": 163.573,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 24.9
+                }
+            ]
+        },
+        {
+            "beat_index": 348,
+            "beat_time": 163.8168,
+            "notes": [
+                {
+                    "time": 163.8168,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 10.67
+                },
+                {
+                    "time": 164.049,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.25
+                },
+                {
+                    "time": 164.1651,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 28.11
+                }
+            ]
+        },
+        {
+            "beat_index": 349,
+            "beat_time": 164.2812,
+            "notes": [
+                {
+                    "time": 164.2812,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 11.71
+                },
+                {
+                    "time": 164.5134,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 17.47
+                },
+                {
+                    "time": 164.6295,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 26.38
+                }
+            ]
+        },
+        {
+            "beat_index": 350,
+            "beat_time": 164.7456,
+            "notes": [
+                {
+                    "time": 164.7456,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 7.62
+                },
+                {
+                    "time": 164.9662,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 14.78
+                },
+                {
+                    "time": 165.0765,
+                    "band": "low",
+                    "relative_pos_in_beat": 12,
+                    "strength": 27.57
+                }
+            ]
+        },
+        {
+            "beat_index": 351,
+            "beat_time": 165.1868,
+            "notes": [
+                {
+                    "time": 165.1868,
+                    "band": "high",
+                    "relative_pos_in_beat": 0,
+                    "strength": 9.05
+                },
+                {
+                    "time": 165.4422,
+                    "band": "low",
+                    "relative_pos_in_beat": 8,
+                    "strength": 22.48
+                }
+            ]
+        },
+        {
+            "beat_index": 352,
+            "beat_time": 165.6976,
+            "notes": [
+                {
+                    "time": 165.9646,
+                    "band": "mid",
+                    "relative_pos_in_beat": 8,
+                    "strength": 9.8
+                }
+            ]
+        }
+    ]
+}
